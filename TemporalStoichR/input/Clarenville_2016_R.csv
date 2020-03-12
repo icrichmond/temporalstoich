@@ -1,4 +1,4 @@
-﻿Date/Time,Year,Month,Day,MaxTemp,MinTemp,MeanTemp,HeatDegDays,CoolDegDays,TotalPrecip,SnowGround
+﻿Date_Time,Year,Month,Day,MaxTemp,MinTemp,MeanTemp,HeatDegDays,CoolDegDays,TotalPrecip,SnowGround
 2016-01-01,2016,1,1,5,-7,-1,19,0,1,
 2016-01-02,2016,1,2,-1,-7,-4,22,0,0,
 2016-01-03,2016,1,3,-0.5,-6,-3.3,21.3,0,6,
