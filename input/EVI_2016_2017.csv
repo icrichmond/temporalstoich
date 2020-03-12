@@ -1,0 +1,401 @@
+PlotName,Year,EVI,DEM_2016,Aspect_2016,Slope_2016,LandCover,AgeClss,HghtCls,CrwnDns,SppComp
+Bloomfield+A1,2016,0.591400027,77,135,0.675206006,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbFwB
+Bloomfield+A11,2016,0.448049992,77,90,0.954841256,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A13,2016,0.465600014,77,117,1.067520261,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A3,2016,0.430099994,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A5,2016,0.47209999,77,90,0,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Bloomfield+A7,2016,0.506600022,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A9,2016,0.451950014,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+B14,2016,0.483399987,78,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C10,2016,0.468650013,77,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C12,2016,0.460000008,78,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C14,2016,0.464850008,78,90,3.18E-15,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C2,2016,0.510699987,76,135,1.350224495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C4,2016,0.496499985,76,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C6,2016,0.486750007,77,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C8,2016,0.513400018,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+D1,2016,0.498349994,74,141,3.054369926,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+E1,2016,0.455199987,75,124,3.438912392,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Bloomfield+F1,2016,0.452749997,76,158,2.569502831,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+F11,2016,0.436699986,79,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F13,2016,0.437900007,79,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F3,2016,0.470050007,78,117,2.134299994,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+F5,2016,0.456050009,78,98,1.687604904,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F7,2016,0.468300015,78,117,1.067520261,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F9,2016,0.517149985,79,117,1.067520261,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+G14,2016,0.460799992,80,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+H14,2016,0.471399993,80,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I10,2016,0.427350014,79,135,1.012750387,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I12,2016,0.44600001,80,90,3.18E-15,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I14,2016,0.467750013,80,162,0.754894495,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+I2,2016,0.438199997,78,135,1.350224495,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+I4,2016,0.441700011,78,90,1.909152389,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+I6,2016,0.493099988,79,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I8,2016,0.434599996,79,90,3.18E-15,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+J1,2016,0.469099998,76,108,3.769243956,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+K1,2016,0.445549995,73,106,3.471741199,Mixed,21-40-years,3.6-6.5-meters,10-25%,CS
+Bloomfield+L10,2016,0.448399991,79,135,0.337614715,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L12,2016,0.470999986,80,135,1.012750387,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L14,2016,0.465799987,80,90,3.18E-15,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L2,2016,0.434549987,73,135,2.698951006,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L4,2016,0.490099996,77,153,1.067520261,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L6,2016,0.449200004,78,162,0.754894495,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L8,2016,0.48574999,79,180,0.954841256,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+M14,2016,0.443699986,79,117,1.067520261,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+N1,2016,0.444700003,78,144,2.052775145,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+N11,2016,0.439550012,78,90,0.954841256,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+N13,2016,0.428950012,79,90,0.954841256,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N3,2016,0.451050013,78,135,4.50E-15,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N5,2016,0.463349998,78,90,0.477453768,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N7,2016,0.515600026,78,135,0.337614715,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N9,2016,0.445199996,78,108,0.754894495,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Dunphys Pond+A1,2016,0.413100004,46,140,3.723867178,Mixed,61-80-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+A11,2016,0.46419999,47,153,4.262692928,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+A13,2016,0.463866681,53,162,8.246892929,Mixed,81-100-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+A3,2016,0.459899992,48,171,2.901821613,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+A5,2016,0.442166656,50,130,3.723867178,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+A7,2016,0.465299994,50,131,4.393377304,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+A9,2016,0.42686668,48,107,5.720433235,Mixed,81-100-years,6.6-9.5-meters,26-50%,CS
+Dunphys Pond+B14,2016,0.461600006,57,157,7.233844757,Mixed,81-100-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+C10,2016,0.433699995,54,132,6.396919727,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+C12,2016,0.506166637,53,127,7.454009533,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+C14,2016,0.415133327,58,164,6.918174744,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+C2,2016,0.419,51,131,4.727942467,Deciduous,61-80-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+C4,2016,0.432733327,54,131,4.727942467,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+C6,2016,0.453633338,55,139,5.062306881,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+C8,2016,0.415133327,57,127,5.095619678,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+D1,2016,0.411333323,56,110,4.822542191,Deciduous,81-100-years,12.6-15.5-meters,51-75%,bS
+Dunphys Pond+E1,2016,0.390500009,59,127,5.095619678,Deciduous,81-100-years,12.6-15.5-meters,51-75%,bS
+Dunphys Pond+F1,2016,0.468633324,63,139,4.393377304,Deciduous,81-100-years,0-3.5-meters,51-75%,DS
+Dunphys Pond+F11,2016,0.443233341,70,156,6.492565632,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+F13,2016,0.389433324,74,157,7.973233223,Coniferous,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+F3,2016,0.552833319,64,141,6.091477871,Deciduous,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+F5,2016,0.502799988,64,148,5.875572681,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+F7,2016,0.508566678,67,120,6.603754997,Deciduous,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+F9,2016,0.464566678,62,142,5.759620667,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+G14,2016,0.377299994,77,153,6.379370213,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+H14,2016,0.394499987,81,158,5.1287117,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+I10,2016,0.513199985,82,140,8.406583786,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+I12,2016,0.415066659,79,159,6.620689869,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+I14,2016,0.401966661,85,130,3.723867178,Mixed,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+I2,2016,0.499500006,74,151,5.961015701,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+I4,2016,0.517266691,76,135,5.385977268,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+I6,2016,0.57130003,76,151,6.281942844,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+I8,2016,0.521499991,81,133,7.725405216,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+J1,2016,0.50183332,76,125,5.808222771,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+K1,2016,0.480233341,80,130,4.058664322,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+L10,2016,0.441466659,92,131,4.393377304,Mixed,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+L12,2016,0.422699988,92,124,3.438912392,Deciduous,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+L14,2016,0.407933325,92,113,3.631393433,Mixed,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+L2,2016,0.469833344,83,146,5.150652409,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+L4,2016,0.503233314,84,151,5.961015701,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+L6,2016,0.482800007,89,169,4.857533455,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+L8,2016,0.499833345,91,143,5.095619678,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+M14,2016,0.469449997,94,104,1.967863798,Deciduous,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+N1,2016,0.539166689,87,175,2.635026455,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+N11,2016,0.383100003,95,135,1.012750387,Mixed,81-100-years,3.6-6.5-meters,26-50%,CS
+Dunphys Pond+N13,2016,0.415450007,96,117,1.067520261,Mixed,81-100-years,3.6-6.5-meters,26-50%,CS
+Dunphys Pond+N3,2016,0.438199997,90,166,1.967863798,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+N5,2016,0.443800002,92,175,2.635026455,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+N7,2016,0.401600003,94,153,1.067520261,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+N9,2016,0.457249999,95,90,3.18E-15,Mixed,81-100-years,3.6-6.5-meters,26-50%,CS
+TNNP North+A1,2016,0.467400014,34,100,5.322852612,Mixed,81-100-years,9.6-12.5-meters,51-75%,bSwB
+TNNP North+A11,2016,0.415866673,67,122,7.572619915,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+A13,2016,0.359400004,76,117,3.199601412,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+A3,2016,0.48633334,40,110,5.570960045,Mixed,81-100-years,6.6-9.5-meters,10-25%,CS
+TNNP North+A5,2016,0.391966671,46,104,3.931095839,Mixed,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+A7,2016,0.40200001,51,103,5.139693737,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+A9,2016,0.4005,58,94,6.201053619,Coniferous,81-100-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+B14,2016,0.365266681,78,113,1.817522049,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+C10,2016,0.379999995,64,135,11.32904339,Mixed,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+C12,2016,0.337566674,76,151,2.456394672,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+C14,2016,0.369399995,76,45,0.675206006,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+C2,2016,0.421200007,35,124,5.150652409,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+C4,2016,0.47420001,44,98,6.721369267,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+C6,2016,0.353899986,50,102,5.601181984,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+C8,2016,0.341966659,55,139,5.062306881,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+D1,2016,0.407066673,36,171,11.46183681,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+E1,2016,0.403499991,44,180,16.26020432,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+F1,2016,0.405066669,62,175,10.43076038,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+F11,2016,0.390333325,77,126,2.052775145,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+F13,2016,0.338166654,76,162,1.509526968,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+F3,2016,0.311566681,54,128,13.04473019,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+F5,2016,0.346833318,48,132,6.063765049,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+F7,2016,0.398600012,56,105,8.111279488,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+F9,2016,0.33496666,74,94,9.719867706,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+G14,2016,0.388366669,78,143,9.787315369,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+H14,2016,0.328500003,86,107,8.691301346,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I10,2016,0.394366652,71,114,6.492565632,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I12,2016,0.353033334,88,120,10.05222988,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I14,2016,0.32616666,90,75,4.679912567,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I2,2016,0.327833325,64,56,1.721006155,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I4,2016,0.333466679,55,98,6.721369267,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I6,2016,0.436733335,54,114,5.749849319,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+I8,2016,0.380299985,63,117,6.69634676,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+J1,2016,0.325800002,64,52,2.719923258,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+K1,2016,0.360666662,61,90,3.338470459,Mixed,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L10,2016,0.367766678,76,107,6.466625214,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L12,2016,0.333833337,83,76,5.885129452,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L14,2016,0.328966677,87,22,5.1287117,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L2,2016,0.32313332,61,18,0.754894495,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L4,2016,0.419866681,59,108,3.016961336,Coniferous,61-80-years,6.6-9.5-meters,>75%,Fen
+TNNP North+L6,2016,0.352499992,57,177,4.532714367,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L8,2016,0.351533324,69,113,7.973233223,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+M14,2016,0.324166656,83,2,5.951584339,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N1,2016,0.400400013,58,86,3.584252357,Mixed,61-80-years,9.6-12.5-meters,26-50%,Fen
+TNNP North+N11,2016,0.333466679,80,22,2.569502831,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N13,2016,0.327733338,82,11,6.063765049,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N3,2016,0.372500002,60,153,1.067520261,Coniferous,61-80-years,6.6-9.5-meters,>75%,Fen
+TNNP North+N5,2016,0.336199999,60,172,1.687604904,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N7,2016,0.533933342,62,108,3.769243956,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N9,2016,0.384933323,71,99,9.566235542,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+Unicorn+A1,2016,0.485000014,60,27,6.379370213,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Unicorn+A11,2016,0.553133309,49,66,12.10607338,Mixed,41-60-years,9.6-12.5-meters,51-75%,wBbS
+Unicorn+A13,2016,0.486200005,45,48,11.02378559,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+A3,2016,0.491400003,63,40,7.416536808,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Unicorn+A5,2016,0.377533346,63,31,9.651911736,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+A7,2016,0.42353332,61,59,10.68350792,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+A9,2016,0.449600011,51,34,10.53989124,Mixed,41-60-years,9.6-12.5-meters,51-75%,wBbS
+Unicorn+B14,2016,0.506633341,52,57,12.57468605,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+C10,2016,0.429266661,68,47,10.3573103,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C12,2016,0.54853332,67,47,11.00901604,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+C14,2016,0.5097,55,62,12.50650978,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+C2,2016,0.438466668,71,36,6.466625214,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C4,2016,0.403633326,77,4,10.1818943,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C6,2016,0.358200014,75,56,10.53989124,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C8,2016,0.377066672,69,39,10.07396603,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+D1,2016,0.419800013,73,35,7.832625866,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+E1,2016,0.403299987,80,32,9.256682396,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+F1,2016,0.40806666,88,12,9.191033363,Mixed,41-60-years,6.6-9.5-meters,26-50%,CS
+Unicorn+F11,2016,0.51273334,79,47,8.056359291,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+F13,2016,0.491366655,71,69,11.33381653,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+F3,2016,0.434066653,90,8,10.48288155,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+F5,2016,0.40990001,90,45,8.380191803,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+F7,2016,0.435533345,90,66,9.321835518,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+F9,2016,0.442233324,76,53,7.454009533,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+G14,2016,0.496300012,79,62,9.106749535,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+H14,2016,0.487166673,84,53,9.462322235,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+I10,2016,0.399066657,94,94,6.671226501,Coniferous,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+I12,2016,0.51973331,88,10,5.322852612,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+I14,2016,0.49393332,92,38,8.111279488,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+I2,2016,0.361600012,98,13,7.543149948,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+I4,2016,0.370433331,102,7,5.989218235,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+I6,2016,0.389499992,102,49,4.393377304,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+I8,2016,0.362366676,101,69,4.072588444,Coniferous,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+J1,2016,0.412966669,104,29,5.961015701,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+K1,2016,0.392199993,107,20,4.822542191,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+L10,2016,0.429800004,98,59,4.168739796,Mixed,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+L12,2016,0.383933336,99,24,2.882181168,Coniferous,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+L14,2016,0.395500004,103,59,5.550718307,Coniferous,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+L2,2016,0.371600002,110,45,2.698951006,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+L4,2016,0.403600007,109,45,2.698951006,Coniferous,41-60-years,6.6-9.5-meters,10-25%,CS
+Unicorn+L6,2016,0.424800009,108,52,2.719923258,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+L8,2016,0.428466678,106,90,5.237475872,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+M14,2016,0.381799996,103,24,4.69196701,Mixed,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+N1,2016,0.436699986,115,45,2.698951006,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+N11,2016,0.45206666,102,45,2.698951006,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+N13,2016,0.481400013,102,9,4.582314968,Mixed,81-100-years,0-3.5-meters,10-25%,CS
+Unicorn+N3,2016,0.444700003,114,53,2.385944128,Mixed,41-60-years,6.6-9.5-meters,10-25%,CS
+Unicorn+N5,2016,0.484033346,112,69,3.321432114,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+N7,2016,0.451299995,111,81,4.582314968,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+N9,2016,0.36073333,104,80,4.114075184,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Bloomfield+A1,2017,0.4265,77,135,0.675206006,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbFwB
+Bloomfield+A11,2017,0.3829,77,90,0.954841256,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A13,2017,0.35995,77,117,1.067520261,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A3,2017,0.40915,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A5,2017,0.40295,77,90,0,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Bloomfield+A7,2017,0.425,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+A9,2017,0.38375,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+B14,2017,0.40005,78,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C10,2017,0.41685,77,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C12,2017,0.3984,78,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C14,2017,0.3822,78,90,3.18E-15,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C2,2017,0.41895,76,135,1.350224495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C4,2017,0.3497,76,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C6,2017,0.41995,77,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+C8,2017,0.4234,77,90,0,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+D1,2017,0.387,74,141,3.054369926,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+E1,2017,0.3827,75,124,3.438912392,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Bloomfield+F1,2017,0.37795,76,158,2.569502831,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+F11,2017,0.4108,79,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F13,2017,0.39125,79,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F3,2017,0.39915,78,117,2.134299994,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+F5,2017,0.4073,78,98,1.687604904,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F7,2017,0.419,78,117,1.067520261,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+F9,2017,0.4329,79,117,1.067520261,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+G14,2017,0.4066,80,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+H14,2017,0.40275,80,135,0.337614715,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I10,2017,0.3962,79,135,1.012750387,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I12,2017,0.37775,80,90,3.18E-15,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I14,2017,0.39335,80,162,0.754894495,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+I2,2017,0.3862,78,135,1.350224495,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+I4,2017,0.3959,78,90,1.909152389,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+I6,2017,0.41525,79,108,0.754894495,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+I8,2017,0.3816,79,90,3.18E-15,Mixed,21-40-years,6.6-9.5-meters,51-75%,wSbF
+Bloomfield+J1,2017,0.3943,76,108,3.769243956,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+K1,2017,0.3898,73,106,3.471741199,Mixed,21-40-years,3.6-6.5-meters,10-25%,CS
+Bloomfield+L10,2017,0.38265,79,135,0.337614715,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L12,2017,0.4064,80,135,1.012750387,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L14,2017,0.4023,80,90,3.18E-15,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L2,2017,0.3754,73,135,2.698951006,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L4,2017,0.43795,77,153,1.067520261,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L6,2017,0.3867,78,162,0.754894495,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+L8,2017,0.3856,79,180,0.954841256,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+M14,2017,0.3929,79,117,1.067520261,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+N1,2017,0.3964,78,144,2.052775145,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+N11,2017,0.3753,78,90,0.954841256,Mixed,21-40-years,3.6-6.5-meters,26-50%,wS
+Bloomfield+N13,2017,0.38575,79,90,0.954841256,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N3,2017,0.3984,78,135,4.50E-15,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N5,2017,0.40255,78,90,0.477453768,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N7,2017,0.41085,78,135,0.337614715,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Bloomfield+N9,2017,0.3825,78,108,0.754894495,Mixed,21-40-years,3.6-6.5-meters,51-75%,wSbF
+Dunphys Pond+A1,2017,0.348712,46,140,3.723867178,Mixed,61-80-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+A11,2017,0.375575,47,153,4.262692928,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+A13,2017,0.397375,53,162,8.246892929,Mixed,81-100-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+A3,2017,0.33805,48,171,2.901821613,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+A5,2017,0.367775,50,130,3.723867178,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+A7,2017,0.36245,50,131,4.393377304,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+A9,2017,0.383788,48,107,5.720433235,Mixed,81-100-years,6.6-9.5-meters,26-50%,CS
+Dunphys Pond+B14,2017,0.382,57,157,7.233844757,Mixed,81-100-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+C10,2017,0.368387,54,132,6.396919727,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+C12,2017,0.396525,53,127,7.454009533,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+C14,2017,0.34465,58,164,6.918174744,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+C2,2017,0.376225,51,131,4.727942467,Deciduous,61-80-years,12.6-15.5-meters,26-50%,bSwB
+Dunphys Pond+C4,2017,0.357888,54,131,4.727942467,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+C6,2017,0.3726,55,139,5.062306881,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+C8,2017,0.347337,57,127,5.095619678,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+D1,2017,0.356263,56,110,4.822542191,Deciduous,81-100-years,12.6-15.5-meters,51-75%,bS
+Dunphys Pond+E1,2017,0.34205,59,127,5.095619678,Deciduous,81-100-years,12.6-15.5-meters,51-75%,bS
+Dunphys Pond+F1,2017,0.329987,63,139,4.393377304,Deciduous,81-100-years,0-3.5-meters,51-75%,DS
+Dunphys Pond+F11,2017,0.38715,70,156,6.492565632,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+F13,2017,0.367225,74,157,7.973233223,Coniferous,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+F3,2017,0.391675,64,141,6.091477871,Deciduous,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+F5,2017,0.381713,64,148,5.875572681,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+F7,2017,0.355787,67,120,6.603754997,Deciduous,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+F9,2017,0.3466,62,142,5.759620667,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+G14,2017,0.344113,77,153,6.379370213,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+H14,2017,0.3432,81,158,5.1287117,Mixed,81-100-years,9.6-12.5-meters,51-75%,bStL
+Dunphys Pond+I10,2017,0.3971,82,140,8.406583786,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+I12,2017,0.367238,79,159,6.620689869,Mixed,81-100-years,12.6-15.5-meters,51-75%,bSwB
+Dunphys Pond+I14,2017,0.35345,85,130,3.723867178,Mixed,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+I2,2017,0.439013,74,151,5.961015701,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+I4,2017,0.410438,76,135,5.385977268,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+I6,2017,0.420388,76,151,6.281942844,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+I8,2017,0.367525,81,133,7.725405216,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+J1,2017,0.438638,76,125,5.808222771,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+K1,2017,0.404963,80,130,4.058664322,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+L10,2017,0.380487,92,131,4.393377304,Mixed,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+L12,2017,0.374175,92,124,3.438912392,Deciduous,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+L14,2017,0.386638,92,113,3.631393433,Mixed,81-100-years,9.6-12.5-meters,51-75%,bS
+Dunphys Pond+L2,2017,0.4195,83,146,5.150652409,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+L4,2017,0.418212,84,151,5.961015701,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+L6,2017,0.41675,89,169,4.857533455,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+L8,2017,0.412425,91,143,5.095619678,Mixed,81-100-years,12.6-15.5-meters,26-50%,bS
+Dunphys Pond+M14,2017,0.4428,94,104,1.967863798,Deciduous,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+N1,2017,0.446862,87,175,2.635026455,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+N11,2017,0.377425,95,135,1.012750387,Mixed,81-100-years,3.6-6.5-meters,26-50%,CS
+Dunphys Pond+N13,2017,0.36265,96,117,1.067520261,Mixed,81-100-years,3.6-6.5-meters,26-50%,CS
+Dunphys Pond+N3,2017,0.4057,90,166,1.967863798,Mixed,21-40-years,3.6-6.5-meters,51-75%,bS
+Dunphys Pond+N5,2017,0.373075,92,175,2.635026455,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+N7,2017,0.3566,94,153,1.067520261,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Dunphys Pond+N9,2017,0.386213,95,90,3.18E-15,Mixed,81-100-years,3.6-6.5-meters,26-50%,CS
+TNNP North+A1,2017,0.34115,34,100,5.322852612,Mixed,81-100-years,9.6-12.5-meters,51-75%,bSwB
+TNNP North+A11,2017,0.354387,67,122,7.572619915,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+A13,2017,0.320875,76,117,3.199601412,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+A3,2017,0.37145,40,110,5.570960045,Mixed,81-100-years,6.6-9.5-meters,10-25%,CS
+TNNP North+A5,2017,0.361537,46,104,3.931095839,Mixed,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+A7,2017,0.371688,51,103,5.139693737,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+A9,2017,0.315475,58,94,6.201053619,Coniferous,81-100-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+B14,2017,0.349675,78,113,1.817522049,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+C10,2017,0.3336,64,135,11.32904339,Mixed,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+C12,2017,0.310488,76,151,2.456394672,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+C14,2017,0.333525,76,45,0.675206006,Coniferous,61-80-years,9.6-12.5-meters,>75%,bS
+TNNP North+C2,2017,0.3311,35,124,5.150652409,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+C4,2017,0.387963,44,98,6.721369267,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+C6,2017,0.331725,50,102,5.601181984,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+C8,2017,0.305963,55,139,5.062306881,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+D1,2017,0.343513,36,171,11.46183681,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+E1,2017,0.337913,44,180,16.26020432,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+F1,2017,0.356125,62,175,10.43076038,Mixed,61-80-years,9.6-12.5-meters,26-50%,bSwB
+TNNP North+F11,2017,0.315587,77,126,2.052775145,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+F13,2017,0.2912,76,162,1.509526968,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+F3,2017,0.303088,54,128,13.04473019,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+F5,2017,0.328712,48,132,6.063765049,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+F7,2017,0.331825,56,105,8.111279488,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+F9,2017,0.310437,74,94,9.719867706,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+G14,2017,0.326587,78,143,9.787315369,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+H14,2017,0.304812,86,107,8.691301346,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I10,2017,0.30475,71,114,6.492565632,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I12,2017,0.32625,88,120,10.05222988,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I14,2017,0.287737,90,75,4.679912567,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I2,2017,0.299287,64,56,1.721006155,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I4,2017,0.294225,55,98,6.721369267,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+I6,2017,0.358588,54,114,5.749849319,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+I8,2017,0.3189,63,117,6.69634676,Coniferous,61-80-years,9.6-12.5-meters,26-50%,bS
+TNNP North+J1,2017,0.3,64,52,2.719923258,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+K1,2017,0.3062,61,90,3.338470459,Mixed,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L10,2017,0.318913,76,107,6.466625214,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L12,2017,0.296275,83,76,5.885129452,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L14,2017,0.296737,87,22,5.1287117,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L2,2017,0.2716,61,18,0.754894495,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L4,2017,0.355325,59,108,3.016961336,Coniferous,61-80-years,6.6-9.5-meters,>75%,Fen
+TNNP North+L6,2017,0.312588,57,177,4.532714367,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+L8,2017,0.310175,69,113,7.973233223,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+M14,2017,0.28715,83,2,5.951584339,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N1,2017,0.390388,58,86,3.584252357,Mixed,61-80-years,9.6-12.5-meters,26-50%,Fen
+TNNP North+N11,2017,0.307013,80,22,2.569502831,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N13,2017,0.293625,82,11,6.063765049,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N3,2017,0.361088,60,153,1.067520261,Coniferous,61-80-years,6.6-9.5-meters,>75%,Fen
+TNNP North+N5,2017,0.312175,60,172,1.687604904,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N7,2017,0.349175,62,108,3.769243956,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+TNNP North+N9,2017,0.312025,71,99,9.566235542,Coniferous,61-80-years,6.6-9.5-meters,>75%,bS
+Unicorn+A1,2017,0.366163,60,27,6.379370213,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Unicorn+A11,2017,0.414638,49,66,12.10607338,Mixed,41-60-years,9.6-12.5-meters,51-75%,wBbS
+Unicorn+A13,2017,0.394675,45,48,11.02378559,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+A3,2017,0.357763,63,40,7.416536808,Mixed,81-100-years,9.6-12.5-meters,26-50%,bSwB
+Unicorn+A5,2017,0.34,63,31,9.651911736,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+A7,2017,0.343925,61,59,10.68350792,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+A9,2017,0.346275,51,34,10.53989124,Mixed,41-60-years,9.6-12.5-meters,51-75%,wBbS
+Unicorn+B14,2017,0.351263,52,57,12.57468605,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+C10,2017,0.35825,68,47,10.3573103,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C12,2017,0.408913,67,47,11.00901604,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+C14,2017,0.376087,55,62,12.50650978,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+C2,2017,0.342888,71,36,6.466625214,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C4,2017,0.342487,77,4,10.1818943,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C6,2017,0.311075,75,56,10.53989124,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+C8,2017,0.327875,69,39,10.07396603,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+D1,2017,0.361362,73,35,7.832625866,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+E1,2017,0.36955,80,32,9.256682396,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+F1,2017,0.366275,88,12,9.191033363,Mixed,41-60-years,6.6-9.5-meters,26-50%,CS
+Unicorn+F11,2017,0.398912,79,47,8.056359291,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+F13,2017,0.36335,71,69,11.33381653,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+F3,2017,0.34915,90,8,10.48288155,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+F5,2017,0.351125,90,45,8.380191803,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+F7,2017,0.362862,90,66,9.321835518,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+F9,2017,0.402037,76,53,7.454009533,Mixed,41-60-years,6.6-9.5-meters,>75%,wBbS
+Unicorn+G14,2017,0.384037,79,62,9.106749535,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+H14,2017,0.400213,84,53,9.462322235,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+I10,2017,0.322437,94,94,6.671226501,Coniferous,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+I12,2017,0.36985,88,10,5.322852612,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+I14,2017,0.401262,92,38,8.111279488,Mixed,41-60-years,6.6-9.5-meters,51-75%,bSwB
+Unicorn+I2,2017,0.338575,98,13,7.543149948,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+I4,2017,0.35945,102,7,5.989218235,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+I6,2017,0.35465,102,49,4.393377304,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+I8,2017,0.324775,101,69,4.072588444,Coniferous,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+J1,2017,0.373625,104,29,5.961015701,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+K1,2017,0.366013,107,20,4.822542191,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+L10,2017,0.350687,98,59,4.168739796,Mixed,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+L12,2017,0.3338,99,24,2.882181168,Coniferous,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+L14,2017,0.349775,103,59,5.550718307,Coniferous,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+L2,2017,0.348075,110,45,2.698951006,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+L4,2017,0.344162,109,45,2.698951006,Coniferous,41-60-years,6.6-9.5-meters,10-25%,CS
+Unicorn+L6,2017,0.359913,108,52,2.719923258,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+L8,2017,0.351063,106,90,5.237475872,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+M14,2017,0.325575,103,24,4.69196701,Mixed,81-100-years,9.6-12.5-meters,26-50%,bS
+Unicorn+N1,2017,0.3875,115,45,2.698951006,Mixed,41-60-years,6.6-9.5-meters,26-50%,bS
+Unicorn+N11,2017,0.356813,102,45,2.698951006,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
+Unicorn+N13,2017,0.384725,102,9,4.582314968,Mixed,81-100-years,0-3.5-meters,10-25%,CS
+Unicorn+N3,2017,0.367087,114,53,2.385944128,Mixed,41-60-years,6.6-9.5-meters,10-25%,CS
+Unicorn+N5,2017,0.372575,112,69,3.321432114,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+N7,2017,0.385337,111,81,4.582314968,Mixed,41-60-years,9.6-12.5-meters,26-50%,wBbS
+Unicorn+N9,2017,0.332137,104,80,4.114075184,Mixed,41-60-years,6.6-9.5-meters,51-75%,bS
