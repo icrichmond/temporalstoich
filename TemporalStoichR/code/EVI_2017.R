@@ -22,6 +22,7 @@ AOI <- shapefile("input/AOI/EcoDistr_AOI.shp")
 plot(AOI)
 
 #### Enhanced Vegetation Index Processing ####
+
 # Preprocessing done in ArcGIS
 # See supplemental information for Landsat interrogation of sample sites
 # For each scene:
@@ -37,21 +38,22 @@ plot(AOI)
 # Using Extract by Mask, cloudy pixels from the cloud masks were removed from each EVI scene
 # Here, we import EVI scene that are cloud free
 
-# Load Scene 1; May 14, 2017 
-Scene1_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170514.tif")
-# Load Scene 2: May 30, 2017
-Scene2_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170530.tif")
-# Load Scene 3; July 17, 2017
-Scene3_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170717.tif")
-# Load Scene 4: September 3, 2017
-Scene4_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170903.tif")
-# Rescale EVI Scenes by 0.0001
+# load Scene 1; May 14, 2017 
+Scene1_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170514.tif")
+# load Scene 2: May 30, 2017
+Scene2_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170530.tif")
+# load Scene 3; July 17, 2017
+Scene3_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170717.tif")
+# load Scene 4: September 3, 2017
+Scene4_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170903.tif")
+
+# rescale EVI Scenes by 0.0001
 Scene1EVI_rescale <- Scene1_EVI*0.0001
 Scene2EVI_rescale <- Scene2_EVI*0.0001
 Scene3EVI_rescale <- Scene3_EVI*0.0001
 Scene4EVI_rescale <- Scene4_EVI*0.0001
 
-# Create a raster brich with the four scenes
+# Create a raster brick with the four scenes
 EVI_Brick <- brick(list(Scene1EVI_rescale, Scene2EVI_rescale, Scene3EVI_rescale, Scene4EVI_rescale))
 # Plot Scenes
 levelplot(EVI_Brick)
