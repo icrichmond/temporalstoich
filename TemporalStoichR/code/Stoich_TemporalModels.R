@@ -1,4 +1,4 @@
-]#Author: Isabella Richmond
+# Author: Isabella Richmond
 #Lots of code from Travis Heckford
 #Last edited: April 7, 2018
 #Import datasets
