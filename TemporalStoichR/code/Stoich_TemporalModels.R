@@ -1,7 +1,19 @@
 # Author: Isabella Richmond
-#Lots of code from Travis Heckford
-#Last edited: April 7, 2018
-#Import datasets
+# Last edited: March 13, 2020
+
+# This code is for the creation and evaluation of my temporal stoichiometry models. A lot of 
+# Code was provided by Travis Heckford (twitter.com/travheckford)
+# Models evaluate the response of stoichiometry in four boreal plant species with site, year
+# weather, moisture, and productivity as explanatory variables
+# Stoichiometry measured using C:N, C:P, and N:P 
+# Elemental composition is also used as a response variable - % C, % N, % P and quantities
+
+# load packages
+install.packages("easypackages")
+library(easypackages)
+libraries("ggplot2", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+
+# import datasets
 stoich <- read.csv("C:/Users/Isabella Richmond/Dropbox/Chapter 1 - Temporal Stoich/Final Data/TotalStoich_2016_2017_Biomass.csv")
 str(stoich)
 
@@ -12,12 +24,7 @@ str(stoich)
 #Set working directory 
 setwd("C:/Users/Isabella Richmond/Dropbox/Chapter 1 - Temporal Stoich")
 
-#Load packages
-install.packages("easypackages")
-library(easypackages)
-libraries("ggplot2", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
-library("plyr", lib.loc = "~/R/win-library/3.5")
-library(ggpol)
+
 
 #Already joined the data in Excel, but could use Merge or Join functions here if not
 

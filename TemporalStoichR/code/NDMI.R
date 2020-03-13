@@ -47,9 +47,9 @@ Scene3_NDMI <- raster("input/NDMI/ProcessedRasters/NDMI_NoClouds_20160916.tif")
 Scene1NDMI_rescale <- Scene1_NDMI*0.0001
 Scene2NDMI_rescale <- Scene2_NDMI*0.0001
 Scene3NDMI_rescale <- Scene3_NDMI*0.0001
-# create a raster brick with the four scenes
+# create a raster brick with the three scenes
 NDMI_Brick_2016 <- brick(list(Scene1NDMI_rescale, Scene2NDMI_rescale, Scene3NDMI_rescale))
-# plot Scenes
+# plot scenes
 jpeg("graphics/NDMI/NDMIBrick2016.jpg")
 levelplot(NDMI_Brick_2016)
 dev.off()
@@ -88,7 +88,7 @@ Scene6_NDMI <- raster("input/NDMI/ProcessedRasters/NDMI_NoClouds_20170903.tif")
 Scene4NDMI_rescale <- Scene4_NDMI*0.0001
 Scene5NDMI_rescale <- Scene5_NDMI*0.0001
 Scene6NDMI_rescale <- Scene6_NDMI*0.0001
-# create a raster brick with the four scenes
+# create a raster brick with the three scenes
 NDMI_Brick_2017 <- brick(list(Scene4NDMI_rescale, Scene5NDMI_rescale, Scene6NDMI_rescale))
 # plot scenes
 jpeg("graphics/NDMI/NDMIBrick2017.jpg")
@@ -115,12 +115,12 @@ jpeg("graphics/NDMI/NDMIMean2017.jpg")
 par(mfrow=c(1,1))
 plot(NDMI_mean_2017)
 dev.off()
-writeRaster(NDMI_mean_2017, "NDMI_NonScaled_Averaged_2017.tif", overwrite=TRUE)
+writeRaster(NDMI_mean_2017, "output/NDMI/NDMI_NonScaled_Average_2017.tif", overwrite=TRUE)
 
 ##### Spatial Extraction of Co-variate Values ####
 # load rasters and sample points and extract NDMI values from 2016 and 2017 at each sample point
-NDMI2016 <- raster("output/NDMI/NDMI_NonScaled_Averaged_2016.tif")
-NDMI2017 <- raster("output/NDMI/NDMI_NonScaled_Averaged_2017.tif")
+NDMI2016 <- raster("output/NDMI/NDMI_NonScaled_Average_2016.tif")
+NDMI2017 <- raster("output/NDMI/NDMI_NonScaled_Average_2017.tif")
 samppts <- shapefile("input/EVI/SamplePoints/SamplePoints_StDMs.shp")
 # create raster brick for 2016/2017
 NDMI20162017 <- brick(list(NDMI2016, NDMI2017))
@@ -129,7 +129,7 @@ crs(NDMI20162017)
 crs(samppts)
 sampptsproj <- spTransform(samppts, CRS("+proj=utm +zone=21 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 "))
 # check that raster and shapefile match up
-jpeg("graphics/EVI/EVIsamplepoints.jpg")
+jpeg("graphics/NDMI/NDMIsamplepoints.jpg")
 plot(NDMI2017)
 plot(sampptsproj, add = TRUE)
 dev.off()
@@ -140,7 +140,9 @@ sampptsraster <- cbind(sampptsproj, SPraster)
 View(sampptsraster)
 # rename columns 
 sampptsraster@data
-colnames(sampptsraster@data)[6] = "NDMI2017"
+colnames(sampptsraster@data)[6] = "NDMI2016"
+colnames(sampptsraster@data)[7] = "NDMI2017"
 
-write.csv(sampptsraster2016, "output/NDMI/SampPts_NDMI_2017.csv")
+write.csv(sampptsraster, "output/NDMI/NDMI_20162017.csv")
 
+# Clean up data in Excel - can fix and do this in R later 
