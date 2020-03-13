@@ -1,5 +1,5 @@
 # Author: Isabella Richmond 
-# Last edited: March 12, 2020
+# Last edited: March 13, 2020
 
 # Code for testing the correlation in weather data collected from Environment & Climate Change 
 # Canada's weather stations in Lethbridge, Clarenville, and Charleston (NL, Canada)
@@ -13,7 +13,7 @@
 
 # load packages 
 library(easypackages)
-easypackages::libraries("readr", "dplyr", "tibble")
+easypackages::libraries("readr", "dplyr", "plyr", "tibble", "ggplot2")
 
 # load datasets 
 clarenville2016 <- read_csv("input/Clarenville_2016_R.csv")
@@ -22,8 +22,6 @@ charleston2016 <- read_csv("input/Charleston_2016_R.csv")
 head(charleston2016)
 lethbridge2016 <- read_csv("input/Lethbridge_2016_R.csv")
 head(lethbridge2016)
-
-# correlations between Clarenville and Lethbridge
 # sort datasets by date and time 
 clarenville2016 <- arrange(clarenville2016, .by_group = clarenville2016$`Date_Time`)
 charleston2016 <- arrange(charleston2016, .by_group = charleston2016$Date_Time)
@@ -32,62 +30,64 @@ lethbridge2016 <- arrange(lethbridge2016, .by_group = lethbridge2016$Date_Time)
 clarenville2016 <- add_column(clarenville2016, "Station" = "Clarenville")
 charleston2016 <- add_column(charleston2016, "Station" = "Charleston")
 lethbridge2016 <- add_column(lethbridge2016, "Station" = "Lethbridge")
+
+# correlations between Clarenville and Lethbridge
 # combine town dataframes
 clarenleth <- rbind(clarenville2016, lethbridge2016)
-
-clarenvillemeanT <- data.frame(Dates = c(clarenville2016$`Date/Time`), CMeanT = c(clarenville2016$MeanTemp), LMeanT = c(lethbridge2016$MeanTemp))
+# mean temperature
 # evlauate correlation
-correlation <- cor.test(climate$CMeanT, climate$LMeanT)
-correlation
-plot(climate$Dates, climate$CMeanT, col = "red", xlab = "Day in Year", ylab = "Mean Temp (deg C)")
-points(climate$Dates, climate$LMeanT, col = "blue")
-text(16,18, label = "cor = 0.93")
-text(37, 21, label = "p-value < 2.2e-16")
-legend(230,-1, legend = c("Clarenville", "Lethbridge"), col = c("red", "blue"), pch = c(1), text.font = 1)
+clmean <- cor.test(clarenville2016$MeanTemp, lethbridge2016$MeanTemp)
+# plot relationship
+ggplot(clarenleth, aes(x=Date_Time, y=MeanTemp, color=Station)) + geom_point()+
+  labs(title = "Clarenville v Lethbridge Mean Temp", x = "Date", y = "Mean Temp degC")+
+  annotate("text", x=as.Date("2016-09-30"), y=-13, label = "r = ")+
+  annotate("text", x =as.Date("2016-12-31"), y = -13,label = clmean$estimate)
+ggsave("graphics/clarenlethmean.png")
 
-climate2 <- data.frame(Dates = c(Clarenville_2016_R$?..Date.Time), CMinT = c(Clarenville_2016_R$MinTemp), LMinT = c(Lethbridge_2016_R$MinTemp))
-correlation2 <- cor.test(climate2$CMinT, climate2$LMinT)
-correlation2
-plot(climate2$Dates, climate2$CMinT, col = "red", xlab = "Day in Year", ylab = "Minimum Temp (deg C)")
-points(climate2$Dates, climate2$LMinT, col = "blue")
-text(36, 17, label = "p-value < 2.2e-16")
-text(15,14, label = "cor = 0.89")
-legend(240,-8, legend = c("Clarenville", "Lethbridge"), col = c("red", "blue"), pch = c(1), text.font = 1)
+# minimum temperature 
+clmin <- cor.test(clarenville2016$MinTemp, lethbridge2016$MinTemp)
+ggplot(clarenleth, aes(x=Date_Time, y=MinTemp, color=Station)) + geom_point()+
+  labs(title = "Clarenville v Lethbridge Minimum Temp", x = "Date", y = "Min Temp degC")+
+  annotate("text", x=as.Date("2016-09-30"), y=-21, label = "r = ")+
+  annotate("text", x =as.Date("2016-12-31"), y = -21,label = clmin$estimate)
+ggsave("graphics/clarenlethmin.png")
 
-climate3 <- data.frame(Dates = c(Clarenville_2016_R$?..Date.Time), CMaxT = c(Clarenville_2016_R$MaxTemp), LMaxT = c(Lethbridge_2016_R$MaxTemp))
-correlation3 <- cor.test(climate3$CMaxT, climate3$LMaxT)
-correlation3
-plot(climate3$Dates, climate3$CMaxT, col = "red", xlab = "Day in Year", ylab = "Maximum Temp (deg C)")
-points(climate3$Dates, climate3$LMaxT, col = "blue")
-text(36, 28, label = "p-value < 2.2e-16")
-text(15,25, label = "cor = 0.92")
-legend(200,5, legend = c("Clarenville", "Lethbridge"), col = c("red", "blue"), pch = c(1), text.font = 1)
+# maximum temperature
+clmax <- cor.test(clarenville2016$MaxTemp, lethbridge2016$MaxTemp)
+ggplot(clarenleth, aes(x=Date_Time, y=MinTemp, color=Station)) + geom_point()+
+  labs(title = "Clarenville v Lethbridge Maximum Temp", x = "Date", y = "Max Temp degC")+
+  annotate("text", x=as.Date("2016-09-30"), y=-21, label = "r = ")+
+  annotate("text", x =as.Date("2016-12-31"), y = -21,label = clmax$estimate)
+ggsave("graphics/clarenlethmax.png")
 
-#Correlations between Charleston and Lethbridge
-climate4 <- data.frame(Dates = c(Charleston_2016_R$?..Date_Time), ChMeanT = c(Charleston_2016_R$MeanTemp), LMeanT = c(Lethbridge_2016_R$MeanTemp))
-View(climate4)
-correlation4 <- cor.test(climate4$ChMeanT, climate4$LMeanT)
-correlation4
-plot(climate4$Dates, climate4$ChMeanT, col = "red", xlab = "Day in Year", ylab = "Mean Temp (deg C)")
-points(climate4$Dates, climate4$LMeanT, col = "blue")
-text(16,23, label = "cor = 0.90")
-text(37, 26, label = "p-value < 2.2e-16")
-legend(227,-1, legend = c("Charleston", "Lethbridge"), col = c("red", "blue"), pch = c(1), text.font = 1)
+# correlations between Charleston and Lethbridge
+# combine town dataframes
+charlesleth <- rbind(charleston2016, lethbridge2016)
+# mean temperature
+# evlauate correlation
+chlmean <- cor.test(charleston2016$MeanTemp, lethbridge2016$MeanTemp)
+# plot relationship
+ggplot(charlesleth, aes(x=Date_Time, y=MeanTemp, color=Station)) + geom_point()+
+  labs(title = "Charleston v Lethbridge Mean Temp", x = "Date", y = "Mean Temp degC")+
+  annotate("text", x=as.Date("2016-09-30"), y=-14, label = "r = ")+
+  annotate("text", x =as.Date("2016-12-31"), y = -14,label = chlmean$estimate)
+ggsave("graphics/charleslethmean.png")
 
-climate5 <- data.frame(Dates = c(Charleston_2016_R$?..Date_Time), ChMinT = c(Charleston_2016_R$MinTemp), LMinT = c(Lethbridge_2016_R$MinTemp))
-correlation5 <- cor.test(climate5$ChMinT, climate5$LMinT)
-correlation5
-plot(climate5$Dates, climate5$ChMinT, col = "red", xlab = "Day in Year", ylab = "Minimum Temp (deg C)")
-points(climate5$Dates, climate5$LMinT, col = "blue")
-text(36, 22, label = "p-value < 2.2e-16")
-text(15,18, label = "cor = 0.82")
-legend(220,-8, legend = c("Charleston", "Lethbridge"), col = c("red", "blue"), pch = c(1), text.font = 1)
+# minimum temperature 
+chlmin <- cor.test(charleston2016$MinTemp, lethbridge2016$MinTemp)
+ggplot(charlesleth, aes(x=Date_Time, y=MinTemp, color=Station)) + geom_point()+
+  labs(title = "Charleston v Lethbridge Minimum Temp", x = "Date", y = "Min Temp degC")+
+  annotate("text", x=as.Date("2016-09-30"), y=-21, label = "r = ")+
+  annotate("text", x =as.Date("2016-12-31"), y = -21,label = chlmin$estimate)
+ggsave("graphics/charleslethmin.png")
 
-climate6 <- data.frame(Dates = c(Charleston_2016_R$?..Date_Time), ChMaxT = c(Charleston_2016_R$MaxTemp), LMaxT = c(Lethbridge_2016_R$MaxTemp))
-correlation6 <- cor.test(climate6$ChMaxT, climate6$LMaxT)
-correlation6
-plot(climate6$Dates, climate6$ChMaxT, col = "red", xlab = "Day in Year", ylab = "Maximum Temp (deg C)")
-points(climate6$Dates, climate6$LMaxT, col = "blue")
-text(36, 30, label = "p-value < 2.2e-16")
-text(15,26, label = "cor = 0.88")
-legend(200,5, legend = c("Charleston", "Lethbridge"), col = c("red", "blue"), pch = c(1), text.font = 1)
+# maximum temperature
+chlmax <- cor.test(charleston2016$MaxTemp, lethbridge2016$MaxTemp)
+ggplot(charlesleth, aes(x=Date_Time, y=MinTemp, color=Station)) + geom_point()+
+  labs(title = "Charleston v Lethbridge Maximum Temp", x = "Date", y = "Max Temp degC")+
+  annotate("text", x=as.Date("2016-09-30"), y=-21, label = "r = ")+
+  annotate("text", x =as.Date("2016-12-31"), y = -21,label = chlmax$estimate)
+ggsave("graphics/charleslethmax.png")
+
+# Clarenville consistently had a higher correlation with Lethbridge weather than Charleston 
+# supplement Lethbridge weather data with data from the Clarenville weather station
