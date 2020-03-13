@@ -18,7 +18,7 @@ libraries("rts", "raster", "RCurl", "sp", "rgdal", "rgeos", "RStoolbox", "shapef
 # This analysis is bounded within our Area Of Interest (AOI).
 # The AOI is the ecodistrict (468)
 # Areas of no data exists in the NW corner (fingers; no FRI), and bottom (south point; no EVI - edge of landsat scene)
-AOI <- shapefile("input/AOI/EcoDistr_AOI.shp")
+AOI <- shapefile("input/EVI/AOI/EcoDistr_AOI.shp")
 plot(AOI)
 
 #### Enhanced Vegetation Index Processing ####
@@ -39,13 +39,13 @@ plot(AOI)
 # Here, we import EVI scene that are cloud free
 
 # load Scene 1; May 14, 2017 
-Scene1_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170514.tif")
+Scene1_EVI <- raster("input/EVI/ProcessedRasters/EVI_NoClouds_20170514.tif")
 # load Scene 2: May 30, 2017
-Scene2_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170530.tif")
+Scene2_EVI <- raster("input/EVI/ProcessedRasters/EVI_NoClouds_20170530.tif")
 # load Scene 3; July 17, 2017
-Scene3_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170717.tif")
+Scene3_EVI <- raster("input/EVI/ProcessedRasters/EVI_NoClouds_20170717.tif")
 # load Scene 4: September 3, 2017
-Scene4_EVI <- raster("input/ProcessedRasters/EVI_NoClouds_20170903.tif")
+Scene4_EVI <- raster("input/EVI/ProcessedRasters/EVI_NoClouds_20170903.tif")
 
 # rescale EVI Scenes by 0.0001
 Scene1EVI_rescale <- Scene1_EVI*0.0001
@@ -53,46 +53,62 @@ Scene2EVI_rescale <- Scene2_EVI*0.0001
 Scene3EVI_rescale <- Scene3_EVI*0.0001
 Scene4EVI_rescale <- Scene4_EVI*0.0001
 
-# Create a raster brick with the four scenes
+# create a raster brick with the four scenes
 EVI_Brick <- brick(list(Scene1EVI_rescale, Scene2EVI_rescale, Scene3EVI_rescale, Scene4EVI_rescale))
-# Plot Scenes
+# plot scenes
+jpeg("graphics/EVI/EVIBrick.jpg",width = 350, height = 350)
 levelplot(EVI_Brick)
-# Perform a linear interpolation between EVI time scenes to populate no data areas
-# First check the distribution of elevation values in the raster
+dev.off()
+
+# perform a linear interpolation between EVI time scenes to populate no data areas
+# first check the distribution of elevation values in the raster
+jpeg("graphics/EVI/EVIBrickHist.jpg")
 hist(EVI_Brick) # The vegetation component of these data are normal; values 0 < or = 0 = water/NA
+dev.off()
 
 EVI_approx <- approxNA(EVI_Brick, method="linear", rule=2) # linear because hist = normal; rule 2 = remove all NAs; rule 1 some NA's retain via interpolation search constraints.
 # Recheck histogram
+jpeg("graphics/EVI/EVIApproxHist.jpg")
 hist(EVI_approx)
+dev.off()
 # Plot Scenes
+jpeg("graphics/EVI/EVIApprox.jpg")
 plot(EVI_approx)
-writeRaster(EVI_approx, "ApproxNA", format="GTiff", bylayer=T, suffix="names", overwrite=TRUE)
+dev.off()
+writeRaster(EVI_approx, "output/EVI/EVIApprox", format="GTiff", bylayer=T, suffix="names", overwrite=TRUE)
 
 # Average rasters together
 EVI_mean <-calc(EVI_approx, fun = mean)
+jpeg("graphics/EVI/EVIMean.jpg")
 plot(EVI_mean)
-writeRaster(EVI_mean, "EVI_NonScaled_ForSampPts.tif", overwrite=TRUE)
+dev.off()
+writeRaster(EVI_mean, "output/EVI/EVI_NonScaled_Averaged.tif", overwrite=TRUE)
 
 
-##### Spatial Extraction of Co-variate Values ####
-# Load layers and extract values of spatial co-variates
-Samp.pts <- shapefile("SamplePoints_StDMs.shp")
-EVI <- raster("EVI_NonScaled_ForSampPts.tif")
+##### Spatial Extraction of EVI Values ####
+# load sample points and extract EVI values at those points
+EVI <- raster("output/EVI/EVI_NonScaled_Averaged.tif")
+samppts <- shapefile("input/EVI/SamplePoints/SamplePoints_StDMs.shp")
+crs(EVI)
+crs(samppts)
+# reproject sample points to match raster
+sampptsproj <- spTransform(samppts, CRS("+proj=utm +zone=21 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0 "))
+jpeg("graphics/EVI/EVIsamplepoints.jpg")
 plot(EVI)
+plot(sampptsproj, add = TRUE)
+dev.off()
+# get coordinates of sample points
+SP <- SpatialPoints(coordinates(sampptsproj)[,-3])
+# extract values from StDM rasters for our sample points
+# need to unload tidyr from library as extract in tidyr doesn't work for rasters
+SPraster <- extract(EVI,SP)
+# join extracted raster values back
+sampptsraster <- cbind(sampptsproj, SPraster)
+View(sampptsraster)
+sampptsraster@data
+# change the column name to EVI2017
+colnames(sampptsraster@data)[6] = "EVI2017"
+# save Sample Points with 2017 EVI as a csv
+write.csv(sampptsraster, "output/EVI/SampPts_EVI_2017.csv")
 
-SP <- SpatialPoints(coordinates(Samp.pts)[,-3])
-# Extract values from StDM rasters for our sample points
-SP.raster <- extract(EVI, SP)
-# Join extracted raster values back
-Samp.pts.raster <- cbind(Samp.pts, SP.raster)
-View(Samp.pts.raster)
-
-Samp.pts.raster@data
-plot(SP)
-# Save Sample Points with Co-variates as a csv
-write.csv(Samp.pts.raster, "SampPts_EVI_2017.csv")
-
-##Sample points and EVI raster are in different projections. Instead of extracting in R,
-##opened both files in ArcMap and used Extract Raster to Point tool, to get EVI
-##values for each sample point. Then copied and pasted table to csv.
-# For some of the sample locations, information on age class, height class, and crown density were missing, because our sample points was located within a wetland type land cover class in FRI, to correct for spatial inaccuracies I extracted values from the adjacent forest type land cover class - to 
+# combine with 2016 dataset in Excel - can fix this later

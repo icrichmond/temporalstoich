@@ -13,7 +13,7 @@
 
 # load packages 
 library(easypackages)
-easypackages::libraries("readr", "dplyr", "plyr", "tibble", "ggplot2")
+easypackages::libraries("readr", "dplyr", "plyr", "tibble", "ggplot2", "tidyr")
 
 # load datasets 
 clarenville2016 <- read_csv("input/WeatherCor/Clarenville_2016_R.csv")
@@ -90,4 +90,5 @@ ggplot(charlesleth, aes(x=Date_Time, y=MinTemp, color=Station)) + geom_point()+
 ggsave("graphics/WeatherCor/charleslethmax.png")
 
 # Clarenville consistently had a higher correlation with Lethbridge weather than Charleston 
-# supplement Lethbridge weather data with data from the Clarenville weather station
+# replace Lethbridge NAs with data from the Clarenville weather station
+# NOTE: replacement was done in Excel - will add in code later
