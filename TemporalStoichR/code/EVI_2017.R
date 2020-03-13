@@ -1,17 +1,13 @@
-#Author: Travis Heckford
-#Edited by: Isabella Richmond
-# Date of last change: 2/April/2019
-# Notes to self (from Travis)
-# Check with YW, should all scaled layers to be set to 0-1, or -1 to 1? In the code below I just let the min and max standardized values up to the original layers. 
+# Author: Travis Heckford
+# Adapted by: Isabella Richmond
+# Date of last change: March 13, 2020
 
-# Code Notes:
-# Data manipulation for spatial correlates
-# Processing of Landsat (EVI), Elevation, Aspect, Slope, Forest Resource Inventory, and the CEC landcover dataset
-# Extract of spatial co-variate values happens at the end
+# Processing of Landsat (EVI) from Landsat imagery for 2017 data 
+# 2016 EVI data was processed in exactly the same way by Travis Heckford
+# both 2016 and 2017 data used for my temporal stoich models 
+
+
 # If steps where done in ArcGIS, the details of those steps are described in this code
-
-# Set working directory
-setwd("C:/Users/Isabella Richmond/Dropbox/Chapter 1 - Temporal Stoich/EVI/Landsat/2017")
 
 # Install/load the following packages
 install.packages("easypackages")
@@ -22,7 +18,7 @@ libraries("rts", "raster", "RCurl", "sp", "rgdal", "rgeos", "RStoolbox", "shapef
 # This analysis is bounded within our Area Of Interest (AOI).
 # The AOI is the ecodistrict (468)
 # Areas of no data exists in the NW corner (fingers; no FRI), and bottom (south point; no EVI - edge of landsat scene)
-AOI <- shapefile("C:/Users/Isabella Richmond/Dropbox/Chapter 1 - Temporal Stoich/EVI/2017/EcoDistr_AOI.shp")
+AOI <- shapefile("input/AOI/EcoDistr_AOI.shp")
 plot(AOI)
 
 #### Enhanced Vegetation Index Processing ####
@@ -42,13 +38,13 @@ plot(AOI)
 # Here, we import EVI scene that are cloud free
 
 # Load Scene 1; May 14, 2017 
-Scene1_EVI <- raster("EVI_NoClouds_20170514.tif")
+Scene1_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170514.tif")
 # Load Scene 2: May 30, 2017
-Scene2_EVI <- raster("EVI_NoClouds_20170530.tif")
+Scene2_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170530.tif")
 # Load Scene 3; July 17, 2017
-Scene3_EVI <- raster("EVI_NoClouds_20170717.tif")
+Scene3_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170717.tif")
 # Load Scene 4: September 3, 2017
-Scene4_EVI <- raster("EVI_NoClouds_20170903.tif")
+Scene4_EVI <- raster("ProcessedRasters/EVI_NoClouds_20170903.tif")
 # Rescale EVI Scenes by 0.0001
 Scene1EVI_rescale <- Scene1_EVI*0.0001
 Scene2EVI_rescale <- Scene2_EVI*0.0001
