@@ -12,7 +12,8 @@
 # load packages
 install.packages("easypackages")
 library(easypackages)
-libraries("ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+install_packages("ggcorrplot")
+libraries("ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
@@ -48,6 +49,10 @@ stoich$Year <- as.factor(stoich$Year)
 str(stoich)
 
 # subset the data by species
+# ABBA = Abies balsamea, balsam fir 
+# ACRU = Acer rubrum, red maple 
+# BEPA = Betula papyrifera, white birch 
+# VAAN = Vaccinium angustifolium, lowland blueberry
 ABBA <- subset(stoich, Species == "ABBA")
 ACRU <- subset(stoich, Species == "ACRU")
 BEPA <- subset(stoich, Species == "BEPA")
@@ -648,30 +653,37 @@ ggsave("graphics/StoichModels/Boxplots/VAANNP.jpg")
 
 
 #### Temporal Stoich Models ####
-#Start models with species separated
-#Global model: Species_Element ~ Year * GDD * EVI * (Site)
-#Test for correlation between covariates
-#If r > 0.70, variables are highly correlated and should not be in the same models 
-ABBA_GDD_EVI_cor <- cor.test(ABBA$GDD, ABBA$EVI)
-ABBA_GDD_EVI_cor
-ACRU_GDD_EVI_cor <- cor.test(ACRU$GDD, ACRU$EVI)
-ACRU_GDD_EVI_cor
-BEPA_GDD_EVI_cor <- cor.test(BEPA$GDD, BEPA$EVI)
-BEPA_GDD_EVI_cor
-VAAN_GDD_EVI_cor <- cor.test(VAAN$GDD, VAAN$EVI)
-VAAN_GDD_EVI_cor
+# test for correlation between covariates
+# if r > 0.70, variables are highly correlated and should not be in the same models 
+# compute a correlation matrix 
+# isolate the explanatory variables 
+abbacorrdata <- tibble(ABBA$GDD, ABBA$NDMI,ABBA$EVI)
+abbacorr <- (cor(abbacorrdata))
+ggcorrplot(abbacorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels/Correlations/ABBAcorr.jpg")
 
-#Create correlation plots to double check for co-linearaity between co-variates
-pairs.panels(ABBA[,25:27], method = "pearson", jiggle=T, hist.col = "grey", stars = T, cex.cor=1, main = "ABBA Covariate Correlation Plot", ci=T)
-pairs.panels(ACRU[,25:27], method = "pearson", jiggle=T, hist.col = "grey", stars = T, cex.cor=1, main = "ACRU Covariate Correlation Plot", ci=T)
-pairs.panels(BEPA[,25:27], method = "pearson", jiggle=T, hist.col = "grey", stars = T, cex.cor=1, main = "BEPA Covariate Correlation Plot", ci=T)
-pairs.panels(VAAN[,25:27], method = "pearson", jiggle=T, hist.col = "grey", stars = T, cex.cor=1, main = "VAAN Covariate Correlation Plot", ci=T)
+acrucorrdata <- tibble(ACRU$GDD, ACRU$NDMI,ACRU$EVI)
+acrucorr <- (cor(acrucorrdata))
+ggcorrplot(acrucorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels/Correlations/ACRUcorr.jpg")
 
-#Temporal stoich models 
-#Fit models of c, N, P, Qty C, Qty N, Qty P, C:N, or C:P, and N:P as a function
-#of covariates for each species
-#ABBA
-#%C
+bepacorrdata <- tibble(BEPA$GDD, BEPA$NDMI,BEPA$EVI)
+bepacorr <- (cor(bepacorrdata))
+ggcorrplot(bepacorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels/Correlations/BEPAcorr.jpg")
+
+vaancorrdata <- tibble(VAAN$GDD, VAAN$NDMI,VAAN$EVI)
+vaancorr <- (cor(vaancorrdata))
+ggcorrplot(vaancorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels/Correlations/VAANcorr.jpg")
+
+# using AICc to evaluate all variables and combinations of models 
+# run models separately for each species
+# fit models of c, N, P, Qty C, Qty N, Qty P, C:N, or C:P, and N:P as a function of covariates for each species
+# global model: Species_Element ~ Year * GDD * EVI * NDMI * (Site) 
+
+# ABBA
+# %C
 ABBA.C1 <- glm(C ~ Year * EVI * GDD * Site, data = ABBA)
 ABBA.C2 <- glm(C ~ Year * EVI * GDD, data = ABBA)
 ABBA.C3 <- glm(C~ Year * EVI * Site, data = ABBA)
