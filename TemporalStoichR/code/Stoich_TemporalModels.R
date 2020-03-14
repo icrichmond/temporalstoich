@@ -1,5 +1,5 @@
 # Author: Isabella Richmond
-# Last edited: March 13, 2020
+# Last edited: March 14, 2020
 
 # This code is for the creation and evaluation of my temporal stoichiometry models. A lot of 
 # Code was provided by Travis Heckford (twitter.com/travheckford)
@@ -8,27 +8,46 @@
 # Stoichiometry measured using C:N, C:P, and N:P 
 # Elemental composition is also used as a response variable - % C, % N, % P and quantities
 
+#### Data Preparation ####
 # load packages
 install.packages("easypackages")
 library(easypackages)
-libraries("ggplot2", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+libraries("ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
-stoich <- read.csv("C:/Users/Isabella Richmond/Dropbox/Chapter 1 - Temporal Stoich/Final Data/TotalStoich_2016_2017_Biomass.csv")
+stoich <- read_csv("input/Stoich_2016_2017.csv")
+gdd <- read_csv("input/GDD_2016_2017.csv")
+evi <- read_csv("input/EVI_2016_2017.csv")
+ndmi <- read_csv("input/NDMI_2016_2017.csv")
+# subset by year so that joining is possible 
+stoich2016 <- subset(stoich, Year==2016)
+stoich2017 <- subset(stoich, Year==2017)
+evi2016 <- subset(evi, Year==2016)
+evi2017 <- subset(evi, Year==2017)
+ndmi2016 <- subset(ndmi, Year==2016)
+ndmi2017 <- subset(ndmi, Year==2017)
+# ndmi and evi datasets have a different number of rows because there are multiple observations
+# at each sample point - due to there being multiple species at each sample point
+# want to add evi and ndmi columns to the stoich dataset to combine data
+# use inner_join by dpylr for EVI and NDMI because it keeps all matching and does not keep 
+# anything that doesn't match
+# output dataframe should have same number of rows as input stoich dataframe 
+stoich2016 <- stoich2016 %>%
+  inner_join(evi2016,by="PlotName") %>%
+  inner_join(ndmi2016, by="PlotName")
+stoich2017 <- stoich2017 %>%
+  inner_join(evi2017, by="PlotName")%>%
+  inner_join(ndmi2017,by="PlotName")
+# bind the 2016 and 2017 dataset back together 
+stoich <- rbind(stoich2016,stoich2017)
+# add GDD columns to stoich dataframe
+stoich <- add_column(stoich, GDD=gdd$GDD, GDDAverage=gdd$AverageGDD)
+
+# convert Year variable to factor (listed as integer)
+stoich$Year <- as.factor(stoich$Year)
 str(stoich)
 
-#Convert Year variable to factor (listed as integer)
-stoich[,'Year'] <-factor(stoich[,'Year'])
-str(stoich)
-
-#Set working directory 
-setwd("C:/Users/Isabella Richmond/Dropbox/Chapter 1 - Temporal Stoich")
-
-
-
-#Already joined the data in Excel, but could use Merge or Join functions here if not
-
-#Subset the data by species
+# subset the data by species
 ABBA <- subset(stoich, Species == "ABBA")
 ACRU <- subset(stoich, Species == "ACRU")
 BEPA <- subset(stoich, Species == "BEPA")
@@ -38,10 +57,12 @@ str(ACRU)
 str(BEPA)
 str(VAAN)
 
-#Make preliminary boxplots to compare data between years
-#Compare N, C, and P across years for each speciess
-#Code from Juliana Balluffi-Fry
-#Manually setting up colours 
+
+#### Data Exploration ####
+# make preliminary boxplots to compare data between years
+# compare N, C, and P across years for each speciess
+# code from Juliana Balluffi-Fry (https://gitlab.com/jballuffi)
+# manually setting up colours 
 cols<-c("2016"= rgb(52,71,61, maxColorValue = 255), "2017"= rgb(84,158,57, maxColorValue = 255))
 
 #Produce boxplot for %C, %N, %P, C, N, P, C:N, C:P, N:P for each species
@@ -52,8 +73,6 @@ ggplot(data=ABBA, aes(Year, C, fill=Year))+
   scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
   ggtitle("Balsam Fir")+
   labs(y="% Carbon", x="Year")+
-  
-  #My go to themes at the moment
   theme(axis.title=element_text(size=14),
         axis.text.x = element_text(size=12),
         plot.title = element_text(size = 14),
@@ -62,6 +81,7 @@ ggplot(data=ABBA, aes(Year, C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBAPerC.jpg")
 
 #%P 
 ggplot(data=ABBA, aes(Year, P, fill=Year))+
@@ -77,6 +97,7 @@ ggplot(data=ABBA, aes(Year, P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBAPerP.jpg")
 
 #%N
 ggplot(data=ABBA, aes(Year, N, fill=Year))+
@@ -92,6 +113,8 @@ ggplot(data=ABBA, aes(Year, N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBAPerN.jpg")
+
 #Qty C
 ggplot(data=ABBA, aes(Year, Qty_C, fill=Year))+
   geom_boxplot(position="dodge", notch=TRUE)+ 
@@ -106,6 +129,7 @@ ggplot(data=ABBA, aes(Year, Qty_C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBAQuanC.jpg")
 
 #Qty P
 ggplot(data=ABBA, aes(Year, Qty_P, fill=Year))+
@@ -121,6 +145,7 @@ ggplot(data=ABBA, aes(Year, Qty_P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBAQuanP.jpg")
 
 #Qty N
 ggplot(data=ABBA, aes(Year, Qty_N, fill=Year))+
@@ -136,6 +161,7 @@ ggplot(data=ABBA, aes(Year, Qty_N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBAQuanN.jpg")
 
 #C:N
 ggplot(data=ABBA, aes(Year, CNRatio, fill=Year))+
@@ -151,6 +177,7 @@ ggplot(data=ABBA, aes(Year, CNRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBACN.jpg")
 
 #C:P
 ggplot(data=ABBA, aes(Year, CPRatio, fill=Year))+
@@ -166,6 +193,7 @@ ggplot(data=ABBA, aes(Year, CPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ABBACP.jpg")
 
 #N:P
 ggplot(data=ABBA, aes(Year, NPRatio, fill=Year))+
@@ -181,7 +209,7 @@ ggplot(data=ABBA, aes(Year, NPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
-
+ggsave("graphics/StoichModels/Boxplots/ABBANP.jpg")
 
 #ACRU
 #%C
@@ -190,8 +218,6 @@ ggplot(data=ACRU, aes(Year, C, fill=Year))+
   scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
   ggtitle("Red Maple")+
   labs(y="% Carbon", x="Year")+
-  
-  #My go to themes at the moment
   theme(axis.title=element_text(size=14),
         axis.text.x = element_text(size=12),
         plot.title = element_text(size = 14),
@@ -200,6 +226,7 @@ ggplot(data=ACRU, aes(Year, C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUPerC.jpg")
 
 #%P 
 ggplot(data=ACRU, aes(Year, P, fill=Year))+
@@ -215,6 +242,7 @@ ggplot(data=ACRU, aes(Year, P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUPerP.jpg")
 
 #%N
 ggplot(data=ACRU, aes(Year, N, fill=Year))+
@@ -230,6 +258,8 @@ ggplot(data=ACRU, aes(Year, N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUPerN.jpg")
+
 #Qty C
 ggplot(data=ACRU, aes(Year, Qty_C, fill=Year))+
   geom_boxplot(position="dodge", notch=TRUE)+ 
@@ -244,6 +274,7 @@ ggplot(data=ACRU, aes(Year, Qty_C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUQuanC.jpg")
 
 #Qty P
 ggplot(data=ACRU, aes(Year, Qty_P, fill=Year))+
@@ -259,6 +290,7 @@ ggplot(data=ACRU, aes(Year, Qty_P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUQuanP.jpg")
 
 #Qty N
 ggplot(data=ACRU, aes(Year, Qty_N, fill=Year))+
@@ -274,6 +306,7 @@ ggplot(data=ACRU, aes(Year, Qty_N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUQuanN.jpg")
 
 #C:N
 ggplot(data=ACRU, aes(Year, CNRatio, fill=Year))+
@@ -289,6 +322,7 @@ ggplot(data=ACRU, aes(Year, CNRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUCN.jpg")
 
 #C:P
 ggplot(data=ACRU, aes(Year, CPRatio, fill=Year))+
@@ -304,6 +338,7 @@ ggplot(data=ACRU, aes(Year, CPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUCP.jpg")
 
 #N:P
 ggplot(data=ACRU, aes(Year, NPRatio, fill=Year))+
@@ -319,6 +354,7 @@ ggplot(data=ACRU, aes(Year, NPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/ACRUNP.jpg")
 
 #BEPA
 #%C
@@ -327,8 +363,6 @@ ggplot(data=BEPA, aes(Year, C, fill=Year))+
   scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
   ggtitle("White Birch")+
   labs(y="% Carbon", x="Year")+
-  
-  #My go to themes at the moment
   theme(axis.title=element_text(size=14),
         axis.text.x = element_text(size=12),
         plot.title = element_text(size = 14),
@@ -337,6 +371,7 @@ ggplot(data=BEPA, aes(Year, C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPAPerC.jpg")
 
 #%P 
 ggplot(data=BEPA, aes(Year, P, fill=Year))+
@@ -352,6 +387,7 @@ ggplot(data=BEPA, aes(Year, P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPAPerP.jpg")
 
 #%N
 ggplot(data=BEPA, aes(Year, N, fill=Year))+
@@ -367,6 +403,8 @@ ggplot(data=BEPA, aes(Year, N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPAPerN.jpg")
+
 #Qty C
 ggplot(data=BEPA, aes(Year, Qty_C, fill=Year))+
   geom_boxplot(position="dodge", notch=TRUE)+ 
@@ -381,6 +419,7 @@ ggplot(data=BEPA, aes(Year, Qty_C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPAQuanC.jpg")
 
 #Qty P
 ggplot(data=BEPA, aes(Year, Qty_P, fill=Year))+
@@ -396,6 +435,7 @@ ggplot(data=BEPA, aes(Year, Qty_P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPAQuanP.jpg")
 
 #Qty N
 ggplot(data=BEPA, aes(Year, Qty_N, fill=Year))+
@@ -411,6 +451,7 @@ ggplot(data=BEPA, aes(Year, Qty_N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPAQuanN.jpg")
 
 #C:N
 ggplot(data=BEPA, aes(Year, CNRatio, fill=Year))+
@@ -426,6 +467,7 @@ ggplot(data=BEPA, aes(Year, CNRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPACN.jpg")
 
 #C:P
 ggplot(data=BEPA, aes(Year, CPRatio, fill=Year))+
@@ -441,6 +483,7 @@ ggplot(data=BEPA, aes(Year, CPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPACP.jpg")
 
 #N:P
 ggplot(data=BEPA, aes(Year, NPRatio, fill=Year))+
@@ -456,6 +499,7 @@ ggplot(data=BEPA, aes(Year, NPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/BEPANP.jpg")
 
 #VAAN
 #%C
@@ -464,8 +508,6 @@ ggplot(data=VAAN, aes(Year, C, fill=Year))+
   scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
   ggtitle("Lowland Blueberry")+
   labs(y="% Carbon", x="Year")+
-  
-  #My go to themes at the moment
   theme(axis.title=element_text(size=14),
         axis.text.x = element_text(size=12),
         plot.title = element_text(size = 14),
@@ -474,6 +516,7 @@ ggplot(data=VAAN, aes(Year, C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANPerC.jpg")
 
 #%P 
 ggplot(data=VAAN, aes(Year, P, fill=Year))+
@@ -489,6 +532,7 @@ ggplot(data=VAAN, aes(Year, P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANPerP.jpg")
 
 #%N
 ggplot(data=VAAN, aes(Year, N, fill=Year))+
@@ -504,6 +548,8 @@ ggplot(data=VAAN, aes(Year, N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANPerN.jpg")
+
 #Qty C
 ggplot(data=VAAN, aes(Year, Qty_C, fill=Year))+
   geom_boxplot(position="dodge", notch=TRUE)+ 
@@ -518,6 +564,7 @@ ggplot(data=VAAN, aes(Year, Qty_C, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANQuanC.jpg")
 
 #Qty P
 ggplot(data=VAAN, aes(Year, Qty_P, fill=Year))+
@@ -533,6 +580,7 @@ ggplot(data=VAAN, aes(Year, Qty_P, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANQuanP.jpg")
 
 #Qty N
 ggplot(data=VAAN, aes(Year, Qty_N, fill=Year))+
@@ -548,6 +596,7 @@ ggplot(data=VAAN, aes(Year, Qty_N, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANQuanN.jpg")
 
 #C:N
 ggplot(data=VAAN, aes(Year, CNRatio, fill=Year))+
@@ -563,6 +612,7 @@ ggplot(data=VAAN, aes(Year, CNRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANCN.jpg")
 
 #C:P
 ggplot(data=VAAN, aes(Year, CPRatio, fill=Year))+
@@ -578,6 +628,7 @@ ggplot(data=VAAN, aes(Year, CPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANCP.jpg")
 
 #N:P
 ggplot(data=VAAN, aes(Year, NPRatio, fill=Year))+
@@ -593,11 +644,12 @@ ggplot(data=VAAN, aes(Year, NPRatio, fill=Year))+
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave("graphics/StoichModels/Boxplots/VAANNP.jpg")
 
+
+#### Temporal Stoich Models ####
 #Start models with species separated
 #Global model: Species_Element ~ Year * GDD * EVI * (Site)
-
-
 #Test for correlation between covariates
 #If r > 0.70, variables are highly correlated and should not be in the same models 
 ABBA_GDD_EVI_cor <- cor.test(ABBA$GDD, ABBA$EVI)
