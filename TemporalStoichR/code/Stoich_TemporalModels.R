@@ -2197,7 +2197,7 @@ BEPA.Qty_Nmodels <- list(BEPA.Qty_N1, BEPA.Qty_N2, BEPA.Qty_N3, BEPA.Qty_N4, BEP
 # create diagnostic figures 
 BEPA.Qty_N.residplots <- imap(BEPA.Qty_Nmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels/ModelDiagnostics/BEPA_QtyP_glm.pdf")
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_QtyN_glm.pdf")
 BEPA.Qty_N.residplots
 dev.off()
 
