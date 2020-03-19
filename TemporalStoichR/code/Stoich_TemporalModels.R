@@ -1239,6 +1239,17 @@ ACRU.C28 <- glm(C ~ GDD, data = ACRU)
 ACRU.C29 <- glm(C ~ EVI, data = ACRU) 
 ACRU.C30 <- glm(C ~ Year, data = ACRU) 
 ACRU.C31 <- glm(C ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Cmodels <- list(ACRU.C1, ACRU.C2, ACRU.C3, ACRU.C4, ACRU.C5, ACRU.C6, ACRU.C7, ACRU.C8, ACRU.C9, ACRU.C10, ACRU.C11, ACRU.C12, ACRU.C13, ACRU.C14, ACRU.C15, ACRU.C16, ACRU.C17, ACRU.C18, ACRU.C19, ACRU.C20, ACRU.C21, ACRU.C22, ACRU.C23, ACRU.C24, ACRU.C25, ACRU.C26, ACRU.C27, ACRU.C28, ACRU.C29, ACRU.C30, ACRU.C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.C.residplots <- imap(ACRU.Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_C_glm.pdf")
+ACRU.C.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.C <- list("ACRU.C1" = ACRU.C1, "ACRU.C2" = ACRU.C2, "ACRU.C3" = ACRU.C3, "ACRU.C4" = ACRU.C4, "ACRU.C5" = ACRU.C5, "ACRU.C6" = ACRU.C6, "ACRU.C7" = ACRU.C7, "ACRU.C8" =  ACRU.C8, "ACRU.C9" = ACRU.C9, "ACRU.C10" = ACRU.C10, "ACRU.C11" = ACRU.C11, "ACRU.C12" = ACRU.C12, "ACRU.C13" = ACRU.C13, "ACRU.C14" = ACRU.C14, "ACRU.C15" = ACRU.C15, "ACRU.C16" = ACRU.C16, "ACRU.C17" = ACRU.C17, "ACRU.C18" = ACRU.C18, "ACRU.C19" = ACRU.C19, "ACRU.C20" = ACRU.C20, "ACRU.C21" = ACRU.C21, "ACRU.C22" = ACRU.C22, "ACRU.C23" = ACRU.C23, "ACRU.C24" =  ACRU.C24, "ACRU.C25" = ACRU.C25, "ACRU.C26" = ACRU.C26, "ACRU.C27" = ACRU.C27, "ACRU.C28" = ACRU.C28, "ACRU.C29" = ACRU.C29, "ACRU.C30" = ACRU.C30, "ACRU.C31" = ACRU.C31)
 ACRU.C <- aictab(cand.set = Models.ACRU.C)
@@ -1280,7 +1291,18 @@ ACRU.P28 <- glm(P ~ GDD, data = ACRU)
 ACRU.P29 <- glm(P ~ EVI, data = ACRU) 
 ACRU.P30 <- glm(P ~ Year, data = ACRU) 
 ACRU.P31 <- glm(P ~ 1, data =  ACRU)
-# create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Pmodels <- list(ACRU.P1, ACRU.P2, ACRU.P3, ACRU.P4, ACRU.P5, ACRU.P6, ACRU.P7, ACRU.P8, ACRU.P9, ACRU.P10, ACRU.P11, ACRU.P12, ACRU.P13, ACRU.P14, ACRU.P15, ACRU.P16, ACRU.P17, ACRU.P18, ACRU.P19, ACRU.P20, ACRU.P21, ACRU.P22, ACRU.P23, ACRU.P24, ACRU.P25, ACRU.P26, ACRU.P27, ACRU.P28, ACRU.P29, ACRU.P30, ACRU.P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.P.residplots <- imap(ACRU.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_P_glm.pdf")
+ACRU.P.residplots
+dev.off()
+
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.P <- list("ACRU.P1" = ACRU.P1, "ACRU.P2" = ACRU.P2, "ACRU.P3" = ACRU.P3, "ACRU.P4" = ACRU.P4, "ACRU.P5" = ACRU.P5, "ACRU.P6" = ACRU.P6, "ACRU.P7" = ACRU.P7, "ACRU.P8" =  ACRU.P8, "ACRU.P9" = ACRU.P9, "ACRU.P10" = ACRU.P10, "ACRU.P11" = ACRU.P11, "ACRU.P12" = ACRU.P12, "ACRU.P13" = ACRU.P13, "ACRU.P14" = ACRU.P14, "ACRU.P15" = ACRU.P15, "ACRU.P16" = ACRU.P16, "ACRU.P17" = ACRU.P17, "ACRU.P18" = ACRU.P18, "ACRU.P19" = ACRU.P19, "ACRU.P20" = ACRU.P20, "ACRU.P21" = ACRU.P21, "ACRU.P22" = ACRU.P22, "ACRU.P23" = ACRU.P23, "ACRU.P24" =  ACRU.P24, "ACRU.P25" = ACRU.P25, "ACRU.P26" = ACRU.P26, "ACRU.P27" = ACRU.P27, "ACRU.P28" = ACRU.P28, "ACRU.P29" = ACRU.P29, "ACRU.P30" = ACRU.P30, "ACRU.P31" = ACRU.P31)
 ACRU.P <- aictab(cand.set = Models.ACRU.P)
 print(ACRU.P)
@@ -1333,6 +1355,17 @@ ACRU.N28 <- glm(N ~ GDD, data = ACRU)
 ACRU.N29 <- glm(N ~ EVI, data = ACRU) 
 ACRU.N30 <- glm(N ~ Year, data = ACRU) 
 ACRU.N31 <- glm(N ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Nmodels <- list(ACRU.N1, ACRU.N2, ACRU.N3, ACRU.N4, ACRU.N5, ACRU.N6, ACRU.N7, ACRU.N8, ACRU.N9, ACRU.N10, ACRU.N11, ACRU.N12, ACRU.N13, ACRU.N14, ACRU.N15, ACRU.N16, ACRU.N17, ACRU.N18, ACRU.N19, ACRU.N20, ACRU.N21, ACRU.N22, ACRU.N23, ACRU.N24, ACRU.N25, ACRU.N26, ACRU.N27, ACRU.N28, ACRU.N29, ACRU.N30, ACRU.N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.N.residplots <- imap(ACRU.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_N_glm.pdf")
+ACRU.N.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.N <- list("ACRU.N1" = ACRU.N1, "ACRU.N2" = ACRU.N2, "ACRU.N3" = ACRU.N3, "ACRU.N4" = ACRU.N4, "ACRU.N5" = ACRU.N5, "ACRU.N6" = ACRU.N6, "ACRU.N7" = ACRU.N7, "ACRU.N8" =  ACRU.N8, "ACRU.N9" = ACRU.N9, "ACRU.N10" = ACRU.N10, "ACRU.N11" = ACRU.N11, "ACRU.N12" = ACRU.N12, "ACRU.N13" = ACRU.N13, "ACRU.N14" = ACRU.N14, "ACRU.N15" = ACRU.N15, "ACRU.N16" = ACRU.N16, "ACRU.N17" = ACRU.N17, "ACRU.N18" = ACRU.N18, "ACRU.N19" = ACRU.N19, "ACRU.N20" = ACRU.N20, "ACRU.N21" = ACRU.N21, "ACRU.N22" = ACRU.N22, "ACRU.N23" = ACRU.N23, "ACRU.N24" =  ACRU.N24, "ACRU.N25" = ACRU.N25, "ACRU.N26" = ACRU.N26, "ACRU.N27" = ACRU.N27, "ACRU.N28" = ACRU.N28, "ACRU.N29" = ACRU.N29, "ACRU.N30" = ACRU.N30, "ACRU.N31" = ACRU.N31)
 ACRU.N <- aictab(cand.set = Models.ACRU.N)
@@ -1376,6 +1409,17 @@ ACRU.CN28 <- glm(CNRatio ~ GDD, data = ACRU)
 ACRU.CN29 <- glm(CNRatio ~ EVI, data = ACRU) 
 ACRU.CN30 <- glm(CNRatio ~ Year, data = ACRU) 
 ACRU.CN31 <- glm(CNRatio ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.CNmodels <- list(ACRU.CN1, ACRU.CN2, ACRU.CN3, ACRU.CN4, ACRU.CN5, ACRU.CN6, ACRU.CN7, ACRU.CN8, ACRU.CN9, ACRU.CN10, ACRU.CN11, ACRU.CN12, ACRU.CN13, ACRU.CN14, ACRU.CN15, ACRU.CN16, ACRU.CN17, ACRU.CN18, ACRU.CN19, ACRU.CN20, ACRU.CN21, ACRU.CN22, ACRU.CN23, ACRU.CN24, ACRU.CN25, ACRU.CN26, ACRU.CN27, ACRU.CN28, ACRU.CN29, ACRU.CN30, ACRU.CN31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.CN.residplots <- imap(ACRU.CNmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_CN_glm.pdf")
+ACRU.CN.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.CN <- list("ACRU.CN1" = ACRU.CN1, "ACRU.CN2" = ACRU.CN2, "ACRU.CN3" = ACRU.CN3, "ACRU.CN4" = ACRU.CN4, "ACRU.CN5" = ACRU.CN5, "ACRU.CN6" = ACRU.CN6, "ACRU.CN7" = ACRU.CN7, "ACRU.CN8" =  ACRU.CN8, "ACRU.CN9" = ACRU.CN9, "ACRU.CN10" = ACRU.CN10, "ACRU.CN11" = ACRU.CN11, "ACRU.CN12" = ACRU.CN12, "ACRU.CN13" = ACRU.CN13, "ACRU.CN14" = ACRU.CN14, "ACRU.CN15" = ACRU.CN15, "ACRU.CN16" = ACRU.CN16, "ACRU.CN17" = ACRU.CN17, "ACRU.CN18" = ACRU.CN18, "ACRU.CN19" = ACRU.CN19, "ACRU.CN20" = ACRU.CN20, "ACRU.CN21" = ACRU.CN21, "ACRU.CN22" = ACRU.CN22, "ACRU.CN23" = ACRU.CN23, "ACRU.CN24" =  ACRU.CN24, "ACRU.CN25" = ACRU.CN25, "ACRU.CN26" = ACRU.CN26, "ACRU.CN27" = ACRU.CN27, "ACRU.CN28" = ACRU.CN28, "ACRU.CN29" = ACRU.CN29, "ACRU.CN30" = ACRU.CN30, "ACRU.CN31" = ACRU.CN31)
 ACRU.CN <- aictab(cand.set = Models.ACRU.CN)
@@ -1419,6 +1463,17 @@ ACRU.CP28 <- glm(CPRatio ~ GDD, data = ACRU)
 ACRU.CP29 <- glm(CPRatio ~ EVI, data = ACRU) 
 ACRU.CP30 <- glm(CPRatio ~ Year, data = ACRU) 
 ACRU.CP31 <- glm(CPRatio ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.CPmodels <- list(ACRU.CP1, ACRU.CP2, ACRU.CP3, ACRU.CP4, ACRU.CP5, ACRU.CP6, ACRU.CP7, ACRU.CP8, ACRU.CP9, ACRU.CP10, ACRU.CP11, ACRU.CP12, ACRU.CP13, ACRU.CP14, ACRU.CP15, ACRU.CP16, ACRU.CP17, ACRU.CP18, ACRU.CP19, ACRU.CP20, ACRU.CP21, ACRU.CP22, ACRU.CP23, ACRU.CP24, ACRU.CP25, ACRU.CP26, ACRU.CP27, ACRU.CP28, ACRU.CP29, ACRU.CP30, ACRU.CP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.CP.residplots <- imap(ACRU.CPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_CP_glm.pdf")
+ACRU.CP.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.CP <- list("ACRU.CP1" = ACRU.CP1, "ACRU.CP2" = ACRU.CP2, "ACRU.CP3" = ACRU.CP3, "ACRU.CP4" = ACRU.CP4, "ACRU.CP5" = ACRU.CP5, "ACRU.CP6" = ACRU.CP6, "ACRU.CP7" = ACRU.CP7, "ACRU.CP8" =  ACRU.CP8, "ACRU.CP9" = ACRU.CP9, "ACRU.CP10" = ACRU.CP10, "ACRU.CP11" = ACRU.CP11, "ACRU.CP12" = ACRU.CP12, "ACRU.CP13" = ACRU.CP13, "ACRU.CP14" = ACRU.CP14, "ACRU.CP15" = ACRU.CP15, "ACRU.CP16" = ACRU.CP16, "ACRU.CP17" = ACRU.CP17, "ACRU.CP18" = ACRU.CP18, "ACRU.CP19" = ACRU.CP19, "ACRU.CP20" = ACRU.CP20, "ACRU.CP21" = ACRU.CP21, "ACRU.CP22" = ACRU.CP22, "ACRU.CP23" = ACRU.CP23, "ACRU.CP24" =  ACRU.CP24, "ACRU.CP25" = ACRU.CP25, "ACRU.CP26" = ACRU.CP26, "ACRU.CP27" = ACRU.CP27, "ACRU.CP28" = ACRU.CP28, "ACRU.CP29" = ACRU.CP29, "ACRU.CP30" = ACRU.CP30, "ACRU.CP31" = ACRU.CP31)
 ACRU.CP <- aictab(cand.set = Models.ACRU.CP)
@@ -1460,6 +1515,17 @@ ACRU.NP28 <- glm(NPRatio ~ GDD, data = ACRU)
 ACRU.NP29 <- glm(NPRatio ~ EVI, data = ACRU) 
 ACRU.NP30 <- glm(NPRatio ~ Year, data = ACRU) 
 ACRU.NP31 <- glm(NPRatio ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.NPmodels <- list(ACRU.NP1, ACRU.NP2, ACRU.NP3, ACRU.NP4, ACRU.NP5, ACRU.NP6, ACRU.NP7, ACRU.NP8, ACRU.NP9, ACRU.NP10, ACRU.NP11, ACRU.NP12, ACRU.NP13, ACRU.NP14, ACRU.NP15, ACRU.NP16, ACRU.NP17, ACRU.NP18, ACRU.NP19, ACRU.NP20, ACRU.NP21, ACRU.NP22, ACRU.NP23, ACRU.NP24, ACRU.NP25, ACRU.NP26, ACRU.NP27, ACRU.NP28, ACRU.NP29, ACRU.NP30, ACRU.NP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.NP.residplots <- imap(ACRU.NPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_NP_glm.pdf")
+ACRU.NP.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.NP <- list("ACRU.NP1" = ACRU.NP1, "ACRU.NP2" = ACRU.NP2, "ACRU.NP3" = ACRU.NP3, "ACRU.NP4" = ACRU.NP4, "ACRU.NP5" = ACRU.NP5, "ACRU.NP6" = ACRU.NP6, "ACRU.NP7" = ACRU.NP7, "ACRU.NP8" =  ACRU.NP8, "ACRU.NP9" = ACRU.NP9, "ACRU.NP10" = ACRU.NP10, "ACRU.NP11" = ACRU.NP11, "ACRU.NP12" = ACRU.NP12, "ACRU.NP13" = ACRU.NP13, "ACRU.NP14" = ACRU.NP14, "ACRU.NP15" = ACRU.NP15, "ACRU.NP16" = ACRU.NP16, "ACRU.NP17" = ACRU.NP17, "ACRU.NP18" = ACRU.NP18, "ACRU.NP19" = ACRU.NP19, "ACRU.NP20" = ACRU.NP20, "ACRU.NP21" = ACRU.NP21, "ACRU.NP22" = ACRU.NP22, "ACRU.NP23" = ACRU.NP23, "ACRU.NP24" =  ACRU.NP24, "ACRU.NP25" = ACRU.NP25, "ACRU.NP26" = ACRU.NP26, "ACRU.NP27" = ACRU.NP27, "ACRU.NP28" = ACRU.NP28, "ACRU.NP29" = ACRU.NP29, "ACRU.NP30" = ACRU.NP30, "ACRU.NP31" = ACRU.NP31)
 ACRU.NP <- aictab(cand.set = Models.ACRU.NP)
@@ -1507,6 +1573,17 @@ ACRU.Qty_C28 <- glm(Qty_C ~ GDD, data = ACRU)
 ACRU.Qty_C29 <- glm(Qty_C ~ EVI, data = ACRU) 
 ACRU.Qty_C30 <- glm(Qty_C ~ Year, data = ACRU) 
 ACRU.Qty_C31 <- glm(Qty_C ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Qty_Cmodels <- list(ACRU.Qty_C1, ACRU.Qty_C2, ACRU.Qty_C3, ACRU.Qty_C4, ACRU.Qty_C5, ACRU.Qty_C6, ACRU.Qty_C7, ACRU.Qty_C8, ACRU.Qty_C9, ACRU.Qty_C10, ACRU.Qty_C11, ACRU.Qty_C12, ACRU.Qty_C13, ACRU.Qty_C14, ACRU.Qty_C15, ACRU.Qty_C16, ACRU.Qty_C17, ACRU.Qty_C18, ACRU.Qty_C19, ACRU.Qty_C20, ACRU.Qty_C21, ACRU.Qty_C22, ACRU.Qty_C23, ACRU.Qty_C24, ACRU.Qty_C25, ACRU.Qty_C26, ACRU.Qty_C27, ACRU.Qty_C28, ACRU.Qty_C29, ACRU.Qty_C30, ACRU.Qty_C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.Qty_C.residplots <- imap(ACRU.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_QtyC_glm.pdf")
+ACRU.Qty_C.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.Qty_C <- list("ACRU.Qty_C1" = ACRU.Qty_C1, "ACRU.Qty_C2" = ACRU.Qty_C2, "ACRU.Qty_C3" = ACRU.Qty_C3, "ACRU.Qty_C4" = ACRU.Qty_C4, "ACRU.Qty_C5" = ACRU.Qty_C5, "ACRU.Qty_C6" = ACRU.Qty_C6, "ACRU.Qty_C7" = ACRU.Qty_C7, "ACRU.Qty_C8" =  ACRU.Qty_C8, "ACRU.Qty_C9" = ACRU.Qty_C9, "ACRU.Qty_C10" = ACRU.Qty_C10, "ACRU.Qty_C11" = ACRU.Qty_C11, "ACRU.Qty_C12" = ACRU.Qty_C12, "ACRU.Qty_C13" = ACRU.Qty_C13, "ACRU.Qty_C14" = ACRU.Qty_C14, "ACRU.Qty_C15" = ACRU.Qty_C15, "ACRU.Qty_C16" = ACRU.Qty_C16, "ACRU.Qty_C17" = ACRU.Qty_C17, "ACRU.Qty_C18" = ACRU.Qty_C18, "ACRU.Qty_C19" = ACRU.Qty_C19, "ACRU.Qty_C20" = ACRU.Qty_C20, "ACRU.Qty_C21" = ACRU.Qty_C21, "ACRU.Qty_C22" = ACRU.Qty_C22, "ACRU.Qty_C23" = ACRU.Qty_C23, "ACRU.Qty_C24" =  ACRU.Qty_C24, "ACRU.Qty_C25" = ACRU.Qty_C25, "ACRU.Qty_C26" = ACRU.Qty_C26, "ACRU.Qty_C27" = ACRU.Qty_C27, "ACRU.Qty_C28" = ACRU.Qty_C28, "ACRU.Qty_C29" = ACRU.Qty_C29, "ACRU.Qty_C30" = ACRU.Qty_C30, "ACRU.Qty_C31" = ACRU.Qty_C31)
 ACRU.Qty_C <- aictab(cand.set = Models.ACRU.Qty_C)
@@ -1554,6 +1631,17 @@ ACRU.Qty_P28 <- glm(Qty_P ~ GDD, data = ACRU)
 ACRU.Qty_P29 <- glm(Qty_P ~ EVI, data = ACRU) 
 ACRU.Qty_P30 <- glm(Qty_P ~ Year, data = ACRU) 
 ACRU.Qty_P31 <- glm(Qty_P ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Qty_Pmodels <- list(ACRU.Qty_P1, ACRU.Qty_P2, ACRU.Qty_P3, ACRU.Qty_P4, ACRU.Qty_P5, ACRU.Qty_P6, ACRU.Qty_P7, ACRU.Qty_P8, ACRU.Qty_P9, ACRU.Qty_P10, ACRU.Qty_P11, ACRU.Qty_P12, ACRU.Qty_P13, ACRU.Qty_P14, ACRU.Qty_P15, ACRU.Qty_P16, ACRU.Qty_P17, ACRU.Qty_P18, ACRU.Qty_P19, ACRU.Qty_P20, ACRU.Qty_P21, ACRU.Qty_P22, ACRU.Qty_P23, ACRU.Qty_P24, ACRU.Qty_P25, ACRU.Qty_P26, ACRU.Qty_P27, ACRU.Qty_P28, ACRU.Qty_P29, ACRU.Qty_P30, ACRU.Qty_P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.Qty_P.residplots <- imap(ACRU.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_QtyP_glm.pdf")
+ACRU.Qty_P.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.Qty_P <- list("ACRU.Qty_P1" = ACRU.Qty_P1, "ACRU.Qty_P2" = ACRU.Qty_P2, "ACRU.Qty_P3" = ACRU.Qty_P3, "ACRU.Qty_P4" = ACRU.Qty_P4, "ACRU.Qty_P5" = ACRU.Qty_P5, "ACRU.Qty_P6" = ACRU.Qty_P6, "ACRU.Qty_P7" = ACRU.Qty_P7, "ACRU.Qty_P8" =  ACRU.Qty_P8, "ACRU.Qty_P9" = ACRU.Qty_P9, "ACRU.Qty_P10" = ACRU.Qty_P10, "ACRU.Qty_P11" = ACRU.Qty_P11, "ACRU.Qty_P12" = ACRU.Qty_P12, "ACRU.Qty_P13" = ACRU.Qty_P13, "ACRU.Qty_P14" = ACRU.Qty_P14, "ACRU.Qty_P15" = ACRU.Qty_P15, "ACRU.Qty_P16" = ACRU.Qty_P16, "ACRU.Qty_P17" = ACRU.Qty_P17, "ACRU.Qty_P18" = ACRU.Qty_P18, "ACRU.Qty_P19" = ACRU.Qty_P19, "ACRU.Qty_P20" = ACRU.Qty_P20, "ACRU.Qty_P21" = ACRU.Qty_P21, "ACRU.Qty_P22" = ACRU.Qty_P22, "ACRU.Qty_P23" = ACRU.Qty_P23, "ACRU.Qty_P24" =  ACRU.Qty_P24, "ACRU.Qty_P25" = ACRU.Qty_P25, "ACRU.Qty_P26" = ACRU.Qty_P26, "ACRU.Qty_P27" = ACRU.Qty_P27, "ACRU.Qty_P28" = ACRU.Qty_P28, "ACRU.Qty_P29" = ACRU.Qty_P29, "ACRU.Qty_P30" = ACRU.Qty_P30, "ACRU.Qty_P31" = ACRU.Qty_P31)
 ACRU.Qty_P <- aictab(cand.set = Models.ACRU.Qty_P)
@@ -1599,6 +1687,17 @@ ACRU.Qty_N28 <- glm(Qty_N ~ GDD, data = ACRU)
 ACRU.Qty_N29 <- glm(Qty_N ~ EVI, data = ACRU) 
 ACRU.Qty_N30 <- glm(Qty_N ~ Year, data = ACRU) 
 ACRU.Qty_N31 <- glm(Qty_N ~ 1, data =  ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Qty_Nmodels <- list(ACRU.Qty_N1, ACRU.Qty_N2, ACRU.Qty_N3, ACRU.Qty_N4, ACRU.Qty_N5, ACRU.Qty_N6, ACRU.Qty_N7, ACRU.Qty_N8, ACRU.Qty_N9, ACRU.Qty_N10, ACRU.Qty_N11, ACRU.Qty_N12, ACRU.Qty_N13, ACRU.Qty_N14, ACRU.Qty_N15, ACRU.Qty_N16, ACRU.Qty_N17, ACRU.Qty_N18, ACRU.Qty_N19, ACRU.Qty_N20, ACRU.Qty_N21, ACRU.Qty_N22, ACRU.Qty_N23, ACRU.Qty_N24, ACRU.Qty_N25, ACRU.Qty_N26, ACRU.Qty_N27, ACRU.Qty_N28, ACRU.Qty_N29, ACRU.Qty_N30, ACRU.Qty_N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.Qty_N.residplots <- imap(ACRU.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ACRU_QtyN_glm.pdf")
+ACRU.Qty_N.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.Qty_N <- list("ACRU.Qty_N1" = ACRU.Qty_N1, "ACRU.Qty_N2" = ACRU.Qty_N2, "ACRU.Qty_N3" = ACRU.Qty_N3, "ACRU.Qty_N4" = ACRU.Qty_N4, "ACRU.Qty_N5" = ACRU.Qty_N5, "ACRU.Qty_N6" = ACRU.Qty_N6, "ACRU.Qty_N7" = ACRU.Qty_N7, "ACRU.Qty_N8" =  ACRU.Qty_N8, "ACRU.Qty_N9" = ACRU.Qty_N9, "ACRU.Qty_N10" = ACRU.Qty_N10, "ACRU.Qty_N11" = ACRU.Qty_N11, "ACRU.Qty_N12" = ACRU.Qty_N12, "ACRU.Qty_N13" = ACRU.Qty_N13, "ACRU.Qty_N14" = ACRU.Qty_N14, "ACRU.Qty_N15" = ACRU.Qty_N15, "ACRU.Qty_N16" = ACRU.Qty_N16, "ACRU.Qty_N17" = ACRU.Qty_N17, "ACRU.Qty_N18" = ACRU.Qty_N18, "ACRU.Qty_N19" = ACRU.Qty_N19, "ACRU.Qty_N20" = ACRU.Qty_N20, "ACRU.Qty_N21" = ACRU.Qty_N21, "ACRU.Qty_N22" = ACRU.Qty_N22, "ACRU.Qty_N23" = ACRU.Qty_N23, "ACRU.Qty_N24" =  ACRU.Qty_N24, "ACRU.Qty_N25" = ACRU.Qty_N25, "ACRU.Qty_N26" = ACRU.Qty_N26, "ACRU.Qty_N27" = ACRU.Qty_N27, "ACRU.Qty_N28" = ACRU.Qty_N28, "ACRU.Qty_N29" = ACRU.Qty_N29, "ACRU.Qty_N30" = ACRU.Qty_N30, "ACRU.Qty_N31" = ACRU.Qty_N31)
 ACRU.Qty_N <- aictab(cand.set = Models.ACRU.Qty_N)
@@ -1648,6 +1747,17 @@ BEPA.C28 <- glm(C ~ GDD, data = BEPA)
 BEPA.C29 <- glm(C ~ EVI, data = BEPA) 
 BEPA.C30 <- glm(C ~ Year, data = BEPA) 
 BEPA.C31 <- glm(C ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Cmodels <- list(BEPA.C1, BEPA.C2, BEPA.C3, BEPA.C4, BEPA.C5, BEPA.C6, BEPA.C7, BEPA.C8, BEPA.C9, BEPA.C10, BEPA.C11, BEPA.C12, BEPA.C13, BEPA.C14, BEPA.C15, BEPA.C16, BEPA.C17, BEPA.C18, BEPA.C19, BEPA.C20, BEPA.C21, BEPA.C22, BEPA.C23, BEPA.C24, BEPA.C25, BEPA.C26, BEPA.C27, BEPA.C28, BEPA.C29, BEPA.C30, BEPA.C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.C.residplots <- imap(BEPA.Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_C_glm.pdf")
+BEPA.C.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.C <- list("BEPA.C1" = BEPA.C1, "BEPA.C2" = BEPA.C2, "BEPA.C3" = BEPA.C3, "BEPA.C4" = BEPA.C4, "BEPA.C5" = BEPA.C5, "BEPA.C6" = BEPA.C6, "BEPA.C7" = BEPA.C7, "BEPA.C8" =  BEPA.C8, "BEPA.C9" = BEPA.C9, "BEPA.C10" = BEPA.C10, "BEPA.C11" = BEPA.C11, "BEPA.C12" = BEPA.C12, "BEPA.C13" = BEPA.C13, "BEPA.C14" = BEPA.C14, "BEPA.C15" = BEPA.C15, "BEPA.C16" = BEPA.C16, "BEPA.C17" = BEPA.C17, "BEPA.C18" = BEPA.C18, "BEPA.C19" = BEPA.C19, "BEPA.C20" = BEPA.C20, "BEPA.C21" = BEPA.C21, "BEPA.C22" = BEPA.C22, "BEPA.C23" = BEPA.C23, "BEPA.C24" =  BEPA.C24, "BEPA.C25" = BEPA.C25, "BEPA.C26" = BEPA.C26, "BEPA.C27" = BEPA.C27, "BEPA.C28" = BEPA.C28, "BEPA.C29" = BEPA.C29, "BEPA.C30" = BEPA.C30, "BEPA.C31" = BEPA.C31)
 BEPA.C <- aictab(cand.set = Models.BEPA.C)
@@ -1691,6 +1801,18 @@ BEPA.P28 <- glm(P ~ GDD, data = BEPA)
 BEPA.P29 <- glm(P ~ EVI, data = BEPA) 
 BEPA.P30 <- glm(P ~ Year, data = BEPA) 
 BEPA.P31 <- glm(P ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Pmodels <- list(BEPA.P1, BEPA.P2, BEPA.P3, BEPA.P4, BEPA.P5, BEPA.P6, BEPA.P7, BEPA.P8, BEPA.P9, BEPA.P10, BEPA.P11, BEPA.P12, BEPA.P13, BEPA.P14, BEPA.P15, BEPA.P16, BEPA.P17, BEPA.P18, BEPA.P19, BEPA.P20, BEPA.P21, BEPA.P22, BEPA.P23, BEPA.P24, BEPA.P25, BEPA.P26, BEPA.P27, BEPA.P28, BEPA.P29, BEPA.P30, BEPA.P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.P.residplots <- imap(BEPA.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_P_glm.pdf")
+BEPA.P.residplots
+dev.off()
+
+
 # create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.P <- list("BEPA.P1" = BEPA.P1, "BEPA.P2" = BEPA.P2, "BEPA.P3" = BEPA.P3, "BEPA.P4" = BEPA.P4, "BEPA.P5" = BEPA.P5, "BEPA.P6" = BEPA.P6, "BEPA.P7" = BEPA.P7, "BEPA.P8" =  BEPA.P8, "BEPA.P9" = BEPA.P9, "BEPA.P10" = BEPA.P10, "BEPA.P11" = BEPA.P11, "BEPA.P12" = BEPA.P12, "BEPA.P13" = BEPA.P13, "BEPA.P14" = BEPA.P14, "BEPA.P15" = BEPA.P15, "BEPA.P16" = BEPA.P16, "BEPA.P17" = BEPA.P17, "BEPA.P18" = BEPA.P18, "BEPA.P19" = BEPA.P19, "BEPA.P20" = BEPA.P20, "BEPA.P21" = BEPA.P21, "BEPA.P22" = BEPA.P22, "BEPA.P23" = BEPA.P23, "BEPA.P24" =  BEPA.P24, "BEPA.P25" = BEPA.P25, "BEPA.P26" = BEPA.P26, "BEPA.P27" = BEPA.P27, "BEPA.P28" = BEPA.P28, "BEPA.P29" = BEPA.P29, "BEPA.P30" = BEPA.P30, "BEPA.P31" = BEPA.P31)
 BEPA.P <- aictab(cand.set = Models.BEPA.P)
@@ -1738,6 +1860,17 @@ BEPA.N28 <- glm(N ~ GDD, data = BEPA)
 BEPA.N29 <- glm(N ~ EVI, data = BEPA) 
 BEPA.N30 <- glm(N ~ Year, data = BEPA) 
 BEPA.N31 <- glm(N ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Nmodels <- list(BEPA.N1, BEPA.N2, BEPA.N3, BEPA.N4, BEPA.N5, BEPA.N6, BEPA.N7, BEPA.N8, BEPA.N9, BEPA.N10, BEPA.N11, BEPA.N12, BEPA.N13, BEPA.N14, BEPA.N15, BEPA.N16, BEPA.N17, BEPA.N18, BEPA.N19, BEPA.N20, BEPA.N21, BEPA.N22, BEPA.N23, BEPA.N24, BEPA.N25, BEPA.N26, BEPA.N27, BEPA.N28, BEPA.N29, BEPA.N30, BEPA.N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.N.residplots <- imap(BEPA.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_N_glm.pdf")
+BEPA.N.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.N <- list("BEPA.N1" = BEPA.N1, "BEPA.N2" = BEPA.N2, "BEPA.N3" = BEPA.N3, "BEPA.N4" = BEPA.N4, "BEPA.N5" = BEPA.N5, "BEPA.N6" = BEPA.N6, "BEPA.N7" = BEPA.N7, "BEPA.N8" =  BEPA.N8, "BEPA.N9" = BEPA.N9, "BEPA.N10" = BEPA.N10, "BEPA.N11" = BEPA.N11, "BEPA.N12" = BEPA.N12, "BEPA.N13" = BEPA.N13, "BEPA.N14" = BEPA.N14, "BEPA.N15" = BEPA.N15, "BEPA.N16" = BEPA.N16, "BEPA.N17" = BEPA.N17, "BEPA.N18" = BEPA.N18, "BEPA.N19" = BEPA.N19, "BEPA.N20" = BEPA.N20, "BEPA.N21" = BEPA.N21, "BEPA.N22" = BEPA.N22, "BEPA.N23" = BEPA.N23, "BEPA.N24" =  BEPA.N24, "BEPA.N25" = BEPA.N25, "BEPA.N26" = BEPA.N26, "BEPA.N27" = BEPA.N27, "BEPA.N28" = BEPA.N28, "BEPA.N29" = BEPA.N29, "BEPA.N30" = BEPA.N30, "BEPA.N31" = BEPA.N31)
 BEPA.N <- aictab(cand.set = Models.BEPA.N)
@@ -1781,6 +1914,17 @@ BEPA.CN28 <- glm(CNRatio ~ GDD, data = BEPA)
 BEPA.CN29 <- glm(CNRatio ~ EVI, data = BEPA) 
 BEPA.CN30 <- glm(CNRatio ~ Year, data = BEPA) 
 BEPA.CN31 <- glm(CNRatio ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.CNmodels <- list(BEPA.CN1, BEPA.CN2, BEPA.CN3, BEPA.CN4, BEPA.CN5, BEPA.CN6, BEPA.CN7, BEPA.CN8, BEPA.CN9, BEPA.CN10, BEPA.CN11, BEPA.CN12, BEPA.CN13, BEPA.CN14, BEPA.CN15, BEPA.CN16, BEPA.CN17, BEPA.CN18, BEPA.CN19, BEPA.CN20, BEPA.CN21, BEPA.CN22, BEPA.CN23, BEPA.CN24, BEPA.CN25, BEPA.CN26, BEPA.CN27, BEPA.CN28, BEPA.CN29, BEPA.CN30, BEPA.CN31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.CN.residplots <- imap(BEPA.CNmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_CN_glm.pdf")
+BEPA.CN.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.CN <- list("BEPA.CN1" = BEPA.CN1, "BEPA.CN2" = BEPA.CN2, "BEPA.CN3" = BEPA.CN3, "BEPA.CN4" = BEPA.CN4, "BEPA.CN5" = BEPA.CN5, "BEPA.CN6" = BEPA.CN6, "BEPA.CN7" = BEPA.CN7, "BEPA.CN8" =  BEPA.CN8, "BEPA.CN9" = BEPA.CN9, "BEPA.CN10" = BEPA.CN10, "BEPA.CN11" = BEPA.CN11, "BEPA.CN12" = BEPA.CN12, "BEPA.CN13" = BEPA.CN13, "BEPA.CN14" = BEPA.CN14, "BEPA.CN15" = BEPA.CN15, "BEPA.CN16" = BEPA.CN16, "BEPA.CN17" = BEPA.CN17, "BEPA.CN18" = BEPA.CN18, "BEPA.CN19" = BEPA.CN19, "BEPA.CN20" = BEPA.CN20, "BEPA.CN21" = BEPA.CN21, "BEPA.CN22" = BEPA.CN22, "BEPA.CN23" = BEPA.CN23, "BEPA.CN24" =  BEPA.CN24, "BEPA.CN25" = BEPA.CN25, "BEPA.CN26" = BEPA.CN26, "BEPA.CN27" = BEPA.CN27, "BEPA.CN28" = BEPA.CN28, "BEPA.CN29" = BEPA.CN29, "BEPA.CN30" = BEPA.CN30, "BEPA.CN31" = BEPA.CN31)
 BEPA.CN <- aictab(cand.set = Models.BEPA.CN)
@@ -1824,6 +1968,17 @@ BEPA.CP28 <- glm(CPRatio ~ GDD, data = BEPA)
 BEPA.CP29 <- glm(CPRatio ~ EVI, data = BEPA) 
 BEPA.CP30 <- glm(CPRatio ~ Year, data = BEPA) 
 BEPA.CP31 <- glm(CPRatio ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.CPmodels <- list(BEPA.CP1, BEPA.CP2, BEPA.CP3, BEPA.CP4, BEPA.CP5, BEPA.CP6, BEPA.CP7, BEPA.CP8, BEPA.CP9, BEPA.CP10, BEPA.CP11, BEPA.CP12, BEPA.CP13, BEPA.CP14, BEPA.CP15, BEPA.CP16, BEPA.CP17, BEPA.CP18, BEPA.CP19, BEPA.CP20, BEPA.CP21, BEPA.CP22, BEPA.CP23, BEPA.CP24, BEPA.CP25, BEPA.CP26, BEPA.CP27, BEPA.CP28, BEPA.CP29, BEPA.CP30, BEPA.CP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.CP.residplots <- imap(BEPA.CPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_CP_glm.pdf")
+BEPA.CP.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.CP <- list("BEPA.CP1" = BEPA.CP1, "BEPA.CP2" = BEPA.CP2, "BEPA.CP3" = BEPA.CP3, "BEPA.CP4" = BEPA.CP4, "BEPA.CP5" = BEPA.CP5, "BEPA.CP6" = BEPA.CP6, "BEPA.CP7" = BEPA.CP7, "BEPA.CP8" =  BEPA.CP8, "BEPA.CP9" = BEPA.CP9, "BEPA.CP10" = BEPA.CP10, "BEPA.CP11" = BEPA.CP11, "BEPA.CP12" = BEPA.CP12, "BEPA.CP13" = BEPA.CP13, "BEPA.CP14" = BEPA.CP14, "BEPA.CP15" = BEPA.CP15, "BEPA.CP16" = BEPA.CP16, "BEPA.CP17" = BEPA.CP17, "BEPA.CP18" = BEPA.CP18, "BEPA.CP19" = BEPA.CP19, "BEPA.CP20" = BEPA.CP20, "BEPA.CP21" = BEPA.CP21, "BEPA.CP22" = BEPA.CP22, "BEPA.CP23" = BEPA.CP23, "BEPA.CP24" =  BEPA.CP24, "BEPA.CP25" = BEPA.CP25, "BEPA.CP26" = BEPA.CP26, "BEPA.CP27" = BEPA.CP27, "BEPA.CP28" = BEPA.CP28, "BEPA.CP29" = BEPA.CP29, "BEPA.CP30" = BEPA.CP30, "BEPA.CP31" = BEPA.CP31)
 BEPA.CP <- aictab(cand.set = Models.BEPA.CP)
@@ -1865,6 +2020,17 @@ BEPA.NP28 <- glm(NPRatio ~ GDD, data = BEPA)
 BEPA.NP29 <- glm(NPRatio ~ EVI, data = BEPA) 
 BEPA.NP30 <- glm(NPRatio ~ Year, data = BEPA) 
 BEPA.NP31 <- glm(NPRatio ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.NPmodels <- list(BEPA.NP1, BEPA.NP2, BEPA.NP3, BEPA.NP4, BEPA.NP5, BEPA.NP6, BEPA.NP7, BEPA.NP8, BEPA.NP9, BEPA.NP10, BEPA.NP11, BEPA.NP12, BEPA.NP13, BEPA.NP14, BEPA.NP15, BEPA.NP16, BEPA.NP17, BEPA.NP18, BEPA.NP19, BEPA.NP20, BEPA.NP21, BEPA.NP22, BEPA.NP23, BEPA.NP24, BEPA.NP25, BEPA.NP26, BEPA.NP27, BEPA.NP28, BEPA.NP29, BEPA.NP30, BEPA.NP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.NP.residplots <- imap(BEPA.NPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_NP_glm.pdf")
+BEPA.NP.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.NP <- list("BEPA.NP1" = BEPA.NP1, "BEPA.NP2" = BEPA.NP2, "BEPA.NP3" = BEPA.NP3, "BEPA.NP4" = BEPA.NP4, "BEPA.NP5" = BEPA.NP5, "BEPA.NP6" = BEPA.NP6, "BEPA.NP7" = BEPA.NP7, "BEPA.NP8" =  BEPA.NP8, "BEPA.NP9" = BEPA.NP9, "BEPA.NP10" = BEPA.NP10, "BEPA.NP11" = BEPA.NP11, "BEPA.NP12" = BEPA.NP12, "BEPA.NP13" = BEPA.NP13, "BEPA.NP14" = BEPA.NP14, "BEPA.NP15" = BEPA.NP15, "BEPA.NP16" = BEPA.NP16, "BEPA.NP17" = BEPA.NP17, "BEPA.NP18" = BEPA.NP18, "BEPA.NP19" = BEPA.NP19, "BEPA.NP20" = BEPA.NP20, "BEPA.NP21" = BEPA.NP21, "BEPA.NP22" = BEPA.NP22, "BEPA.NP23" = BEPA.NP23, "BEPA.NP24" =  BEPA.NP24, "BEPA.NP25" = BEPA.NP25, "BEPA.NP26" = BEPA.NP26, "BEPA.NP27" = BEPA.NP27, "BEPA.NP28" = BEPA.NP28, "BEPA.NP29" = BEPA.NP29, "BEPA.NP30" = BEPA.NP30, "BEPA.NP31" = BEPA.NP31)
 BEPA.NP <- aictab(cand.set = Models.BEPA.NP)
@@ -1906,6 +2072,17 @@ BEPA.Qty_C28 <- glm(Qty_C ~ GDD, data = BEPA)
 BEPA.Qty_C29 <- glm(Qty_C ~ EVI, data = BEPA) 
 BEPA.Qty_C30 <- glm(Qty_C ~ Year, data = BEPA) 
 BEPA.Qty_C31 <- glm(Qty_C ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Qty_Cmodels <- list(BEPA.Qty_C1, BEPA.Qty_C2, BEPA.Qty_C3, BEPA.Qty_C4, BEPA.Qty_C5, BEPA.Qty_C6, BEPA.Qty_C7, BEPA.Qty_C8, BEPA.Qty_C9, BEPA.Qty_C10, BEPA.Qty_C11, BEPA.Qty_C12, BEPA.Qty_C13, BEPA.Qty_C14, BEPA.Qty_C15, BEPA.Qty_C16, BEPA.Qty_C17, BEPA.Qty_C18, BEPA.Qty_C19, BEPA.Qty_C20, BEPA.Qty_C21, BEPA.Qty_C22, BEPA.Qty_C23, BEPA.Qty_C24, BEPA.Qty_C25, BEPA.Qty_C26, BEPA.Qty_C27, BEPA.Qty_C28, BEPA.Qty_C29, BEPA.Qty_C30, BEPA.Qty_C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.Qty_C.residplots <- imap(BEPA.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_QtyC_glm.pdf")
+BEPA.Qty_C.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.Qty_C <- list("BEPA.Qty_C1" = BEPA.Qty_C1, "BEPA.Qty_C2" = BEPA.Qty_C2, "BEPA.Qty_C3" = BEPA.Qty_C3, "BEPA.Qty_C4" = BEPA.Qty_C4, "BEPA.Qty_C5" = BEPA.Qty_C5, "BEPA.Qty_C6" = BEPA.Qty_C6, "BEPA.Qty_C7" = BEPA.Qty_C7, "BEPA.Qty_C8" =  BEPA.Qty_C8, "BEPA.Qty_C9" = BEPA.Qty_C9, "BEPA.Qty_C10" = BEPA.Qty_C10, "BEPA.Qty_C11" = BEPA.Qty_C11, "BEPA.Qty_C12" = BEPA.Qty_C12, "BEPA.Qty_C13" = BEPA.Qty_C13, "BEPA.Qty_C14" = BEPA.Qty_C14, "BEPA.Qty_C15" = BEPA.Qty_C15, "BEPA.Qty_C16" = BEPA.Qty_C16, "BEPA.Qty_C17" = BEPA.Qty_C17, "BEPA.Qty_C18" = BEPA.Qty_C18, "BEPA.Qty_C19" = BEPA.Qty_C19, "BEPA.Qty_C20" = BEPA.Qty_C20, "BEPA.Qty_C21" = BEPA.Qty_C21, "BEPA.Qty_C22" = BEPA.Qty_C22, "BEPA.Qty_C23" = BEPA.Qty_C23, "BEPA.Qty_C24" =  BEPA.Qty_C24, "BEPA.Qty_C25" = BEPA.Qty_C25, "BEPA.Qty_C26" = BEPA.Qty_C26, "BEPA.Qty_C27" = BEPA.Qty_C27, "BEPA.Qty_C28" = BEPA.Qty_C28, "BEPA.Qty_C29" = BEPA.Qty_C29, "BEPA.Qty_C30" = BEPA.Qty_C30, "BEPA.Qty_C31" = BEPA.Qty_C31)
 BEPA.Qty_C <- aictab(cand.set = Models.BEPA.Qty_C)
@@ -1953,6 +2130,17 @@ BEPA.Qty_P28 <- glm(Qty_P ~ GDD, data = BEPA)
 BEPA.Qty_P29 <- glm(Qty_P ~ EVI, data = BEPA) 
 BEPA.Qty_P30 <- glm(Qty_P ~ Year, data = BEPA) 
 BEPA.Qty_P31 <- glm(Qty_P ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Qty_Pmodels <- list(BEPA.Qty_P1, BEPA.Qty_P2, BEPA.Qty_P3, BEPA.Qty_P4, BEPA.Qty_P5, BEPA.Qty_P6, BEPA.Qty_P7, BEPA.Qty_P8, BEPA.Qty_P9, BEPA.Qty_P10, BEPA.Qty_P11, BEPA.Qty_P12, BEPA.Qty_P13, BEPA.Qty_P14, BEPA.Qty_P15, BEPA.Qty_P16, BEPA.Qty_P17, BEPA.Qty_P18, BEPA.Qty_P19, BEPA.Qty_P20, BEPA.Qty_P21, BEPA.Qty_P22, BEPA.Qty_P23, BEPA.Qty_P24, BEPA.Qty_P25, BEPA.Qty_P26, BEPA.Qty_P27, BEPA.Qty_P28, BEPA.Qty_P29, BEPA.Qty_P30, BEPA.Qty_P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.Qty_P.residplots <- imap(BEPA.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_QtyP_glm.pdf")
+BEPA.Qty_P.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.Qty_P <- list("BEPA.Qty_P1" = BEPA.Qty_P1, "BEPA.Qty_P2" = BEPA.Qty_P2, "BEPA.Qty_P3" = BEPA.Qty_P3, "BEPA.Qty_P4" = BEPA.Qty_P4, "BEPA.Qty_P5" = BEPA.Qty_P5, "BEPA.Qty_P6" = BEPA.Qty_P6, "BEPA.Qty_P7" = BEPA.Qty_P7, "BEPA.Qty_P8" =  BEPA.Qty_P8, "BEPA.Qty_P9" = BEPA.Qty_P9, "BEPA.Qty_P10" = BEPA.Qty_P10, "BEPA.Qty_P11" = BEPA.Qty_P11, "BEPA.Qty_P12" = BEPA.Qty_P12, "BEPA.Qty_P13" = BEPA.Qty_P13, "BEPA.Qty_P14" = BEPA.Qty_P14, "BEPA.Qty_P15" = BEPA.Qty_P15, "BEPA.Qty_P16" = BEPA.Qty_P16, "BEPA.Qty_P17" = BEPA.Qty_P17, "BEPA.Qty_P18" = BEPA.Qty_P18, "BEPA.Qty_P19" = BEPA.Qty_P19, "BEPA.Qty_P20" = BEPA.Qty_P20, "BEPA.Qty_P21" = BEPA.Qty_P21, "BEPA.Qty_P22" = BEPA.Qty_P22, "BEPA.Qty_P23" = BEPA.Qty_P23, "BEPA.Qty_P24" =  BEPA.Qty_P24, "BEPA.Qty_P25" = BEPA.Qty_P25, "BEPA.Qty_P26" = BEPA.Qty_P26, "BEPA.Qty_P27" = BEPA.Qty_P27, "BEPA.Qty_P28" = BEPA.Qty_P28, "BEPA.Qty_P29" = BEPA.Qty_P29, "BEPA.Qty_P30" = BEPA.Qty_P30, "BEPA.Qty_P31" = BEPA.Qty_P31)
 BEPA.Qty_P <- aictab(cand.set = Models.BEPA.Qty_P)
@@ -2002,6 +2190,17 @@ BEPA.Qty_N28 <- glm(Qty_N ~ GDD, data = BEPA)
 BEPA.Qty_N29 <- glm(Qty_N ~ EVI, data = BEPA) 
 BEPA.Qty_N30 <- glm(Qty_N ~ Year, data = BEPA) 
 BEPA.Qty_N31 <- glm(Qty_N ~ 1, data =  BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Qty_Nmodels <- list(BEPA.Qty_N1, BEPA.Qty_N2, BEPA.Qty_N3, BEPA.Qty_N4, BEPA.Qty_N5, BEPA.Qty_N6, BEPA.Qty_N7, BEPA.Qty_N8, BEPA.Qty_N9, BEPA.Qty_N10, BEPA.Qty_N11, BEPA.Qty_N12, BEPA.Qty_N13, BEPA.Qty_N14, BEPA.Qty_N15, BEPA.Qty_N16, BEPA.Qty_N17, BEPA.Qty_N18, BEPA.Qty_N19, BEPA.Qty_N20, BEPA.Qty_N21, BEPA.Qty_N22, BEPA.Qty_N23, BEPA.Qty_N24, BEPA.Qty_N25, BEPA.Qty_N26, BEPA.Qty_N27, BEPA.Qty_N28, BEPA.Qty_N29, BEPA.Qty_N30, BEPA.Qty_N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.Qty_N.residplots <- imap(BEPA.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/BEPA_QtyP_glm.pdf")
+BEPA.Qty_N.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.Qty_N <- list("BEPA.Qty_N1" = BEPA.Qty_N1, "BEPA.Qty_N2" = BEPA.Qty_N2, "BEPA.Qty_N3" = BEPA.Qty_N3, "BEPA.Qty_N4" = BEPA.Qty_N4, "BEPA.Qty_N5" = BEPA.Qty_N5, "BEPA.Qty_N6" = BEPA.Qty_N6, "BEPA.Qty_N7" = BEPA.Qty_N7, "BEPA.Qty_N8" =  BEPA.Qty_N8, "BEPA.Qty_N9" = BEPA.Qty_N9, "BEPA.Qty_N10" = BEPA.Qty_N10, "BEPA.Qty_N11" = BEPA.Qty_N11, "BEPA.Qty_N12" = BEPA.Qty_N12, "BEPA.Qty_N13" = BEPA.Qty_N13, "BEPA.Qty_N14" = BEPA.Qty_N14, "BEPA.Qty_N15" = BEPA.Qty_N15, "BEPA.Qty_N16" = BEPA.Qty_N16, "BEPA.Qty_N17" = BEPA.Qty_N17, "BEPA.Qty_N18" = BEPA.Qty_N18, "BEPA.Qty_N19" = BEPA.Qty_N19, "BEPA.Qty_N20" = BEPA.Qty_N20, "BEPA.Qty_N21" = BEPA.Qty_N21, "BEPA.Qty_N22" = BEPA.Qty_N22, "BEPA.Qty_N23" = BEPA.Qty_N23, "BEPA.Qty_N24" =  BEPA.Qty_N24, "BEPA.Qty_N25" = BEPA.Qty_N25, "BEPA.Qty_N26" = BEPA.Qty_N26, "BEPA.Qty_N27" = BEPA.Qty_N27, "BEPA.Qty_N28" = BEPA.Qty_N28, "BEPA.Qty_N29" = BEPA.Qty_N29, "BEPA.Qty_N30" = BEPA.Qty_N30, "BEPA.Qty_N31" = BEPA.Qty_N31)
 BEPA.Qty_N <- aictab(cand.set = Models.BEPA.Qty_N)
