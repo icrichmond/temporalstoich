@@ -12,8 +12,8 @@
 # load packages
 install.packages("easypackages")
 library(easypackages)
-install_packages("ggcorrplot")
-libraries("ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+install_packages("purrr", "ggcorrplot", "purrr", "broom", "patchwork")
+libraries("purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
@@ -61,6 +61,38 @@ str(ABBA)
 str(ACRU)
 str(BEPA)
 str(VAAN)
+
+### Create Functions ### 
+# create a function to make the residual plots later on in the script 
+# code originally obtained and edited from github.com/aosmith and https://rstudio-pubs-static.s3.amazonaws.com/43190_f9bd428cf5b94562a1b46e00b454e05a.html
+resid_plots <- function(model, modelname){
+  # augment is from broom package, it adds columns of residuals, predictions, etc.
+  output <- augment(model)
+  # first plot is a residual vs fitted plot
+  p1 <- ggplot(model, aes(.fitted, .resid))+geom_point()
+  p1 <- p1+stat_smooth(method="loess")+geom_hline(yintercept=0, col="red", linetype="dashed")
+  p1 <- p1+xlab("Fitted values")+ylab("Residuals")
+  p1 <- p1+ggtitle("Residual vs Fitted Plot")+theme_bw()+theme(plot.title = element_text(size=9),axis.title = element_text(size=8))
+  # second plot is a qqplot to test normality
+  p2 <- ggplot(model, aes(sample=.stdresid))+stat_qq()
+  p2 <- p2+geom_qq_line(col='red')+xlab("Theoretical Quantiles")+ylab("Stdized Residuals")
+  p2 <- p2+ggtitle("Normal Q-Q")+theme_bw()+theme(plot.title = element_text(size=9),axis.title = element_text(size=8))
+  # third plot is a Cook's distance plot to assess outliers 
+  p3 <- ggplot(model, aes(seq_along(.cooksd), .cooksd))+geom_bar(stat="identity", position="identity")
+  p3 <- p3+xlab("Obs. Number")+ylab("Cook's distance")
+  p3 <- p3+ggtitle("Cook's distance")+theme_bw()+theme(plot.title = element_text(size=9),axis.title = element_text(size=8))
+  # last plot is a check of influential data points, similar to Cook's distance
+  p4 <- ggplot(model, aes(.hat, .stdresid))+geom_point(aes(size=.cooksd), na.rm=TRUE)
+  p4 <- p4+stat_smooth(method="loess", na.rm=TRUE)
+  p4 <- p4+xlab("Leverage")+ylab("Stdized Residuals")
+  p4 <- p4+ggtitle("Residual vs Leverage Plot")
+  p4 <- p4+scale_size_continuous("Cook's Distance", range=c(1,5))
+  p4 <- p4+theme_bw()+theme(plot.title = element_text(size=9),axis.title = element_text(size=8), legend.position="bottom")
+  # plot with patchwork 
+  (p1 | p2) /
+    (p3 | p4) +
+    patchwork::plot_annotation(title = paste("Diagnostic plots", modelname))
+}
 
 
 #### Data Exploration ####
@@ -715,6 +747,18 @@ ABBA.C28 <- glm(C ~ GDD, data = ABBA)
 ABBA.C29 <- glm(C ~ EVI, data = ABBA) 
 ABBA.C30 <- glm(C ~ Year, data = ABBA) 
 ABBA.C31 <- glm(C ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Cmodels <- list(ABBA.C1, ABBA.C2, ABBA.C3, ABBA.C4, ABBA.C5, ABBA.C6, ABBA.C7, ABBA.C8, ABBA.C9, ABBA.C10, ABBA.C11, ABBA.C12, ABBA.C13, ABBA.C14, ABBA.C15, ABBA.C16, ABBA.C17, ABBA.C18, ABBA.C19, ABBA.C20, ABBA.C21, ABBA.C22, ABBA.C23, ABBA.C24, ABBA.C25, ABBA.C26, ABBA.C27, ABBA.C28, ABBA.C29, ABBA.C30, ABBA.C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.C.residplots <- imap(ABBA.Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_C_glm.pdf")
+ABBA.C.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.C <- list("ABBA.C1" = ABBA.C1, "ABBA.C2" = ABBA.C2, "ABBA.C3" = ABBA.C3, "ABBA.C4" = ABBA.C4, "ABBA.C5" = ABBA.C5, "ABBA.C6" = ABBA.C6, "ABBA.C7" = ABBA.C7, "ABBA.C8" =  ABBA.C8, "ABBA.C9" = ABBA.C9, "ABBA.C10" = ABBA.C10, "ABBA.C11" = ABBA.C11, "ABBA.C12" = ABBA.C12, "ABBA.C13" = ABBA.C13, "ABBA.C14" = ABBA.C14, "ABBA.C15" = ABBA.C15, "ABBA.C16" = ABBA.C16, "ABBA.C17" = ABBA.C17, "ABBA.C18" = ABBA.C18, "ABBA.C19" = ABBA.C19, "ABBA.C20" = ABBA.C20, "ABBA.C21" = ABBA.C21, "ABBA.C22" = ABBA.C22, "ABBA.C23" = ABBA.C23, "ABBA.C24" =  ABBA.C24, "ABBA.C25" = ABBA.C25, "ABBA.C26" = ABBA.C26, "ABBA.C27" = ABBA.C27, "ABBA.C28" = ABBA.C28, "ABBA.C29" = ABBA.C29, "ABBA.C30" = ABBA.C30, "ABBA.C31" = ABBA.C31)
 ABBA.C <- aictab(cand.set = Models.ABBA.C)
@@ -756,7 +800,19 @@ ABBA.P28 <- glm(P ~ GDD, data = ABBA)
 ABBA.P29 <- glm(P ~ EVI, data = ABBA) 
 ABBA.P30 <- glm(P ~ Year, data = ABBA) 
 ABBA.P31 <- glm(P ~ 1, data =  ABBA)
-# create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Pmodels <- list(ABBA.P1, ABBA.P2, ABBA.P3, ABBA.P4, ABBA.P5, ABBA.P6, ABBA.P7, ABBA.P8, ABBA.P9, ABBA.P10, ABBA.P11, ABBA.P12, ABBA.P13, ABBA.P14, ABBA.P15, ABBA.P16, ABBA.P17, ABBA.P18, ABBA.P19, ABBA.P20, ABBA.P21, ABBA.P22, ABBA.P23, ABBA.P24, ABBA.P25, ABBA.P26, ABBA.P27, ABBA.P28, ABBA.P29, ABBA.P30, ABBA.P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.P.residplots <- imap(ABBA.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_P_glm.pdf")
+ABBA.P.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.P <- list("ABBA.P1" = ABBA.P1, "ABBA.P2" = ABBA.P2, "ABBA.P3" = ABBA.P3, "ABBA.P4" = ABBA.P4, "ABBA.P5" = ABBA.P5, "ABBA.P6" = ABBA.P6, "ABBA.P7" = ABBA.P7, "ABBA.P8" =  ABBA.P8, "ABBA.P9" = ABBA.P9, "ABBA.P10" = ABBA.P10, "ABBA.P11" = ABBA.P11, "ABBA.P12" = ABBA.P12, "ABBA.P13" = ABBA.P13, "ABBA.P14" = ABBA.P14, "ABBA.P15" = ABBA.P15, "ABBA.P16" = ABBA.P16, "ABBA.P17" = ABBA.P17, "ABBA.P18" = ABBA.P18, "ABBA.P19" = ABBA.P19, "ABBA.P20" = ABBA.P20, "ABBA.P21" = ABBA.P21, "ABBA.P22" = ABBA.P22, "ABBA.P23" = ABBA.P23, "ABBA.P24" =  ABBA.P24, "ABBA.P25" = ABBA.P25, "ABBA.P26" = ABBA.P26, "ABBA.P27" = ABBA.P27, "ABBA.P28" = ABBA.P28, "ABBA.P29" = ABBA.P29, "ABBA.P30" = ABBA.P30, "ABBA.P31" = ABBA.P31)
 ABBA.P <- aictab(cand.set = Models.ABBA.P)
 print(ABBA.P)
@@ -799,6 +855,17 @@ ABBA.N28 <- glm(N ~ GDD, data = ABBA)
 ABBA.N29 <- glm(N ~ EVI, data = ABBA) 
 ABBA.N30 <- glm(N ~ Year, data = ABBA) 
 ABBA.N31 <- glm(N ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Nmodels <- list(ABBA.N1, ABBA.N2, ABBA.N3, ABBA.N4, ABBA.N5, ABBA.N6, ABBA.N7, ABBA.N8, ABBA.N9, ABBA.N10, ABBA.N11, ABBA.N12, ABBA.N13, ABBA.N14, ABBA.N15, ABBA.N16, ABBA.N17, ABBA.N18, ABBA.N19, ABBA.N20, ABBA.N21, ABBA.N22, ABBA.N23, ABBA.N24, ABBA.N25, ABBA.N26, ABBA.N27, ABBA.N28, ABBA.N29, ABBA.N30, ABBA.N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.N.residplots <- imap(ABBA.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_N_glm.pdf")
+ABBA.N.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.N <- list("ABBA.N1" = ABBA.N1, "ABBA.N2" = ABBA.N2, "ABBA.N3" = ABBA.N3, "ABBA.N4" = ABBA.N4, "ABBA.N5" = ABBA.N5, "ABBA.N6" = ABBA.N6, "ABBA.N7" = ABBA.N7, "ABBA.N8" =  ABBA.N8, "ABBA.N9" = ABBA.N9, "ABBA.N10" = ABBA.N10, "ABBA.N11" = ABBA.N11, "ABBA.N12" = ABBA.N12, "ABBA.N13" = ABBA.N13, "ABBA.N14" = ABBA.N14, "ABBA.N15" = ABBA.N15, "ABBA.N16" = ABBA.N16, "ABBA.N17" = ABBA.N17, "ABBA.N18" = ABBA.N18, "ABBA.N19" = ABBA.N19, "ABBA.N20" = ABBA.N20, "ABBA.N21" = ABBA.N21, "ABBA.N22" = ABBA.N22, "ABBA.N23" = ABBA.N23, "ABBA.N24" =  ABBA.N24, "ABBA.N25" = ABBA.N25, "ABBA.N26" = ABBA.N26, "ABBA.N27" = ABBA.N27, "ABBA.N28" = ABBA.N28, "ABBA.N29" = ABBA.N29, "ABBA.N30" = ABBA.N30, "ABBA.N31" = ABBA.N31)
 ABBA.N <- aictab(cand.set = Models.ABBA.N)
@@ -842,6 +909,18 @@ ABBA.CN28 <- glm(CNRatio ~ GDD, data = ABBA)
 ABBA.CN29 <- glm(CNRatio ~ EVI, data = ABBA) 
 ABBA.CN30 <- glm(CNRatio ~ Year, data = ABBA) 
 ABBA.CN31 <- glm(CNRatio ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.CNmodels <- list(ABBA.CN1, ABBA.CN2, ABBA.CN3, ABBA.CN4, ABBA.CN5, ABBA.CN6, ABBA.CN7, ABBA.CN8, ABBA.CN9, ABBA.CN10, ABBA.CN11, ABBA.CN12, ABBA.CN13, ABBA.CN14, ABBA.CN15, ABBA.CN16, ABBA.CN17, ABBA.CN18, ABBA.CN19, ABBA.CN20, ABBA.CN21, ABBA.CN22, ABBA.CN23, ABBA.CN24, ABBA.CN25, ABBA.CN26, ABBA.CN27, ABBA.CN28, ABBA.CN29, ABBA.CN30, ABBA.CN31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.CN.residplots <- imap(ABBA.CNmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_CN_glm.pdf")
+ABBA.CN.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.CN <- list("ABBA.CN1" = ABBA.CN1, "ABBA.CN2" = ABBA.CN2, "ABBA.CN3" = ABBA.CN3, "ABBA.CN4" = ABBA.CN4, "ABBA.CN5" = ABBA.CN5, "ABBA.CN6" = ABBA.CN6, "ABBA.CN7" = ABBA.CN7, "ABBA.CN8" =  ABBA.CN8, "ABBA.CN9" = ABBA.CN9, "ABBA.CN10" = ABBA.CN10, "ABBA.CN11" = ABBA.CN11, "ABBA.CN12" = ABBA.CN12, "ABBA.CN13" = ABBA.CN13, "ABBA.CN14" = ABBA.CN14, "ABBA.CN15" = ABBA.CN15, "ABBA.CN16" = ABBA.CN16, "ABBA.CN17" = ABBA.CN17, "ABBA.CN18" = ABBA.CN18, "ABBA.CN19" = ABBA.CN19, "ABBA.CN20" = ABBA.CN20, "ABBA.CN21" = ABBA.CN21, "ABBA.CN22" = ABBA.CN22, "ABBA.CN23" = ABBA.CN23, "ABBA.CN24" =  ABBA.CN24, "ABBA.CN25" = ABBA.CN25, "ABBA.CN26" = ABBA.CN26, "ABBA.CN27" = ABBA.CN27, "ABBA.CN28" = ABBA.CN28, "ABBA.CN29" = ABBA.CN29, "ABBA.CN30" = ABBA.CN30, "ABBA.CN31" = ABBA.CN31)
 ABBA.CN <- aictab(cand.set = Models.ABBA.CN)
@@ -883,6 +962,17 @@ ABBA.CP28 <- glm(CPRatio ~ GDD, data = ABBA)
 ABBA.CP29 <- glm(CPRatio ~ EVI, data = ABBA) 
 ABBA.CP30 <- glm(CPRatio ~ Year, data = ABBA) 
 ABBA.CP31 <- glm(CPRatio ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.CPmodels <- list(ABBA.CP1, ABBA.CP2, ABBA.CP3, ABBA.CP4, ABBA.CP5, ABBA.CP6, ABBA.CP7, ABBA.CP8, ABBA.CP9, ABBA.CP10, ABBA.CP11, ABBA.CP12, ABBA.CP13, ABBA.CP14, ABBA.CP15, ABBA.CP16, ABBA.CP17, ABBA.CP18, ABBA.CP19, ABBA.CP20, ABBA.CP21, ABBA.CP22, ABBA.CP23, ABBA.CP24, ABBA.CP25, ABBA.CP26, ABBA.CP27, ABBA.CP28, ABBA.CP29, ABBA.CP30, ABBA.CP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.CP.residplots <- imap(ABBA.CPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_CP_glm.pdf")
+ABBA.CP.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.CP <- list("ABBA.CP1" = ABBA.CP1, "ABBA.CP2" = ABBA.CP2, "ABBA.CP3" = ABBA.CP3, "ABBA.CP4" = ABBA.CP4, "ABBA.CP5" = ABBA.CP5, "ABBA.CP6" = ABBA.CP6, "ABBA.CP7" = ABBA.CP7, "ABBA.CP8" =  ABBA.CP8, "ABBA.CP9" = ABBA.CP9, "ABBA.CP10" = ABBA.CP10, "ABBA.CP11" = ABBA.CP11, "ABBA.CP12" = ABBA.CP12, "ABBA.CP13" = ABBA.CP13, "ABBA.CP14" = ABBA.CP14, "ABBA.CP15" = ABBA.CP15, "ABBA.CP16" = ABBA.CP16, "ABBA.CP17" = ABBA.CP17, "ABBA.CP18" = ABBA.CP18, "ABBA.CP19" = ABBA.CP19, "ABBA.CP20" = ABBA.CP20, "ABBA.CP21" = ABBA.CP21, "ABBA.CP22" = ABBA.CP22, "ABBA.CP23" = ABBA.CP23, "ABBA.CP24" =  ABBA.CP24, "ABBA.CP25" = ABBA.CP25, "ABBA.CP26" = ABBA.CP26, "ABBA.CP27" = ABBA.CP27, "ABBA.CP28" = ABBA.CP28, "ABBA.CP29" = ABBA.CP29, "ABBA.CP30" = ABBA.CP30, "ABBA.CP31" = ABBA.CP31)
 ABBA.CP <- aictab(cand.set = Models.ABBA.CP)
@@ -926,6 +1016,17 @@ ABBA.NP28 <- glm(NPRatio ~ GDD, data = ABBA)
 ABBA.NP29 <- glm(NPRatio ~ EVI, data = ABBA) 
 ABBA.NP30 <- glm(NPRatio ~ Year, data = ABBA) 
 ABBA.NP31 <- glm(NPRatio ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.NPmodels <- list(ABBA.NP1, ABBA.NP2, ABBA.NP3, ABBA.NP4, ABBA.NP5, ABBA.NP6, ABBA.NP7, ABBA.NP8, ABBA.NP9, ABBA.NP10, ABBA.NP11, ABBA.NP12, ABBA.NP13, ABBA.NP14, ABBA.NP15, ABBA.NP16, ABBA.NP17, ABBA.NP18, ABBA.NP19, ABBA.NP20, ABBA.NP21, ABBA.NP22, ABBA.NP23, ABBA.NP24, ABBA.NP25, ABBA.NP26, ABBA.NP27, ABBA.NP28, ABBA.NP29, ABBA.NP30, ABBA.NP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.NP.residplots <- imap(ABBA.NPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_NP_glm.pdf")
+ABBA.NP.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.NP <- list("ABBA.NP1" = ABBA.NP1, "ABBA.NP2" = ABBA.NP2, "ABBA.NP3" = ABBA.NP3, "ABBA.NP4" = ABBA.NP4, "ABBA.NP5" = ABBA.NP5, "ABBA.NP6" = ABBA.NP6, "ABBA.NP7" = ABBA.NP7, "ABBA.NP8" =  ABBA.NP8, "ABBA.NP9" = ABBA.NP9, "ABBA.NP10" = ABBA.NP10, "ABBA.NP11" = ABBA.NP11, "ABBA.NP12" = ABBA.NP12, "ABBA.NP13" = ABBA.NP13, "ABBA.NP14" = ABBA.NP14, "ABBA.NP15" = ABBA.NP15, "ABBA.NP16" = ABBA.NP16, "ABBA.NP17" = ABBA.NP17, "ABBA.NP18" = ABBA.NP18, "ABBA.NP19" = ABBA.NP19, "ABBA.NP20" = ABBA.NP20, "ABBA.NP21" = ABBA.NP21, "ABBA.NP22" = ABBA.NP22, "ABBA.NP23" = ABBA.NP23, "ABBA.NP24" =  ABBA.NP24, "ABBA.NP25" = ABBA.NP25, "ABBA.NP26" = ABBA.NP26, "ABBA.NP27" = ABBA.NP27, "ABBA.NP28" = ABBA.NP28, "ABBA.NP29" = ABBA.NP29, "ABBA.NP30" = ABBA.NP30, "ABBA.NP31" = ABBA.NP31)
 ABBA.NP <- aictab(cand.set = Models.ABBA.NP)
@@ -971,6 +1072,18 @@ ABBA.Qty_C28 <- glm(Qty_C ~ GDD, data = ABBA)
 ABBA.Qty_C29 <- glm(Qty_C ~ EVI, data = ABBA) 
 ABBA.Qty_C30 <- glm(Qty_C ~ Year, data = ABBA) 
 ABBA.Qty_C31 <- glm(Qty_C ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Qty_Cmodels <- list(ABBA.Qty_C1, ABBA.Qty_C2, ABBA.Qty_C3, ABBA.Qty_C4, ABBA.Qty_C5, ABBA.Qty_C6, ABBA.Qty_C7, ABBA.Qty_C8, ABBA.Qty_C9, ABBA.Qty_C10, ABBA.Qty_C11, ABBA.Qty_C12, ABBA.Qty_C13, ABBA.Qty_C14, ABBA.Qty_C15, ABBA.Qty_C16, ABBA.Qty_C17, ABBA.Qty_C18, ABBA.Qty_C19, ABBA.Qty_C20, ABBA.Qty_C21, ABBA.Qty_C22, ABBA.Qty_C23, ABBA.Qty_C24, ABBA.Qty_C25, ABBA.Qty_C26, ABBA.Qty_C27, ABBA.Qty_C28, ABBA.Qty_C29, ABBA.Qty_C30, ABBA.Qty_C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.Qty_C.residplots <- imap(ABBA.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_QtyC_glm.pdf")
+ABBA.Qty_C.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.Qty_C <- list("ABBA.Qty_C1" = ABBA.Qty_C1, "ABBA.Qty_C2" = ABBA.Qty_C2, "ABBA.Qty_C3" = ABBA.Qty_C3, "ABBA.Qty_C4" = ABBA.Qty_C4, "ABBA.Qty_C5" = ABBA.Qty_C5, "ABBA.Qty_C6" = ABBA.Qty_C6, "ABBA.Qty_C7" = ABBA.Qty_C7, "ABBA.Qty_C8" =  ABBA.Qty_C8, "ABBA.Qty_C9" = ABBA.Qty_C9, "ABBA.Qty_C10" = ABBA.Qty_C10, "ABBA.Qty_C11" = ABBA.Qty_C11, "ABBA.Qty_C12" = ABBA.Qty_C12, "ABBA.Qty_C13" = ABBA.Qty_C13, "ABBA.Qty_C14" = ABBA.Qty_C14, "ABBA.Qty_C15" = ABBA.Qty_C15, "ABBA.Qty_C16" = ABBA.Qty_C16, "ABBA.Qty_C17" = ABBA.Qty_C17, "ABBA.Qty_C18" = ABBA.Qty_C18, "ABBA.Qty_C19" = ABBA.Qty_C19, "ABBA.Qty_C20" = ABBA.Qty_C20, "ABBA.Qty_C21" = ABBA.Qty_C21, "ABBA.Qty_C22" = ABBA.Qty_C22, "ABBA.Qty_C23" = ABBA.Qty_C23, "ABBA.Qty_C24" =  ABBA.Qty_C24, "ABBA.Qty_C25" = ABBA.Qty_C25, "ABBA.Qty_C26" = ABBA.Qty_C26, "ABBA.Qty_C27" = ABBA.Qty_C27, "ABBA.Qty_C28" = ABBA.Qty_C28, "ABBA.Qty_C29" = ABBA.Qty_C29, "ABBA.Qty_C30" = ABBA.Qty_C30, "ABBA.Qty_C31" = ABBA.Qty_C31)
 ABBA.Qty_C <- aictab(cand.set = Models.ABBA.Qty_C)
@@ -1014,6 +1127,18 @@ ABBA.Qty_P28 <- glm(Qty_P ~ GDD, data = ABBA)
 ABBA.Qty_P29 <- glm(Qty_P ~ EVI, data = ABBA) 
 ABBA.Qty_P30 <- glm(Qty_P ~ Year, data = ABBA) 
 ABBA.Qty_P31 <- glm(Qty_P ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Qty_Pmodels <- list(ABBA.Qty_P1, ABBA.Qty_P2, ABBA.Qty_P3, ABBA.Qty_P4, ABBA.Qty_P5, ABBA.Qty_P6, ABBA.Qty_P7, ABBA.Qty_P8, ABBA.Qty_P9, ABBA.Qty_P10, ABBA.Qty_P11, ABBA.Qty_P12, ABBA.Qty_P13, ABBA.Qty_P14, ABBA.Qty_P15, ABBA.Qty_P16, ABBA.Qty_P17, ABBA.Qty_P18, ABBA.Qty_P19, ABBA.Qty_P20, ABBA.Qty_P21, ABBA.Qty_P22, ABBA.Qty_P23, ABBA.Qty_P24, ABBA.Qty_P25, ABBA.Qty_P26, ABBA.Qty_P27, ABBA.Qty_P28, ABBA.Qty_P29, ABBA.Qty_P30, ABBA.Qty_P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.Qty_P.residplots <- imap(ABBA.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_QtyP_glm.pdf")
+ABBA.Qty_P.residplots
+dev.off()
+
+# if models pass assumptions, proceed. If not, use different error structure 
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.Qty_P <- list("ABBA.Qty_P1" = ABBA.Qty_P1, "ABBA.Qty_P2" = ABBA.Qty_P2, "ABBA.Qty_P3" = ABBA.Qty_P3, "ABBA.Qty_P4" = ABBA.Qty_P4, "ABBA.Qty_P5" = ABBA.Qty_P5, "ABBA.Qty_P6" = ABBA.Qty_P6, "ABBA.Qty_P7" = ABBA.Qty_P7, "ABBA.Qty_P8" =  ABBA.Qty_P8, "ABBA.Qty_P9" = ABBA.Qty_P9, "ABBA.Qty_P10" = ABBA.Qty_P10, "ABBA.Qty_P11" = ABBA.Qty_P11, "ABBA.Qty_P12" = ABBA.Qty_P12, "ABBA.Qty_P13" = ABBA.Qty_P13, "ABBA.Qty_P14" = ABBA.Qty_P14, "ABBA.Qty_P15" = ABBA.Qty_P15, "ABBA.Qty_P16" = ABBA.Qty_P16, "ABBA.Qty_P17" = ABBA.Qty_P17, "ABBA.Qty_P18" = ABBA.Qty_P18, "ABBA.Qty_P19" = ABBA.Qty_P19, "ABBA.Qty_P20" = ABBA.Qty_P20, "ABBA.Qty_P21" = ABBA.Qty_P21, "ABBA.Qty_P22" = ABBA.Qty_P22, "ABBA.Qty_P23" = ABBA.Qty_P23, "ABBA.Qty_P24" =  ABBA.Qty_P24, "ABBA.Qty_P25" = ABBA.Qty_P25, "ABBA.Qty_P26" = ABBA.Qty_P26, "ABBA.Qty_P27" = ABBA.Qty_P27, "ABBA.Qty_P28" = ABBA.Qty_P28, "ABBA.Qty_P29" = ABBA.Qty_P29, "ABBA.Qty_P30" = ABBA.Qty_P30, "ABBA.Qty_P31" = ABBA.Qty_P31)
 ABBA.Qty_P <- aictab(cand.set = Models.ABBA.Qty_P)
@@ -1057,6 +1182,18 @@ ABBA.Qty_N28 <- glm(Qty_N ~ GDD, data = ABBA)
 ABBA.Qty_N29 <- glm(Qty_N ~ EVI, data = ABBA) 
 ABBA.Qty_N30 <- glm(Qty_N ~ Year, data = ABBA) 
 ABBA.Qty_N31 <- glm(Qty_N ~ 1, data =  ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Qty_Nmodels <- list(ABBA.Qty_N1, ABBA.Qty_N2, ABBA.Qty_N3, ABBA.Qty_N4, ABBA.Qty_N5, ABBA.Qty_N6, ABBA.Qty_N7, ABBA.Qty_N8, ABBA.Qty_N9, ABBA.Qty_N10, ABBA.Qty_N11, ABBA.Qty_N12, ABBA.Qty_N13, ABBA.Qty_N14, ABBA.Qty_N15, ABBA.Qty_N16, ABBA.Qty_N17, ABBA.Qty_N18, ABBA.Qty_N19, ABBA.Qty_N20, ABBA.Qty_N21, ABBA.Qty_N22, ABBA.Qty_N23, ABBA.Qty_N24, ABBA.Qty_N25, ABBA.Qty_N26, ABBA.Qty_N27, ABBA.Qty_N28, ABBA.Qty_N29, ABBA.Qty_N30, ABBA.Qty_N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.Qty_N.residplots <- imap(ABBA.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/ABBA_QtyN_glm.pdf")
+ABBA.Qty_N.residplots
+dev.off()
+
+# if models pass assumptions, proceed. If not, use different error structure 
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.Qty_N <- list("ABBA.Qty_N1" = ABBA.Qty_N1, "ABBA.Qty_N2" = ABBA.Qty_N2, "ABBA.Qty_N3" = ABBA.Qty_N3, "ABBA.Qty_N4" = ABBA.Qty_N4, "ABBA.Qty_N5" = ABBA.Qty_N5, "ABBA.Qty_N6" = ABBA.Qty_N6, "ABBA.Qty_N7" = ABBA.Qty_N7, "ABBA.Qty_N8" =  ABBA.Qty_N8, "ABBA.Qty_N9" = ABBA.Qty_N9, "ABBA.Qty_N10" = ABBA.Qty_N10, "ABBA.Qty_N11" = ABBA.Qty_N11, "ABBA.Qty_N12" = ABBA.Qty_N12, "ABBA.Qty_N13" = ABBA.Qty_N13, "ABBA.Qty_N14" = ABBA.Qty_N14, "ABBA.Qty_N15" = ABBA.Qty_N15, "ABBA.Qty_N16" = ABBA.Qty_N16, "ABBA.Qty_N17" = ABBA.Qty_N17, "ABBA.Qty_N18" = ABBA.Qty_N18, "ABBA.Qty_N19" = ABBA.Qty_N19, "ABBA.Qty_N20" = ABBA.Qty_N20, "ABBA.Qty_N21" = ABBA.Qty_N21, "ABBA.Qty_N22" = ABBA.Qty_N22, "ABBA.Qty_N23" = ABBA.Qty_N23, "ABBA.Qty_N24" =  ABBA.Qty_N24, "ABBA.Qty_N25" = ABBA.Qty_N25, "ABBA.Qty_N26" = ABBA.Qty_N26, "ABBA.Qty_N27" = ABBA.Qty_N27, "ABBA.Qty_N28" = ABBA.Qty_N28, "ABBA.Qty_N29" = ABBA.Qty_N29, "ABBA.Qty_N30" = ABBA.Qty_N30, "ABBA.Qty_N31" = ABBA.Qty_N31)
 ABBA.Qty_N <- aictab(cand.set = Models.ABBA.Qty_N)
