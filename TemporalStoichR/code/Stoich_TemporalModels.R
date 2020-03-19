@@ -2252,6 +2252,17 @@ VAAN.C28 <- glm(C ~ GDD, data = VAAN)
 VAAN.C29 <- glm(C ~ EVI, data = VAAN) 
 VAAN.C30 <- glm(C ~ Year, data = VAAN) 
 VAAN.C31 <- glm(C ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Cmodels <- list(VAAN.C1, VAAN.C2, VAAN.C3, VAAN.C4, VAAN.C5, VAAN.C6, VAAN.C7, VAAN.C8, VAAN.C9, VAAN.C10, VAAN.C11, VAAN.C12, VAAN.C13, VAAN.C14, VAAN.C15, VAAN.C16, VAAN.C17, VAAN.C18, VAAN.C19, VAAN.C20, VAAN.C21, VAAN.C22, VAAN.C23, VAAN.C24, VAAN.C25, VAAN.C26, VAAN.C27, VAAN.C28, VAAN.C29, VAAN.C30, VAAN.C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.C.residplots <- imap(VAAN.Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_C_glm.pdf")
+VAAN.C.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.C <- list("VAAN.C1" = VAAN.C1, "VAAN.C2" = VAAN.C2, "VAAN.C3" = VAAN.C3, "VAAN.C4" = VAAN.C4, "VAAN.C5" = VAAN.C5, "VAAN.C6" = VAAN.C6, "VAAN.C7" = VAAN.C7, "VAAN.C8" =  VAAN.C8, "VAAN.C9" = VAAN.C9, "VAAN.C10" = VAAN.C10, "VAAN.C11" = VAAN.C11, "VAAN.C12" = VAAN.C12, "VAAN.C13" = VAAN.C13, "VAAN.C14" = VAAN.C14, "VAAN.C15" = VAAN.C15, "VAAN.C16" = VAAN.C16, "VAAN.C17" = VAAN.C17, "VAAN.C18" = VAAN.C18, "VAAN.C19" = VAAN.C19, "VAAN.C20" = VAAN.C20, "VAAN.C21" = VAAN.C21, "VAAN.C22" = VAAN.C22, "VAAN.C23" = VAAN.C23, "VAAN.C24" =  VAAN.C24, "VAAN.C25" = VAAN.C25, "VAAN.C26" = VAAN.C26, "VAAN.C27" = VAAN.C27, "VAAN.C28" = VAAN.C28, "VAAN.C29" = VAAN.C29, "VAAN.C30" = VAAN.C30, "VAAN.C31" = VAAN.C31)
 VAAN.C <- aictab(cand.set = Models.VAAN.C)
@@ -2293,6 +2304,17 @@ VAAN.P28 <- glm(P ~ GDD, data = VAAN)
 VAAN.P29 <- glm(P ~ EVI, data = VAAN) 
 VAAN.P30 <- glm(P ~ Year, data = VAAN) 
 VAAN.P31 <- glm(P ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Pmodels <- list(VAAN.P1, VAAN.P2, VAAN.P3, VAAN.P4, VAAN.P5, VAAN.P6, VAAN.P7, VAAN.P8, VAAN.P9, VAAN.P10, VAAN.P11, VAAN.P12, VAAN.P13, VAAN.P14, VAAN.P15, VAAN.P16, VAAN.P17, VAAN.P18, VAAN.P19, VAAN.P20, VAAN.P21, VAAN.P22, VAAN.P23, VAAN.P24, VAAN.P25, VAAN.P26, VAAN.P27, VAAN.P28, VAAN.P29, VAAN.P30, VAAN.P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.P.residplots <- imap(VAAN.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_P_glm.pdf")
+VAAN.P.residplots
+dev.off()
+
 # create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.P <- list("VAAN.P1" = VAAN.P1, "VAAN.P2" = VAAN.P2, "VAAN.P3" = VAAN.P3, "VAAN.P4" = VAAN.P4, "VAAN.P5" = VAAN.P5, "VAAN.P6" = VAAN.P6, "VAAN.P7" = VAAN.P7, "VAAN.P8" =  VAAN.P8, "VAAN.P9" = VAAN.P9, "VAAN.P10" = VAAN.P10, "VAAN.P11" = VAAN.P11, "VAAN.P12" = VAAN.P12, "VAAN.P13" = VAAN.P13, "VAAN.P14" = VAAN.P14, "VAAN.P15" = VAAN.P15, "VAAN.P16" = VAAN.P16, "VAAN.P17" = VAAN.P17, "VAAN.P18" = VAAN.P18, "VAAN.P19" = VAAN.P19, "VAAN.P20" = VAAN.P20, "VAAN.P21" = VAAN.P21, "VAAN.P22" = VAAN.P22, "VAAN.P23" = VAAN.P23, "VAAN.P24" =  VAAN.P24, "VAAN.P25" = VAAN.P25, "VAAN.P26" = VAAN.P26, "VAAN.P27" = VAAN.P27, "VAAN.P28" = VAAN.P28, "VAAN.P29" = VAAN.P29, "VAAN.P30" = VAAN.P30, "VAAN.P31" = VAAN.P31)
 VAAN.P <- aictab(cand.set = Models.VAAN.P)
@@ -2342,6 +2364,17 @@ VAAN.N28 <- glm(N ~ GDD, data = VAAN)
 VAAN.N29 <- glm(N ~ EVI, data = VAAN) 
 VAAN.N30 <- glm(N ~ Year, data = VAAN) 
 VAAN.N31 <- glm(N ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Nmodels <- list(VAAN.N1, VAAN.N2, VAAN.N3, VAAN.N4, VAAN.N5, VAAN.N6, VAAN.N7, VAAN.N8, VAAN.N9, VAAN.N10, VAAN.N11, VAAN.N12, VAAN.N13, VAAN.N14, VAAN.N15, VAAN.N16, VAAN.N17, VAAN.N18, VAAN.N19, VAAN.N20, VAAN.N21, VAAN.N22, VAAN.N23, VAAN.N24, VAAN.N25, VAAN.N26, VAAN.N27, VAAN.N28, VAAN.N29, VAAN.N30, VAAN.N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.N.residplots <- imap(VAAN.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_N_glm.pdf")
+VAAN.N.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.N <- list("VAAN.N1" = VAAN.N1, "VAAN.N2" = VAAN.N2, "VAAN.N3" = VAAN.N3, "VAAN.N4" = VAAN.N4, "VAAN.N5" = VAAN.N5, "VAAN.N6" = VAAN.N6, "VAAN.N7" = VAAN.N7, "VAAN.N8" =  VAAN.N8, "VAAN.N9" = VAAN.N9, "VAAN.N10" = VAAN.N10, "VAAN.N11" = VAAN.N11, "VAAN.N12" = VAAN.N12, "VAAN.N13" = VAAN.N13, "VAAN.N14" = VAAN.N14, "VAAN.N15" = VAAN.N15, "VAAN.N16" = VAAN.N16, "VAAN.N17" = VAAN.N17, "VAAN.N18" = VAAN.N18, "VAAN.N19" = VAAN.N19, "VAAN.N20" = VAAN.N20, "VAAN.N21" = VAAN.N21, "VAAN.N22" = VAAN.N22, "VAAN.N23" = VAAN.N23, "VAAN.N24" =  VAAN.N24, "VAAN.N25" = VAAN.N25, "VAAN.N26" = VAAN.N26, "VAAN.N27" = VAAN.N27, "VAAN.N28" = VAAN.N28, "VAAN.N29" = VAAN.N29, "VAAN.N30" = VAAN.N30, "VAAN.N31" = VAAN.N31)
 VAAN.N <- aictab(cand.set = Models.VAAN.N)
@@ -2385,6 +2418,17 @@ VAAN.CN28 <- glm(CNRatio ~ GDD, data = VAAN)
 VAAN.CN29 <- glm(CNRatio ~ EVI, data = VAAN) 
 VAAN.CN30 <- glm(CNRatio ~ Year, data = VAAN) 
 VAAN.CN31 <- glm(CNRatio ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.CNmodels <- list(VAAN.CN1, VAAN.CN2, VAAN.CN3, VAAN.CN4, VAAN.CN5, VAAN.CN6, VAAN.CN7, VAAN.CN8, VAAN.CN9, VAAN.CN10, VAAN.CN11, VAAN.CN12, VAAN.CN13, VAAN.CN14, VAAN.CN15, VAAN.CN16, VAAN.CN17, VAAN.CN18, VAAN.CN19, VAAN.CN20, VAAN.CN21, VAAN.CN22, VAAN.CN23, VAAN.CN24, VAAN.CN25, VAAN.CN26, VAAN.CN27, VAAN.CN28, VAAN.CN29, VAAN.CN30, VAAN.CN31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.CN.residplots <- imap(VAAN.CNmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_CN_glm.pdf")
+VAAN.CN.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.CN <- list("VAAN.CN1" = VAAN.CN1, "VAAN.CN2" = VAAN.CN2, "VAAN.CN3" = VAAN.CN3, "VAAN.CN4" = VAAN.CN4, "VAAN.CN5" = VAAN.CN5, "VAAN.CN6" = VAAN.CN6, "VAAN.CN7" = VAAN.CN7, "VAAN.CN8" =  VAAN.CN8, "VAAN.CN9" = VAAN.CN9, "VAAN.CN10" = VAAN.CN10, "VAAN.CN11" = VAAN.CN11, "VAAN.CN12" = VAAN.CN12, "VAAN.CN13" = VAAN.CN13, "VAAN.CN14" = VAAN.CN14, "VAAN.CN15" = VAAN.CN15, "VAAN.CN16" = VAAN.CN16, "VAAN.CN17" = VAAN.CN17, "VAAN.CN18" = VAAN.CN18, "VAAN.CN19" = VAAN.CN19, "VAAN.CN20" = VAAN.CN20, "VAAN.CN21" = VAAN.CN21, "VAAN.CN22" = VAAN.CN22, "VAAN.CN23" = VAAN.CN23, "VAAN.CN24" =  VAAN.CN24, "VAAN.CN25" = VAAN.CN25, "VAAN.CN26" = VAAN.CN26, "VAAN.CN27" = VAAN.CN27, "VAAN.CN28" = VAAN.CN28, "VAAN.CN29" = VAAN.CN29, "VAAN.CN30" = VAAN.CN30, "VAAN.CN31" = VAAN.CN31)
 VAAN.CN <- aictab(cand.set = Models.VAAN.CN)
@@ -2432,6 +2476,17 @@ VAAN.CP28 <- glm(CPRatio ~ GDD, data = VAAN)
 VAAN.CP29 <- glm(CPRatio ~ EVI, data = VAAN) 
 VAAN.CP30 <- glm(CPRatio ~ Year, data = VAAN) 
 VAAN.CP31 <- glm(CPRatio ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.CPmodels <- list(VAAN.CP1, VAAN.CP2, VAAN.CP3, VAAN.CP4, VAAN.CP5, VAAN.CP6, VAAN.CP7, VAAN.CP8, VAAN.CP9, VAAN.CP10, VAAN.CP11, VAAN.CP12, VAAN.CP13, VAAN.CP14, VAAN.CP15, VAAN.CP16, VAAN.CP17, VAAN.CP18, VAAN.CP19, VAAN.CP20, VAAN.CP21, VAAN.CP22, VAAN.CP23, VAAN.CP24, VAAN.CP25, VAAN.CP26, VAAN.CP27, VAAN.CP28, VAAN.CP29, VAAN.CP30, VAAN.CP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.CP.residplots <- imap(VAAN.CPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_CP_glm.pdf")
+VAAN.CP.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.CP <- list("VAAN.CP1" = VAAN.CP1, "VAAN.CP2" = VAAN.CP2, "VAAN.CP3" = VAAN.CP3, "VAAN.CP4" = VAAN.CP4, "VAAN.CP5" = VAAN.CP5, "VAAN.CP6" = VAAN.CP6, "VAAN.CP7" = VAAN.CP7, "VAAN.CP8" =  VAAN.CP8, "VAAN.CP9" = VAAN.CP9, "VAAN.CP10" = VAAN.CP10, "VAAN.CP11" = VAAN.CP11, "VAAN.CP12" = VAAN.CP12, "VAAN.CP13" = VAAN.CP13, "VAAN.CP14" = VAAN.CP14, "VAAN.CP15" = VAAN.CP15, "VAAN.CP16" = VAAN.CP16, "VAAN.CP17" = VAAN.CP17, "VAAN.CP18" = VAAN.CP18, "VAAN.CP19" = VAAN.CP19, "VAAN.CP20" = VAAN.CP20, "VAAN.CP21" = VAAN.CP21, "VAAN.CP22" = VAAN.CP22, "VAAN.CP23" = VAAN.CP23, "VAAN.CP24" =  VAAN.CP24, "VAAN.CP25" = VAAN.CP25, "VAAN.CP26" = VAAN.CP26, "VAAN.CP27" = VAAN.CP27, "VAAN.CP28" = VAAN.CP28, "VAAN.CP29" = VAAN.CP29, "VAAN.CP30" = VAAN.CP30, "VAAN.CP31" = VAAN.CP31)
 VAAN.CP <- aictab(cand.set = Models.VAAN.CP)
@@ -2477,6 +2532,17 @@ VAAN.NP28 <- glm(NPRatio ~ GDD, data = VAAN)
 VAAN.NP29 <- glm(NPRatio ~ EVI, data = VAAN) 
 VAAN.NP30 <- glm(NPRatio ~ Year, data = VAAN) 
 VAAN.NP31 <- glm(NPRatio ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.NPmodels <- list(VAAN.NP1, VAAN.NP2, VAAN.NP3, VAAN.NP4, VAAN.NP5, VAAN.NP6, VAAN.NP7, VAAN.NP8, VAAN.NP9, VAAN.NP10, VAAN.NP11, VAAN.NP12, VAAN.NP13, VAAN.NP14, VAAN.NP15, VAAN.NP16, VAAN.NP17, VAAN.NP18, VAAN.NP19, VAAN.NP20, VAAN.NP21, VAAN.NP22, VAAN.NP23, VAAN.NP24, VAAN.NP25, VAAN.NP26, VAAN.NP27, VAAN.NP28, VAAN.NP29, VAAN.NP30, VAAN.NP31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.NP.residplots <- imap(VAAN.NPmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_NP_glm.pdf")
+VAAN.NP.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.NP <- list("VAAN.NP1" = VAAN.NP1, "VAAN.NP2" = VAAN.NP2, "VAAN.NP3" = VAAN.NP3, "VAAN.NP4" = VAAN.NP4, "VAAN.NP5" = VAAN.NP5, "VAAN.NP6" = VAAN.NP6, "VAAN.NP7" = VAAN.NP7, "VAAN.NP8" =  VAAN.NP8, "VAAN.NP9" = VAAN.NP9, "VAAN.NP10" = VAAN.NP10, "VAAN.NP11" = VAAN.NP11, "VAAN.NP12" = VAAN.NP12, "VAAN.NP13" = VAAN.NP13, "VAAN.NP14" = VAAN.NP14, "VAAN.NP15" = VAAN.NP15, "VAAN.NP16" = VAAN.NP16, "VAAN.NP17" = VAAN.NP17, "VAAN.NP18" = VAAN.NP18, "VAAN.NP19" = VAAN.NP19, "VAAN.NP20" = VAAN.NP20, "VAAN.NP21" = VAAN.NP21, "VAAN.NP22" = VAAN.NP22, "VAAN.NP23" = VAAN.NP23, "VAAN.NP24" =  VAAN.NP24, "VAAN.NP25" = VAAN.NP25, "VAAN.NP26" = VAAN.NP26, "VAAN.NP27" = VAAN.NP27, "VAAN.NP28" = VAAN.NP28, "VAAN.NP29" = VAAN.NP29, "VAAN.NP30" = VAAN.NP30, "VAAN.NP31" = VAAN.NP31)
 VAAN.NP <- aictab(cand.set = Models.VAAN.NP)
@@ -2518,6 +2584,17 @@ VAAN.Qty_C28 <- glm(Qty_C ~ GDD, data = VAAN)
 VAAN.Qty_C29 <- glm(Qty_C ~ EVI, data = VAAN) 
 VAAN.Qty_C30 <- glm(Qty_C ~ Year, data = VAAN) 
 VAAN.Qty_C31 <- glm(Qty_C ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Qty_Cmodels <- list(VAAN.Qty_C1, VAAN.Qty_C2, VAAN.Qty_C3, VAAN.Qty_C4, VAAN.Qty_C5, VAAN.Qty_C6, VAAN.Qty_C7, VAAN.Qty_C8, VAAN.Qty_C9, VAAN.Qty_C10, VAAN.Qty_C11, VAAN.Qty_C12, VAAN.Qty_C13, VAAN.Qty_C14, VAAN.Qty_C15, VAAN.Qty_C16, VAAN.Qty_C17, VAAN.Qty_C18, VAAN.Qty_C19, VAAN.Qty_C20, VAAN.Qty_C21, VAAN.Qty_C22, VAAN.Qty_C23, VAAN.Qty_C24, VAAN.Qty_C25, VAAN.Qty_C26, VAAN.Qty_C27, VAAN.Qty_C28, VAAN.Qty_C29, VAAN.Qty_C30, VAAN.Qty_C31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.Qty_C.residplots <- imap(VAAN.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_QtyC_glm.pdf")
+VAAN.Qty_C.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.Qty_C <- list("VAAN.Qty_C1" = VAAN.Qty_C1, "VAAN.Qty_C2" = VAAN.Qty_C2, "VAAN.Qty_C3" = VAAN.Qty_C3, "VAAN.Qty_C4" = VAAN.Qty_C4, "VAAN.Qty_C5" = VAAN.Qty_C5, "VAAN.Qty_C6" = VAAN.Qty_C6, "VAAN.Qty_C7" = VAAN.Qty_C7, "VAAN.Qty_C8" =  VAAN.Qty_C8, "VAAN.Qty_C9" = VAAN.Qty_C9, "VAAN.Qty_C10" = VAAN.Qty_C10, "VAAN.Qty_C11" = VAAN.Qty_C11, "VAAN.Qty_C12" = VAAN.Qty_C12, "VAAN.Qty_C13" = VAAN.Qty_C13, "VAAN.Qty_C14" = VAAN.Qty_C14, "VAAN.Qty_C15" = VAAN.Qty_C15, "VAAN.Qty_C16" = VAAN.Qty_C16, "VAAN.Qty_C17" = VAAN.Qty_C17, "VAAN.Qty_C18" = VAAN.Qty_C18, "VAAN.Qty_C19" = VAAN.Qty_C19, "VAAN.Qty_C20" = VAAN.Qty_C20, "VAAN.Qty_C21" = VAAN.Qty_C21, "VAAN.Qty_C22" = VAAN.Qty_C22, "VAAN.Qty_C23" = VAAN.Qty_C23, "VAAN.Qty_C24" =  VAAN.Qty_C24, "VAAN.Qty_C25" = VAAN.Qty_C25, "VAAN.Qty_C26" = VAAN.Qty_C26, "VAAN.Qty_C27" = VAAN.Qty_C27, "VAAN.Qty_C28" = VAAN.Qty_C28, "VAAN.Qty_C29" = VAAN.Qty_C29, "VAAN.Qty_C30" = VAAN.Qty_C30, "VAAN.Qty_C31" = VAAN.Qty_C31)
 VAAN.Qty_C <- aictab(cand.set = Models.VAAN.Qty_C)
@@ -2561,6 +2638,17 @@ VAAN.Qty_P28 <- glm(Qty_P ~ GDD, data = VAAN)
 VAAN.Qty_P29 <- glm(Qty_P ~ EVI, data = VAAN) 
 VAAN.Qty_P30 <- glm(Qty_P ~ Year, data = VAAN) 
 VAAN.Qty_P31 <- glm(Qty_P ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Qty_Pmodels <- list(VAAN.Qty_P1, VAAN.Qty_P2, VAAN.Qty_P3, VAAN.Qty_P4, VAAN.Qty_P5, VAAN.Qty_P6, VAAN.Qty_P7, VAAN.Qty_P8, VAAN.Qty_P9, VAAN.Qty_P10, VAAN.Qty_P11, VAAN.Qty_P12, VAAN.Qty_P13, VAAN.Qty_P14, VAAN.Qty_P15, VAAN.Qty_P16, VAAN.Qty_P17, VAAN.Qty_P18, VAAN.Qty_P19, VAAN.Qty_P20, VAAN.Qty_P21, VAAN.Qty_P22, VAAN.Qty_P23, VAAN.Qty_P24, VAAN.Qty_P25, VAAN.Qty_P26, VAAN.Qty_P27, VAAN.Qty_P28, VAAN.Qty_P29, VAAN.Qty_P30, VAAN.Qty_P31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.Qty_P.residplots <- imap(VAAN.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_QtyP_glm.pdf")
+VAAN.Qty_P.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.Qty_P <- list("VAAN.Qty_P1" = VAAN.Qty_P1, "VAAN.Qty_P2" = VAAN.Qty_P2, "VAAN.Qty_P3" = VAAN.Qty_P3, "VAAN.Qty_P4" = VAAN.Qty_P4, "VAAN.Qty_P5" = VAAN.Qty_P5, "VAAN.Qty_P6" = VAAN.Qty_P6, "VAAN.Qty_P7" = VAAN.Qty_P7, "VAAN.Qty_P8" =  VAAN.Qty_P8, "VAAN.Qty_P9" = VAAN.Qty_P9, "VAAN.Qty_P10" = VAAN.Qty_P10, "VAAN.Qty_P11" = VAAN.Qty_P11, "VAAN.Qty_P12" = VAAN.Qty_P12, "VAAN.Qty_P13" = VAAN.Qty_P13, "VAAN.Qty_P14" = VAAN.Qty_P14, "VAAN.Qty_P15" = VAAN.Qty_P15, "VAAN.Qty_P16" = VAAN.Qty_P16, "VAAN.Qty_P17" = VAAN.Qty_P17, "VAAN.Qty_P18" = VAAN.Qty_P18, "VAAN.Qty_P19" = VAAN.Qty_P19, "VAAN.Qty_P20" = VAAN.Qty_P20, "VAAN.Qty_P21" = VAAN.Qty_P21, "VAAN.Qty_P22" = VAAN.Qty_P22, "VAAN.Qty_P23" = VAAN.Qty_P23, "VAAN.Qty_P24" =  VAAN.Qty_P24, "VAAN.Qty_P25" = VAAN.Qty_P25, "VAAN.Qty_P26" = VAAN.Qty_P26, "VAAN.Qty_P27" = VAAN.Qty_P27, "VAAN.Qty_P28" = VAAN.Qty_P28, "VAAN.Qty_P29" = VAAN.Qty_P29, "VAAN.Qty_P30" = VAAN.Qty_P30, "VAAN.Qty_P31" = VAAN.Qty_P31)
 VAAN.Qty_P <- aictab(cand.set = Models.VAAN.Qty_P)
@@ -2602,6 +2690,17 @@ VAAN.Qty_N28 <- glm(Qty_N ~ GDD, data = VAAN)
 VAAN.Qty_N29 <- glm(Qty_N ~ EVI, data = VAAN) 
 VAAN.Qty_N30 <- glm(Qty_N ~ Year, data = VAAN) 
 VAAN.Qty_N31 <- glm(Qty_N ~ 1, data =  VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Qty_Nmodels <- list(VAAN.Qty_N1, VAAN.Qty_N2, VAAN.Qty_N3, VAAN.Qty_N4, VAAN.Qty_N5, VAAN.Qty_N6, VAAN.Qty_N7, VAAN.Qty_N8, VAAN.Qty_N9, VAAN.Qty_N10, VAAN.Qty_N11, VAAN.Qty_N12, VAAN.Qty_N13, VAAN.Qty_N14, VAAN.Qty_N15, VAAN.Qty_N16, VAAN.Qty_N17, VAAN.Qty_N18, VAAN.Qty_N19, VAAN.Qty_N20, VAAN.Qty_N21, VAAN.Qty_N22, VAAN.Qty_N23, VAAN.Qty_N24, VAAN.Qty_N25, VAAN.Qty_N26, VAAN.Qty_N27, VAAN.Qty_N28, VAAN.Qty_N29, VAAN.Qty_N30, VAAN.Qty_N31)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.Qty_N.residplots <- imap(VAAN.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels/ModelDiagnostics/VAAN_QtyN_glm.pdf")
+VAAN.Qty_N.residplots
+dev.off()
+
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.VAAN.Qty_N <- list("VAAN.Qty_N1" = VAAN.Qty_N1, "VAAN.Qty_N2" = VAAN.Qty_N2, "VAAN.Qty_N3" = VAAN.Qty_N3, "VAAN.Qty_N4" = VAAN.Qty_N4, "VAAN.Qty_N5" = VAAN.Qty_N5, "VAAN.Qty_N6" = VAAN.Qty_N6, "VAAN.Qty_N7" = VAAN.Qty_N7, "VAAN.Qty_N8" =  VAAN.Qty_N8, "VAAN.Qty_N9" = VAAN.Qty_N9, "VAAN.Qty_N10" = VAAN.Qty_N10, "VAAN.Qty_N11" = VAAN.Qty_N11, "VAAN.Qty_N12" = VAAN.Qty_N12, "VAAN.Qty_N13" = VAAN.Qty_N13, "VAAN.Qty_N14" = VAAN.Qty_N14, "VAAN.Qty_N15" = VAAN.Qty_N15, "VAAN.Qty_N16" = VAAN.Qty_N16, "VAAN.Qty_N17" = VAAN.Qty_N17, "VAAN.Qty_N18" = VAAN.Qty_N18, "VAAN.Qty_N19" = VAAN.Qty_N19, "VAAN.Qty_N20" = VAAN.Qty_N20, "VAAN.Qty_N21" = VAAN.Qty_N21, "VAAN.Qty_N22" = VAAN.Qty_N22, "VAAN.Qty_N23" = VAAN.Qty_N23, "VAAN.Qty_N24" =  VAAN.Qty_N24, "VAAN.Qty_N25" = VAAN.Qty_N25, "VAAN.Qty_N26" = VAAN.Qty_N26, "VAAN.Qty_N27" = VAAN.Qty_N27, "VAAN.Qty_N28" = VAAN.Qty_N28, "VAAN.Qty_N29" = VAAN.Qty_N29, "VAAN.Qty_N30" = VAAN.Qty_N30, "VAAN.Qty_N31" = VAAN.Qty_N31)
 VAAN.Qty_N <- aictab(cand.set = Models.VAAN.Qty_N)
