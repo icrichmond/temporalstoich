@@ -1,7 +1,11 @@
 # Author: Isabella Richmond
-# Last edited: March 14, 2020
+# Last edited: March 23, 2020
 
-# This code is for the creation and evaluation of my temporal stoichiometry models. A lot of 
+# NOTE: This code is no longer being used - moving to a 2-step model approach, see 
+#       Stoich_TemporalModels_2step.R in code folder to see current modelling approach
+#       Moving to new approach to simplify models and make them more interpretable
+
+# This code was for the creation and evaluation of my temporal stoichiometry models. A lot of 
 # Code was provided by Travis Heckford (twitter.com/travheckford)
 # Models evaluate the response of stoichiometry in four boreal plant species with site, year
 # weather, moisture, and productivity as explanatory variables
@@ -12,7 +16,7 @@
 # load packages
 install.packages("easypackages")
 library(easypackages)
-install_packages("purrr", "ggcorrplot", "purrr", "broom", "patchwork")
+install_packages("MuMIn", "purrr", "ggcorrplot", "purrr", "broom", "patchwork")
 libraries("purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
