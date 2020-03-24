@@ -12,7 +12,7 @@
 install.packages("easypackages")
 library(easypackages)
 install_packages("sjPlot", "MuMIn", "purrr", "ggcorrplot", "purrr", "broom", "patchwork")
-libraries("sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
@@ -60,6 +60,31 @@ str(ABBA)
 str(ACRU)
 str(BEPA)
 str(VAAN)
+
+# test for correlation between covariates
+# if r > 0.70, variables are highly correlated and should not be in the same models 
+# compute a correlation matrix 
+# isolate the explanatory variables 
+abbacorrdata <- tibble(ABBA$GDD, ABBA$NDMI,ABBA$EVI)
+abbacorr <- (cor(abbacorrdata))
+ggcorrplot(abbacorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels_2Step/Correlations/ABBAcorr.jpg")
+
+acrucorrdata <- tibble(ACRU$GDD, ACRU$NDMI,ACRU$EVI)
+acrucorr <- (cor(acrucorrdata))
+ggcorrplot(acrucorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels_2Step/Correlations/ACRUcorr.jpg")
+
+bepacorrdata <- tibble(BEPA$GDD, BEPA$NDMI,BEPA$EVI)
+bepacorr <- (cor(bepacorrdata))
+ggcorrplot(bepacorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels_2Step/Correlations/BEPAcorr.jpg")
+
+vaancorrdata <- tibble(VAAN$GDD, VAAN$NDMI,VAAN$EVI)
+vaancorr <- (cor(vaancorrdata))
+ggcorrplot(vaancorr, hc.order = TRUE, lab = TRUE)
+ggsave("graphics/StoichModels_2Step/Correlations/VAANcorr.jpg")
+# no variables are highly correlated, all correlation values < 0.40
 
 ### Create Functions ### 
 # create a function to make the residual plots later on in the script 
@@ -133,7 +158,30 @@ PseudoR2(ABBA.C1, which = "Nagelkerke")
 ABBA.C.Global <- glm(C ~ EVI * GDD * NDMI * Site, data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
-# create AICc table ranking models with dredge. Set interaction limit to 
-ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", m.lim = c(0,3))
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = ABBA)
+ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+
+#set interaction limit to 6 so that only two-way interactions are being evaluated - not sure if this works
+#ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", m.lim = c(0,6))
+
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.C.mechmodels <- get.models(ABBA.C.mech,subset=NA)
+ABBA.C.mech.residplots <- imap(ABBA.C.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_C_mech_glm.pdf")
+ABBA.C.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
 print(ABBA.C.mech)
-summary(get.models(ABBA.C.mech, 1)[[1]])
+# save the AIC table
+write_csv(ABBA.C.mech, "output/AIC_2Step/ABBA_C_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.C.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.C.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+topmodel <- summary(get.models(ABBA.C.mech, 1)[[1]])
+topmodel
