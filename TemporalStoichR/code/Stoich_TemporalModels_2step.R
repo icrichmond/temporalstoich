@@ -1,5 +1,5 @@
 # Author: Isabella Richmond
-# Last edited: March 23, 2020
+# Last edited: March 25, 2020
 
 # This code was for the creation and evaluation of my temporal stoichiometry models. A lot of 
 # code was provided by Travis Heckford (twitter.com/travheckford)
@@ -162,10 +162,6 @@ options(na.action = "na.fail")
 # interaction terms 
 ABBA.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = ABBA)
 ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
-
-#set interaction limit to 6 so that only two-way interactions are being evaluated - not sure if this works
-#ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", m.lim = c(0,6))
-
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.C.mechmodels <- get.models(ABBA.C.mech,subset=NA)
 ABBA.C.mech.residplots <- imap(ABBA.C.mechmodels, resid_plots) 
@@ -183,5 +179,6 @@ par(mar=c(4,5,9,4))
 plot(ABBA.C.mech)
 dev.off()
 # get the summary of the top model and save it to a .csv
-topmodel <- summary(get.models(ABBA.C.mech, 1)[[1]])
-topmodel
+ABBA.C.mechtop <- (get.models(ABBA.C.mech, 1)[[1]])
+ABBA.C.mechtop <- tidy(ABBA.C.mechtop)
+write_csv(ABBA.C.mechtop, "output/Summary_2Step/summary.ABBA.C.mech.csv")
