@@ -182,3 +182,434 @@ dev.off()
 ABBA.C.mechtop <- (get.models(ABBA.C.mech, 1)[[1]])
 ABBA.C.mechtop <- tidy(ABBA.C.mechtop)
 write_csv(ABBA.C.mechtop, "output/Summary_2Step/summary.ABBA.C.mech.csv")
+
+# % Nitrogen
+ABBA.N1 <- glm(N ~ Year*Site, data = ABBA)
+ABBA.N2 <- glm(N ~ Year, data = ABBA)
+ABBA.N3 <- glm(N ~ Site, data = ABBA)
+ABBA.N4 <- glm(N ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Nmodels <- list(ABBA.N1, ABBA.N2, ABBA.N3, ABBA.N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.N.residplots <- imap(ABBA.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_N_glm.pdf")
+ABBA.N.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.N <- list("ABBA.N1 = Year*Site" = ABBA.N1, "ABBA.N2 = Year" = ABBA.N2, "ABBA.N3 = Site" = ABBA.N3, "ABBA.N4 = Null" = ABBA.N4)
+ABBA.N <- aictab(cand.set = Models.ABBA.N)
+print(ABBA.N)
+write.csv(ABBA.N, "output/AIC_2Step/ABBA_N.csv")
+# save the summary tables of the models 
+summary.ABBA.N <-map_df(Models.ABBA.N, broom::tidy, .id="model")
+write_csv(summary.ABBA.N, path = "output/Summary_2Step/summary.ABBA.N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.N1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ABBA.N.Global <- glm(N ~ EVI * GDD * NDMI * Site, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.N.Global <- glm(N ~ EVI*GDD*NDMI*Site, data = ABBA)
+ABBA.N.mech <- dredge(ABBA.N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.N.mechmodels <- get.models(ABBA.N.mech,subset=NA)
+ABBA.N.mech.residplots <- imap(ABBA.N.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_N_mech_glm.pdf")
+ABBA.N.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.N.mech)
+# save the AIC table
+write_csv(ABBA.N.mech, "output/AIC_2Step/ABBA_N_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.N.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.N.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.N.mechtop <- (get.models(ABBA.N.mech, 1)[[1]])
+ABBA.N.mechtop <- tidy(ABBA.N.mechtop)
+ABBA.N.mechtop
+write_csv(ABBA.N.mechtop, "output/Summary_2Step/summary.ABBA.N.mech.csv")
+
+# % Phosphorus
+ABBA.P1 <- glm(P ~ Year*Site, data = ABBA)
+ABBA.P2 <- glm(P ~ Year, data = ABBA)
+ABBA.P3 <- glm(P ~ Site, data = ABBA)
+ABBA.P4 <- glm(P ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Pmodels <- list(ABBA.P1, ABBA.P2, ABBA.P3, ABBA.P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.P.residplots <- imap(ABBA.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_P_glm.pdf")
+ABBA.P.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.P <- list("ABBA.P1 = Year*Site" = ABBA.P1, "ABBA.P2 = Year" = ABBA.P2, "ABBA.P3 = Site" = ABBA.P3, "ABBA.P4 = Null" = ABBA.P4)
+ABBA.P <- aictab(cand.set = Models.ABBA.P)
+print(ABBA.P)
+write.csv(ABBA.P, "output/AIC_2Step/ABBA_P.csv")
+# save the summary tables of the models 
+summary.ABBA.P <-map_df(Models.ABBA.P, broom::tidy, .id="model")
+write_csv(summary.ABBA.P, path = "output/Summary_2Step/summary.ABBA.P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.P1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ABBA.P.Global <- glm(P ~ EVI * GDD * NDMI * Site, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.P.Global <- glm(P ~ EVI*GDD*NDMI*Site, data = ABBA)
+ABBA.P.mech <- dredge(ABBA.P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.P.mechmodels <- get.models(ABBA.P.mech,subset=NA)
+ABBA.P.mech.residplots <- imap(ABBA.P.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_P_mech_glm.pdf")
+ABBA.P.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIP table and analysis
+# look at the AIP table
+print(ABBA.P.mech)
+# save the AIC table
+write_csv(ABBA.P.mech, "output/AIC_2Step/ABBA_P_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.P.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.P.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.P.mechtop <- (get.models(ABBA.P.mech, 1)[[1]])
+ABBA.P.mechtop <- tidy(ABBA.P.mechtop)
+ABBA.P.mechtop
+write_csv(ABBA.P.mechtop, "output/Summary_2Step/summary.ABBA.P.mech.csv")
+
+# Carbon (g)
+ABBA.Qty_C1 <- glm(Qty_C ~ Year*Site, data = ABBA)
+ABBA.Qty_C2 <- glm(Qty_C ~ Year, data = ABBA)
+ABBA.Qty_C3 <- glm(Qty_C ~ Site, data = ABBA)
+ABBA.Qty_C4 <- glm(Qty_C ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Qty_Cmodels <- list(ABBA.Qty_C1, ABBA.Qty_C2, ABBA.Qty_C3, ABBA.Qty_C4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.Qty_C.residplots <- imap(ABBA.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_C_glm.pdf")
+ABBA.Qty_C.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.Qty_C <- list("ABBA.Qty_C1 = Year*Site" = ABBA.Qty_C1, "ABBA.Qty_C2 = Year" = ABBA.Qty_C2, "ABBA.Qty_C3 = Site" = ABBA.Qty_C3, "ABBA.Qty_C4 = Null" = ABBA.Qty_C4)
+ABBA.Qty_C <- aictab(cand.set = Models.ABBA.Qty_C)
+print(ABBA.Qty_C)
+write.csv(ABBA.Qty_C, "output/AIC_2Step/ABBA_Qty_C.csv")
+# save the summary tables of the models 
+summary.ABBA.Qty_C <-map_df(Models.ABBA.Qty_C, broom::tidy, .id="model")
+write_csv(summary.ABBA.Qty_C, path = "output/Summary_2Step/summary.ABBA.Qty_C.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.Qty_C1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ABBA.Qty_C.Global <- glm(Qty_C ~ EVI * GDD * NDMI * Site, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.Qty_C.Global <- glm(Qty_C ~ EVI*GDD*Qty_CDMI*Site, data = ABBA)
+ABBA.Qty_C.mech <- dredge(ABBA.Qty_C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && Qty_CDMI | EVI && GDD && Site | EVI && Qty_CDMI && Site | GDD && Qty_CDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.Qty_C.mechmodels <- get.models(ABBA.Qty_C.mech,subset=Qty_CA)
+ABBA.Qty_C.mech.residplots <- imap(ABBA.Qty_C.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_C_mech_glm.pdf")
+ABBA.Qty_C.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.Qty_C.mech)
+# save the AIC table
+write_csv(ABBA.Qty_C.mech, "output/AIC_2Step/ABBA_Qty_C_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.Qty_C.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.Qty_C.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.Qty_C.mechtop <- (get.models(ABBA.Qty_C.mech, 1)[[1]])
+ABBA.Qty_C.mechtop <- tidy(ABBA.Qty_C.mechtop)
+write_csv(ABBA.Qty_C.mechtop, "output/Summary_2Step/summary.ABBA.Qty_C.mech.csv")
+
+# Nitrogen (g)
+ABBA.Qty_N1 <- glm(Qty_N ~ Year*Site, data = ABBA)
+ABBA.Qty_N2 <- glm(Qty_N ~ Year, data = ABBA)
+ABBA.Qty_N3 <- glm(Qty_N ~ Site, data = ABBA)
+ABBA.Qty_N4 <- glm(Qty_N ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Qty_Nmodels <- list(ABBA.Qty_N1, ABBA.Qty_N2, ABBA.Qty_N3, ABBA.Qty_N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.Qty_N.residplots <- imap(ABBA.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_N_glm.pdf")
+ABBA.Qty_N.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.Qty_N <- list("ABBA.Qty_N1 = Year*Site" = ABBA.Qty_N1, "ABBA.Qty_N2 = Year" = ABBA.Qty_N2, "ABBA.Qty_N3 = Site" = ABBA.Qty_N3, "ABBA.Qty_N4 = Null" = ABBA.Qty_N4)
+ABBA.Qty_N <- aictab(cand.set = Models.ABBA.Qty_N)
+print(ABBA.Qty_N)
+write.csv(ABBA.Qty_N, "output/AIC_2Step/ABBA_Qty_N.csv")
+# save the summary tables of the models 
+summary.ABBA.Qty_N <-map_df(Models.ABBA.Qty_N, broom::tidy, .id="model")
+write_csv(summary.ABBA.Qty_N, path = "output/Summary_2Step/summary.ABBA.Qty_N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.Qty_N1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ABBA.Qty_N.Global <- glm(Qty_N ~ EVI * GDD * NDMI * Site, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.Qty_N.Global <- glm(Qty_N ~ EVI*GDD*Qty_NDMI*Site, data = ABBA)
+ABBA.Qty_N.mech <- dredge(ABBA.Qty_N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && Qty_NDMI | EVI && GDD && Site | EVI && Qty_NDMI && Site | GDD && Qty_NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.Qty_N.mechmodels <- get.models(ABBA.Qty_N.mech,subset=Qty_NA)
+ABBA.Qty_N.mech.residplots <- imap(ABBA.Qty_N.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_N_mech_glm.pdf")
+ABBA.Qty_N.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.Qty_N.mech)
+# save the AIC table
+write_csv(ABBA.Qty_N.mech, "output/AIC_2Step/ABBA_Qty_N_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.Qty_N.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.Qty_N.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.Qty_N.mechtop <- (get.models(ABBA.Qty_N.mech, 1)[[1]])
+ABBA.Qty_N.mechtop <- tidy(ABBA.Qty_N.mechtop)
+write_csv(ABBA.Qty_N.mechtop, "output/Summary_2Step/summary.ABBA.Qty_N.mech.csv")
+
+# Phosphorus (g)
+ABBA.Qty_P1 <- glm(Qty_P ~ Year*Site, data = ABBA)
+ABBA.Qty_P2 <- glm(Qty_P ~ Year, data = ABBA)
+ABBA.Qty_P3 <- glm(Qty_P ~ Site, data = ABBA)
+ABBA.Qty_P4 <- glm(Qty_P ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.Qty_Pmodels <- list(ABBA.Qty_P1, ABBA.Qty_P2, ABBA.Qty_P3, ABBA.Qty_P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.Qty_P.residplots <- imap(ABBA.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_P_glm.pdf")
+ABBA.Qty_P.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.Qty_P <- list("ABBA.Qty_P1 = Year*Site" = ABBA.Qty_P1, "ABBA.Qty_P2 = Year" = ABBA.Qty_P2, "ABBA.Qty_P3 = Site" = ABBA.Qty_P3, "ABBA.Qty_P4 = Null" = ABBA.Qty_P4)
+ABBA.Qty_P <- aictab(cand.set = Models.ABBA.Qty_P)
+print(ABBA.Qty_P)
+write.csv(ABBA.Qty_P, "output/AIC_2Step/ABBA_Qty_P.csv")
+# save the summary tables of the models 
+summary.ABBA.Qty_P <-map_df(Models.ABBA.Qty_P, broom::tidy, .id="model")
+write_csv(summary.ABBA.Qty_P, path = "output/Summary_2Step/summary.ABBA.Qty_P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.Qty_P1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ABBA.Qty_P.Global <- glm(Qty_P ~ EVI * GDD * NDMI * Site, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.Qty_P.Global <- glm(Qty_P ~ EVI*GDD*Qty_PDMI*Site, data = ABBA)
+ABBA.Qty_P.mech <- dredge(ABBA.Qty_P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && Qty_PDMI | EVI && GDD && Site | EVI && Qty_PDMI && Site | GDD && Qty_PDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.Qty_P.mechmodels <- get.models(ABBA.Qty_P.mech,subset=Qty_PA)
+ABBA.Qty_P.mech.residplots <- imap(ABBA.Qty_P.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_P_mech_glm.pdf")
+ABBA.Qty_P.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.Qty_P.mech)
+# save the AIC table
+write_csv(ABBA.Qty_P.mech, "output/AIC_2Step/ABBA_Qty_P_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.Qty_P.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.Qty_P.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.Qty_P.mechtop <- (get.models(ABBA.Qty_P.mech, 1)[[1]])
+ABBA.Qty_P.mechtop <- tidy(ABBA.Qty_P.mechtop)
+write_csv(ABBA.Qty_P.mechtop, "output/Summary_2Step/summary.ABBA.Qty_P.mech.csv")
+
+# Carbon:Nitrogen
+ABBA.CNRatio1 <- glm(CNRatio ~ Year*Site, data = ABBA)
+ABBA.CNRatio2 <- glm(CNRatio ~ Year, data = ABBA)
+ABBA.CNRatio3 <- glm(CNRatio ~ Site, data = ABBA)
+ABBA.CNRatio4 <- glm(CNRatio ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.CNRatiomodels <- list(ABBA.CNRatio1, ABBA.CNRatio2, ABBA.CNRatio3, ABBA.CNRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.CNRatio.residplots <- imap(ABBA.CNRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_CNRatio_glm.pdf")
+ABBA.CNRatio.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.CNRatio <- list("ABBA.CNRatio1 = Year*Site" = ABBA.CNRatio1, "ABBA.CNRatio2 = Year" = ABBA.CNRatio2, "ABBA.CNRatio3 = Site" = ABBA.CNRatio3, "ABBA.CNRatio4 = Null" = ABBA.CNRatio4)
+ABBA.CNRatio <- aictab(cand.set = Models.ABBA.CNRatio)
+print(ABBA.CNRatio)
+write.csv(ABBA.CNRatio, "output/AIC_2Step/ABBA_CNRatio.csv")
+# save the summary tables of the models 
+summary.ABBA.CNRatio <-map_df(Models.ABBA.CNRatio, broom::tidy, .id="model")
+write_csv(summary.ABBA.CNRatio, path = "output/Summary_2Step/summary.ABBA.CNRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.CNRatio1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ABBA.CNRatio.Global <- glm(CNRatio ~ EVI * GDD * NDMI * Site, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.CNRatio.Global <- glm(CNRatio ~ EVI*GDD*NDMI*Site, data = ABBA)
+ABBA.CNRatio.mech <- dredge(ABBA.CNRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.CNRatio.mechmodels <- get.models(ABBA.CNRatio.mech,subset=NA)
+ABBA.CNRatio.mech.residplots <- imap(ABBA.CNRatio.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_CNRatio_mech_glm.pdf")
+ABBA.CNRatio.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.CNRatio.mech)
+# save the AIC table
+write_csv(ABBA.CNRatio.mech, "output/AIC_2Step/ABBA_CNRatio_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.CNRatio.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.CNRatio.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.CNRatio.mechtop <- (get.models(ABBA.CNRatio.mech, 1)[[1]])
+ABBA.CNRatio.mechtop <- tidy(ABBA.CNRatio.mechtop)
+write_csv(ABBA.CNRatio.mechtop, "output/Summary_2Step/summary.ABBA.CNRatio.mech.csv")
+
+# Carbon:Phosphorus
+ABBA.CPRatio1 <- glm(CPRatio ~ Year*Site, data = ABBA)
+ABBA.CPRatio2 <- glm(CPRatio ~ Year, data = ABBA)
+ABBA.CPRatio3 <- glm(CPRatio ~ Site, data = ABBA)
+ABBA.CPRatio4 <- glm(CPRatio ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.CPRatiomodels <- list(ABBA.CPRatio1, ABBA.CPRatio2, ABBA.CPRatio3, ABBA.CPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.CPRatio.residplots <- imap(ABBA.CPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_CPRatio_glm.pdf")
+ABBA.CPRatio.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.CPRatio <- list("ABBA.CPRatio1 = Year*Site" = ABBA.CPRatio1, "ABBA.CPRatio2 = Year" = ABBA.CPRatio2, "ABBA.CPRatio3 = Site" = ABBA.CPRatio3, "ABBA.CPRatio4 = Null" = ABBA.CPRatio4)
+ABBA.CPRatio <- aictab(cand.set = Models.ABBA.CPRatio)
+print(ABBA.CPRatio)
+write.csv(ABBA.CPRatio, "output/AIC_2Step/ABBA_CPRatio.csv")
+# save the summary tables of the models 
+summary.ABBA.CPRatio <-map_df(Models.ABBA.CPRatio, broom::tidy, .id="model")
+write_csv(summary.ABBA.CPRatio, path = "output/Summary_2Step/summary.ABBA.CPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.CPRatio1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ABBA.CPRatio.Global <- glm(CPRatio ~ EVI * GDD * NDMI * Site, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.CPRatio.Global <- glm(CPRatio ~ EVI*GDD*NDMI*Site, data = ABBA)
+ABBA.CPRatio.mech <- dredge(ABBA.CPRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.CPRatio.mechmodels <- get.models(ABBA.CPRatio.mech,subset=NA)
+ABBA.CPRatio.mech.residplots <- imap(ABBA.CPRatio.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_CPRatio_mech_glm.pdf")
+ABBA.CPRatio.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.CPRatio.mech)
+# save the AIC table
+write_csv(ABBA.CPRatio.mech, "output/AIC_2Step/ABBA_CPRatio_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.CPRatio.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.CPRatio.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.CPRatio.mechtop <- (get.models(ABBA.CPRatio.mech, 1)[[1]])
+ABBA.CPRatio.mechtop <- tidy(ABBA.CPRatio.mechtop)
+write_csv(ABBA.CPRatio.mechtop, "output/Summary_2Step/summary.ABBA.CPRatio.mech.csv")
+
+# Nitrogen:Phosphorus
+ABBA.NPRatio1 <- glm(NPRatio ~ Year*Site, data = ABBA)
+ABBA.NPRatio2 <- glm(NPRatio ~ Year, data = ABBA)
+ABBA.NPRatio3 <- glm(NPRatio ~ Site, data = ABBA)
+ABBA.NPRatio4 <- glm(NPRatio ~ 1, data = ABBA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ABBA.NPRatiomodels <- list(ABBA.NPRatio1, ABBA.NPRatio2, ABBA.NPRatio3, ABBA.NPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ABBA.NPRatio.residplots <- imap(ABBA.NPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_NPRatio_glm.pdf")
+ABBA.NPRatio.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ABBA.NPRatio <- list("ABBA.NPRatio1 = Year*Site" = ABBA.NPRatio1, "ABBA.NPRatio2 = Year" = ABBA.NPRatio2, "ABBA.NPRatio3 = Site" = ABBA.NPRatio3, "ABBA.NPRatio4 = Null" = ABBA.NPRatio4)
+ABBA.NPRatio <- aictab(cand.set = Models.ABBA.NPRatio)
+print(ABBA.NPRatio)
+write.csv(ABBA.NPRatio, "output/AIC_2Step/ABBA_NPRatio.csv")
+# save the summary tables of the models 
+summary.ABBA.NPRatio <-map_df(Models.ABBA.NPRatio, broom::tidy, .id="model")
+write_csv(summary.ABBA.NPRatio, path = "output/Summary_2Step/summary.ABBA.NPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ABBA.NPRatio1, which = "Nagelkerke")
+# site was the top model - don't continue because year is not a top variable
+
+#NOTE for ABBA - stoich models meet assumptions. Need new error structure for % and qty models
