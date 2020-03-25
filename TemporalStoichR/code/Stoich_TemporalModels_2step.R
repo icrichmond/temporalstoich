@@ -314,7 +314,7 @@ ABBA.Qty_C.residplots <- imap(ABBA.Qty_Cmodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_C_glm.pdf")
 ABBA.Qty_C.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# models do not meet assumptions - really bad fit. Will have to try a different error structure.
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.Qty_C <- list("ABBA.Qty_C1 = Year*Site" = ABBA.Qty_C1, "ABBA.Qty_C2 = Year" = ABBA.Qty_C2, "ABBA.Qty_C3 = Site" = ABBA.Qty_C3, "ABBA.Qty_C4 = Null" = ABBA.Qty_C4)
 ABBA.Qty_C <- aictab(cand.set = Models.ABBA.Qty_C)
@@ -325,36 +325,7 @@ summary.ABBA.Qty_C <-map_df(Models.ABBA.Qty_C, broom::tidy, .id="model")
 write_csv(summary.ABBA.Qty_C, path = "output/Summary_2Step/summary.ABBA.Qty_C.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ABBA.Qty_C1, which = "Nagelkerke")
-# this model has Year in the top model, move on to testing the mechanisms
-# use dredge package and keep interaction terms to max 2 
-# build global model with all mechanisms and interactions 
-ABBA.Qty_C.Global <- glm(Qty_C ~ EVI * GDD * NDMI * Site, data = ABBA)
-# set options, dredge requires this 
-options(na.action = "na.fail")
-# create AICc table ranking models with dredge. Subset the models to remove three-way 
-# interaction terms 
-ABBA.Qty_C.Global <- glm(Qty_C ~ EVI*GDD*Qty_CDMI*Site, data = ABBA)
-ABBA.Qty_C.mech <- dredge(ABBA.Qty_C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && Qty_CDMI | EVI && GDD && Site | EVI && Qty_CDMI && Site | GDD && Qty_CDMI && Site))
-# check the residuals of the models to ensure that glm was correct choice 
-ABBA.Qty_C.mechmodels <- get.models(ABBA.Qty_C.mech,subset=Qty_CA)
-ABBA.Qty_C.mech.residplots <- imap(ABBA.Qty_C.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_C_mech_glm.pdf")
-ABBA.Qty_C.mech.residplots
-dev.off()
-# if assumptions are met, proceed with AIC table and analysis
-# look at the AIC table
-print(ABBA.Qty_C.mech)
-# save the AIC table
-write_csv(ABBA.Qty_C.mech, "output/AIC_2Step/ABBA_Qty_C_Mech.csv")
-# visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.Qty_C.pdf")
-par(mar=c(4,5,9,4))
-plot(ABBA.Qty_C.mech)
-dev.off()
-# get the summary of the top model and save it to a .csv
-ABBA.Qty_C.mechtop <- (get.models(ABBA.Qty_C.mech, 1)[[1]])
-ABBA.Qty_C.mechtop <- tidy(ABBA.Qty_C.mechtop)
-write_csv(ABBA.Qty_C.mechtop, "output/Summary_2Step/summary.ABBA.Qty_C.mech.csv")
+# top model was Null - stop here. Probably due to poor fit. 
 
 # Nitrogen (g)
 ABBA.Qty_N1 <- glm(Qty_N ~ Year*Site, data = ABBA)
@@ -371,7 +342,7 @@ ABBA.Qty_N.residplots <- imap(ABBA.Qty_Nmodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_N_glm.pdf")
 ABBA.Qty_N.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# models do not meet assumptions - really bad fit. Will have to try a different error structure.
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.Qty_N <- list("ABBA.Qty_N1 = Year*Site" = ABBA.Qty_N1, "ABBA.Qty_N2 = Year" = ABBA.Qty_N2, "ABBA.Qty_N3 = Site" = ABBA.Qty_N3, "ABBA.Qty_N4 = Null" = ABBA.Qty_N4)
 ABBA.Qty_N <- aictab(cand.set = Models.ABBA.Qty_N)
@@ -382,36 +353,7 @@ summary.ABBA.Qty_N <-map_df(Models.ABBA.Qty_N, broom::tidy, .id="model")
 write_csv(summary.ABBA.Qty_N, path = "output/Summary_2Step/summary.ABBA.Qty_N.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ABBA.Qty_N1, which = "Nagelkerke")
-# this model has Year in the top model, move on to testing the mechanisms
-# use dredge package and keep interaction terms to max 2 
-# build global model with all mechanisms and interactions 
-ABBA.Qty_N.Global <- glm(Qty_N ~ EVI * GDD * NDMI * Site, data = ABBA)
-# set options, dredge requires this 
-options(na.action = "na.fail")
-# create AICc table ranking models with dredge. Subset the models to remove three-way 
-# interaction terms 
-ABBA.Qty_N.Global <- glm(Qty_N ~ EVI*GDD*Qty_NDMI*Site, data = ABBA)
-ABBA.Qty_N.mech <- dredge(ABBA.Qty_N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && Qty_NDMI | EVI && GDD && Site | EVI && Qty_NDMI && Site | GDD && Qty_NDMI && Site))
-# check the residuals of the models to ensure that glm was correct choice 
-ABBA.Qty_N.mechmodels <- get.models(ABBA.Qty_N.mech,subset=Qty_NA)
-ABBA.Qty_N.mech.residplots <- imap(ABBA.Qty_N.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_N_mech_glm.pdf")
-ABBA.Qty_N.mech.residplots
-dev.off()
-# if assumptions are met, proceed with AIC table and analysis
-# look at the AIC table
-print(ABBA.Qty_N.mech)
-# save the AIC table
-write_csv(ABBA.Qty_N.mech, "output/AIC_2Step/ABBA_Qty_N_Mech.csv")
-# visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.Qty_N.pdf")
-par(mar=c(4,5,9,4))
-plot(ABBA.Qty_N.mech)
-dev.off()
-# get the summary of the top model and save it to a .csv
-ABBA.Qty_N.mechtop <- (get.models(ABBA.Qty_N.mech, 1)[[1]])
-ABBA.Qty_N.mechtop <- tidy(ABBA.Qty_N.mechtop)
-write_csv(ABBA.Qty_N.mechtop, "output/Summary_2Step/summary.ABBA.Qty_N.mech.csv")
+# top model was Null - stop here. Probably due to poor fit. 
 
 # Phosphorus (g)
 ABBA.Qty_P1 <- glm(Qty_P ~ Year*Site, data = ABBA)
@@ -428,7 +370,7 @@ ABBA.Qty_P.residplots <- imap(ABBA.Qty_Pmodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_P_glm.pdf")
 ABBA.Qty_P.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# models do not meet assumptions - really bad fit. Will have to try a different error structure.
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.Qty_P <- list("ABBA.Qty_P1 = Year*Site" = ABBA.Qty_P1, "ABBA.Qty_P2 = Year" = ABBA.Qty_P2, "ABBA.Qty_P3 = Site" = ABBA.Qty_P3, "ABBA.Qty_P4 = Null" = ABBA.Qty_P4)
 ABBA.Qty_P <- aictab(cand.set = Models.ABBA.Qty_P)
@@ -439,36 +381,7 @@ summary.ABBA.Qty_P <-map_df(Models.ABBA.Qty_P, broom::tidy, .id="model")
 write_csv(summary.ABBA.Qty_P, path = "output/Summary_2Step/summary.ABBA.Qty_P.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ABBA.Qty_P1, which = "Nagelkerke")
-# this model has Year in the top model, move on to testing the mechanisms
-# use dredge package and keep interaction terms to max 2 
-# build global model with all mechanisms and interactions 
-ABBA.Qty_P.Global <- glm(Qty_P ~ EVI * GDD * NDMI * Site, data = ABBA)
-# set options, dredge requires this 
-options(na.action = "na.fail")
-# create AICc table ranking models with dredge. Subset the models to remove three-way 
-# interaction terms 
-ABBA.Qty_P.Global <- glm(Qty_P ~ EVI*GDD*Qty_PDMI*Site, data = ABBA)
-ABBA.Qty_P.mech <- dredge(ABBA.Qty_P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && Qty_PDMI | EVI && GDD && Site | EVI && Qty_PDMI && Site | GDD && Qty_PDMI && Site))
-# check the residuals of the models to ensure that glm was correct choice 
-ABBA.Qty_P.mechmodels <- get.models(ABBA.Qty_P.mech,subset=Qty_PA)
-ABBA.Qty_P.mech.residplots <- imap(ABBA.Qty_P.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_Qty_P_mech_glm.pdf")
-ABBA.Qty_P.mech.residplots
-dev.off()
-# if assumptions are met, proceed with AIC table and analysis
-# look at the AIC table
-print(ABBA.Qty_P.mech)
-# save the AIC table
-write_csv(ABBA.Qty_P.mech, "output/AIC_2Step/ABBA_Qty_P_Mech.csv")
-# visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.Qty_P.pdf")
-par(mar=c(4,5,9,4))
-plot(ABBA.Qty_P.mech)
-dev.off()
-# get the summary of the top model and save it to a .csv
-ABBA.Qty_P.mechtop <- (get.models(ABBA.Qty_P.mech, 1)[[1]])
-ABBA.Qty_P.mechtop <- tidy(ABBA.Qty_P.mechtop)
-write_csv(ABBA.Qty_P.mechtop, "output/Summary_2Step/summary.ABBA.Qty_P.mech.csv")
+# top model was Null - stop here. Probably due to poor fit. 
 
 # Carbon:Nitrogen
 ABBA.CNRatio1 <- glm(CNRatio ~ Year*Site, data = ABBA)
@@ -485,7 +398,7 @@ ABBA.CNRatio.residplots <- imap(ABBA.CNRatiomodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_CNRatio_glm.pdf")
 ABBA.CNRatio.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# models meet assumptions - diagnostic plots look good
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.CNRatio <- list("ABBA.CNRatio1 = Year*Site" = ABBA.CNRatio1, "ABBA.CNRatio2 = Year" = ABBA.CNRatio2, "ABBA.CNRatio3 = Site" = ABBA.CNRatio3, "ABBA.CNRatio4 = Null" = ABBA.CNRatio4)
 ABBA.CNRatio <- aictab(cand.set = Models.ABBA.CNRatio)
@@ -542,7 +455,7 @@ ABBA.CPRatio.residplots <- imap(ABBA.CPRatiomodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_CPRatio_glm.pdf")
 ABBA.CPRatio.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# models pass assumptions, diagnostic plots look good 
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.CPRatio <- list("ABBA.CPRatio1 = Year*Site" = ABBA.CPRatio1, "ABBA.CPRatio2 = Year" = ABBA.CPRatio2, "ABBA.CPRatio3 = Site" = ABBA.CPRatio3, "ABBA.CPRatio4 = Null" = ABBA.CPRatio4)
 ABBA.CPRatio <- aictab(cand.set = Models.ABBA.CPRatio)
@@ -610,6 +523,289 @@ summary.ABBA.NPRatio <-map_df(Models.ABBA.NPRatio, broom::tidy, .id="model")
 write_csv(summary.ABBA.NPRatio, path = "output/Summary_2Step/summary.ABBA.NPRatio.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ABBA.NPRatio1, which = "Nagelkerke")
-# site was the top model - don't continue because year is not a top variable
+# site was the top model - because year is not a top variable
 
-#NOTE for ABBA - stoich models meet assumptions. Need new error structure for % and qty models
+#NOTE for ABBA - stoich models meet assumptions. Need new error structure for % (ok) and qty (bad) models
+
+# ACRU
+# % Carbon
+ACRU.C1 <- glm(C ~ Year*Site, data = ACRU)
+ACRU.C2 <- glm(C ~ Year, data = ACRU)
+ACRU.C3 <- glm(C ~ Site, data = ACRU)
+ACRU.C4 <- glm(C ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Cmodels <- list(ACRU.C1, ACRU.C2, ACRU.C3, ACRU.C4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.C.residplots <- imap(ACRU.Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_C_glm.pdf")
+ACRU.C.residplots
+dev.off()
+# Model assumptions are OK, will try another error structure to see if it improves. 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.C <- list("ACRU.C1 = Year*Site" = ACRU.C1, "ACRU.C2 = Year" = ACRU.C2, "ACRU.C3 = Site" = ACRU.C3, "ACRU.C4 = Null" = ACRU.C4)
+ACRU.C <- aictab(cand.set = Models.ACRU.C)
+print(ACRU.C)
+write.csv(ACRU.C, "output/AIC_2Step/ACRU_C.csv")
+# save the summary tables of the models 
+summary.ACRU.C <-map_df(Models.ACRU.C, broom::tidy, .id="model")
+write_csv(summary.ACRU.C, path = "output/Summary_2Step/summary.ACRU.C.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.C1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+ACRU.C.Global <- glm(C ~ EVI * GDD * NDMI * Site, data = ACRU)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ACRU.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = ACRU)
+ACRU.C.mech <- dredge(ACRU.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+ACRU.C.mechmodels <- get.models(ACRU.C.mech,subset=NA)
+ACRU.C.mech.residplots <- imap(ACRU.C.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_C_mech_glm.pdf")
+ACRU.C.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ACRU.C.mech)
+# save the AIC table
+write_csv(ACRU.C.mech, "output/AIC_2Step/ACRU_C_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ACRU.C.pdf")
+par(mar=c(4,5,9,4))
+plot(ACRU.C.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ACRU.C.mechtop <- (get.models(ACRU.C.mech, 1)[[1]])
+ACRU.C.mechtop <- tidy(ACRU.C.mechtop)
+ACRU.C.mechtop
+write_csv(ACRU.C.mechtop, "output/Summary_2Step/summary.ACRU.C.mech.csv")
+
+# % Nitrogen
+ACRU.N1 <- glm(N ~ Year*Site, data = ACRU)
+ACRU.N2 <- glm(N ~ Year, data = ACRU)
+ACRU.N3 <- glm(N ~ Site, data = ACRU)
+ACRU.N4 <- glm(N ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Nmodels <- list(ACRU.N1, ACRU.N2, ACRU.N3, ACRU.N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.N.residplots <- imap(ACRU.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_N_glm.pdf")
+ACRU.N.residplots
+dev.off()
+# model assumptions look good
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.N <- list("ACRU.N1 = Year*Site" = ACRU.N1, "ACRU.N2 = Year" = ACRU.N2, "ACRU.N3 = Site" = ACRU.N3, "ACRU.N4 = Null" = ACRU.N4)
+ACRU.N <- aictab(cand.set = Models.ACRU.N)
+print(ACRU.N)
+write.csv(ACRU.N, "output/AIC_2Step/ACRU_N.csv")
+# save the summary tables of the models 
+summary.ACRU.N <-map_df(Models.ACRU.N, broom::tidy, .id="model")
+write_csv(summary.ACRU.N, path = "output/Summary_2Step/summary.ACRU.N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.N1, which = "Nagelkerke")
+# this model has Year in the top model but is within 2 delta AIC with the null so stop here
+
+# % Phosphorus
+ACRU.P1 <- glm(P ~ Year*Site, data = ACRU)
+ACRU.P2 <- glm(P ~ Year, data = ACRU)
+ACRU.P3 <- glm(P ~ Site, data = ACRU)
+ACRU.P4 <- glm(P ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Pmodels <- list(ACRU.P1, ACRU.P2, ACRU.P3, ACRU.P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.P.residplots <- imap(ACRU.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_P_glm.pdf")
+ACRU.P.residplots
+dev.off()
+# diagnostic plots don't look great, will try another error structure to see if it helps 
+# create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.P <- list("ACRU.P1 = Year*Site" = ACRU.P1, "ACRU.P2 = Year" = ACRU.P2, "ACRU.P3 = Site" = ACRU.P3, "ACRU.P4 = Null" = ACRU.P4)
+ACRU.P <- aictab(cand.set = Models.ACRU.P)
+print(ACRU.P)
+write.csv(ACRU.P, "output/AIC_2Step/ACRU_P.csv")
+# save the summary tables of the models 
+summary.ACRU.P <-map_df(Models.ACRU.P, broom::tidy, .id="model")
+write_csv(summary.ACRU.P, path = "output/Summary_2Step/summary.ACRU.P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.P1, which = "Nagelkerke")
+# Null is top model - stop here.
+
+# Carbon (g)
+ACRU.Qty_C1 <- glm(Qty_C ~ Year*Site, data = ACRU)
+ACRU.Qty_C2 <- glm(Qty_C ~ Year, data = ACRU)
+ACRU.Qty_C3 <- glm(Qty_C ~ Site, data = ACRU)
+ACRU.Qty_C4 <- glm(Qty_C ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Qty_Cmodels <- list(ACRU.Qty_C1, ACRU.Qty_C2, ACRU.Qty_C3, ACRU.Qty_C4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.Qty_C.residplots <- imap(ACRU.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_Qty_C_glm.pdf")
+ACRU.Qty_C.residplots
+dev.off()
+# assumptions not met, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.Qty_C <- list("ACRU.Qty_C1 = Year*Site" = ACRU.Qty_C1, "ACRU.Qty_C2 = Year" = ACRU.Qty_C2, "ACRU.Qty_C3 = Site" = ACRU.Qty_C3, "ACRU.Qty_C4 = Null" = ACRU.Qty_C4)
+ACRU.Qty_C <- aictab(cand.set = Models.ACRU.Qty_C)
+print(ACRU.Qty_C)
+write.csv(ACRU.Qty_C, "output/AIC_2Step/ACRU_Qty_C.csv")
+# save the summary tables of the models 
+summary.ACRU.Qty_C <-map_df(Models.ACRU.Qty_C, broom::tidy, .id="model")
+write_csv(summary.ACRU.Qty_C, path = "output/Summary_2Step/summary.ACRU.Qty_C.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.Qty_C1, which = "Nagelkerke")
+# top model is Null - stop here. Probably due to bad fit.
+
+# Nitrogen (g)
+ACRU.Qty_N1 <- glm(Qty_N ~ Year*Site, data = ACRU)
+ACRU.Qty_N2 <- glm(Qty_N ~ Year, data = ACRU)
+ACRU.Qty_N3 <- glm(Qty_N ~ Site, data = ACRU)
+ACRU.Qty_N4 <- glm(Qty_N ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Qty_Nmodels <- list(ACRU.Qty_N1, ACRU.Qty_N2, ACRU.Qty_N3, ACRU.Qty_N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.Qty_N.residplots <- imap(ACRU.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_Qty_N_glm.pdf")
+ACRU.Qty_N.residplots
+dev.off()
+# models don't pass assumptions, use another error structure
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.Qty_N <- list("ACRU.Qty_N1 = Year*Site" = ACRU.Qty_N1, "ACRU.Qty_N2 = Year" = ACRU.Qty_N2, "ACRU.Qty_N3 = Site" = ACRU.Qty_N3, "ACRU.Qty_N4 = Null" = ACRU.Qty_N4)
+ACRU.Qty_N <- aictab(cand.set = Models.ACRU.Qty_N)
+print(ACRU.Qty_N)
+write.csv(ACRU.Qty_N, "output/AIC_2Step/ACRU_Qty_N.csv")
+# save the summary tables of the models 
+summary.ACRU.Qty_N <-map_df(Models.ACRU.Qty_N, broom::tidy, .id="model")
+write_csv(summary.ACRU.Qty_N, path = "output/Summary_2Step/summary.ACRU.Qty_N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.Qty_N1, which = "Nagelkerke")
+# Null is top model, stop here. Probably due to bad fit.
+
+# Phosphorus (g)
+ACRU.Qty_P1 <- glm(Qty_P ~ Year*Site, data = ACRU)
+ACRU.Qty_P2 <- glm(Qty_P ~ Year, data = ACRU)
+ACRU.Qty_P3 <- glm(Qty_P ~ Site, data = ACRU)
+ACRU.Qty_P4 <- glm(Qty_P ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.Qty_Pmodels <- list(ACRU.Qty_P1, ACRU.Qty_P2, ACRU.Qty_P3, ACRU.Qty_P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.Qty_P.residplots <- imap(ACRU.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_Qty_P_glm.pdf")
+ACRU.Qty_P.residplots
+dev.off()
+# if models pass assumptions, proceed. If not, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.Qty_P <- list("ACRU.Qty_P1 = Year*Site" = ACRU.Qty_P1, "ACRU.Qty_P2 = Year" = ACRU.Qty_P2, "ACRU.Qty_P3 = Site" = ACRU.Qty_P3, "ACRU.Qty_P4 = Null" = ACRU.Qty_P4)
+ACRU.Qty_P <- aictab(cand.set = Models.ACRU.Qty_P)
+print(ACRU.Qty_P)
+write.csv(ACRU.Qty_P, "output/AIC_2Step/ACRU_Qty_P.csv")
+# save the summary tables of the models 
+summary.ACRU.Qty_P <-map_df(Models.ACRU.Qty_P, broom::tidy, .id="model")
+write_csv(summary.ACRU.Qty_P, path = "output/Summary_2Step/summary.ACRU.Qty_P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.Qty_P1, which = "Nagelkerke")
+# Null is the top model, stop here. Probably due to bad fit. 
+
+# Carbon:Nitrogen
+ACRU.CNRatio1 <- glm(CNRatio ~ Year*Site, data = ACRU)
+ACRU.CNRatio2 <- glm(CNRatio ~ Year, data = ACRU)
+ACRU.CNRatio3 <- glm(CNRatio ~ Site, data = ACRU)
+ACRU.CNRatio4 <- glm(CNRatio ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.CNRatiomodels <- list(ACRU.CNRatio1, ACRU.CNRatio2, ACRU.CNRatio3, ACRU.CNRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.CNRatio.residplots <- imap(ACRU.CNRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_CNRatio_glm.pdf")
+ACRU.CNRatio.residplots
+dev.off()
+# diagnostic plots look good
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.CNRatio <- list("ACRU.CNRatio1 = Year*Site" = ACRU.CNRatio1, "ACRU.CNRatio2 = Year" = ACRU.CNRatio2, "ACRU.CNRatio3 = Site" = ACRU.CNRatio3, "ACRU.CNRatio4 = Null" = ACRU.CNRatio4)
+ACRU.CNRatio <- aictab(cand.set = Models.ACRU.CNRatio)
+print(ACRU.CNRatio)
+write.csv(ACRU.CNRatio, "output/AIC_2Step/ACRU_CNRatio.csv")
+# save the summary tables of the models 
+summary.ACRU.CNRatio <-map_df(Models.ACRU.CNRatio, broom::tidy, .id="model")
+write_csv(summary.ACRU.CNRatio, path = "output/Summary_2Step/summary.ACRU.CNRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.CNRatio1, which = "Nagelkerke")
+# Null model is the top model, stop here.
+
+# Carbon:Phosphorus
+ACRU.CPRatio1 <- glm(CPRatio ~ Year*Site, data = ACRU)
+ACRU.CPRatio2 <- glm(CPRatio ~ Year, data = ACRU)
+ACRU.CPRatio3 <- glm(CPRatio ~ Site, data = ACRU)
+ACRU.CPRatio4 <- glm(CPRatio ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.CPRatiomodels <- list(ACRU.CPRatio1, ACRU.CPRatio2, ACRU.CPRatio3, ACRU.CPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.CPRatio.residplots <- imap(ACRU.CPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_CPRatio_glm.pdf")
+ACRU.CPRatio.residplots
+dev.off()
+# model diagnostics look good, assumptions are met. 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.CPRatio <- list("ACRU.CPRatio1 = Year*Site" = ACRU.CPRatio1, "ACRU.CPRatio2 = Year" = ACRU.CPRatio2, "ACRU.CPRatio3 = Site" = ACRU.CPRatio3, "ACRU.CPRatio4 = Null" = ACRU.CPRatio4)
+ACRU.CPRatio <- aictab(cand.set = Models.ACRU.CPRatio)
+print(ACRU.CPRatio)
+write.csv(ACRU.CPRatio, "output/AIC_2Step/ACRU_CPRatio.csv")
+# save the summary tables of the models 
+summary.ACRU.CPRatio <-map_df(Models.ACRU.CPRatio, broom::tidy, .id="model")
+write_csv(summary.ACRU.CPRatio, path = "output/Summary_2Step/summary.ACRU.CPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.CPRatio1, which = "Nagelkerke")
+# Null is top model, stop here.
+
+# Nitrogen:Phosphorus
+ACRU.NPRatio1 <- glm(NPRatio ~ Year*Site, data = ACRU)
+ACRU.NPRatio2 <- glm(NPRatio ~ Year, data = ACRU)
+ACRU.NPRatio3 <- glm(NPRatio ~ Site, data = ACRU)
+ACRU.NPRatio4 <- glm(NPRatio ~ 1, data = ACRU)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+ACRU.NPRatiomodels <- list(ACRU.NPRatio1, ACRU.NPRatio2, ACRU.NPRatio3, ACRU.NPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+ACRU.NPRatio.residplots <- imap(ACRU.NPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_NPRatio_glm.pdf")
+ACRU.NPRatio.residplots
+dev.off()
+# model diagnostics look good, assumptions are met
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.ACRU.NPRatio <- list("ACRU.NPRatio1 = Year*Site" = ACRU.NPRatio1, "ACRU.NPRatio2 = Year" = ACRU.NPRatio2, "ACRU.NPRatio3 = Site" = ACRU.NPRatio3, "ACRU.NPRatio4 = Null" = ACRU.NPRatio4)
+ACRU.NPRatio <- aictab(cand.set = Models.ACRU.NPRatio)
+print(ACRU.NPRatio)
+write.csv(ACRU.NPRatio, "output/AIC_2Step/ACRU_NPRatio.csv")
+# save the summary tables of the models 
+summary.ACRU.NPRatio <-map_df(Models.ACRU.NPRatio, broom::tidy, .id="model")
+write_csv(summary.ACRU.NPRatio, path = "output/Summary_2Step/summary.ACRU.NPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(ACRU.NPRatio1, which = "Nagelkerke")
+# Null is the top model, stop here.
