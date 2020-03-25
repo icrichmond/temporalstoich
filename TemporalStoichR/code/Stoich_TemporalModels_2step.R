@@ -1091,3 +1091,285 @@ write_csv(summary.BEPA.NPRatio, path = "output/Summary_2Step/summary.BEPA.NPRati
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(BEPA.NPRatio1, which = "Nagelkerke")
 # Null was the top model, stop here
+
+# VAAN
+# % Carbon
+VAAN.C1 <- glm(C ~ Year*Site, data = VAAN)
+VAAN.C2 <- glm(C ~ Year, data = VAAN)
+VAAN.C3 <- glm(C ~ Site, data = VAAN)
+VAAN.C4 <- glm(C ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Cmodels <- list(VAAN.C1, VAAN.C2, VAAN.C3, VAAN.C4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.C.residplots <- imap(VAAN.Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_C_glm.pdf")
+VAAN.C.residplots
+dev.off()
+# diagnostic plots are okay, could use a different error structure to check
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.C <- list("VAAN.C1 = Year*Site" = VAAN.C1, "VAAN.C2 = Year" = VAAN.C2, "VAAN.C3 = Site" = VAAN.C3, "VAAN.C4 = Null" = VAAN.C4)
+VAAN.C <- aictab(cand.set = Models.VAAN.C)
+print(VAAN.C)
+write.csv(VAAN.C, "output/AIC_2Step/VAAN_C.csv")
+# save the summary tables of the models 
+summary.VAAN.C <-map_df(Models.VAAN.C, broom::tidy, .id="model")
+write_csv(summary.VAAN.C, path = "output/Summary_2Step/summary.VAAN.C.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.C1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+VAAN.C.Global <- glm(C ~ EVI * GDD * NDMI * Site, data = VAAN)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+VAAN.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = VAAN)
+VAAN.C.mech <- dredge(VAAN.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+VAAN.C.mechmodels <- get.models(VAAN.C.mech,subset=NA)
+VAAN.C.mech.residplots <- imap(VAAN.C.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_C_mech_glm.pdf")
+VAAN.C.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(VAAN.C.mech)
+# save the AIC table
+write_csv(VAAN.C.mech, "output/AIC_2Step/VAAN_C_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/VAAN.C.pdf")
+par(mar=c(4,5,9,4))
+plot(VAAN.C.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+VAAN.C.mechtop <- (get.models(VAAN.C.mech, 1)[[1]])
+VAAN.C.mechtop <- tidy(VAAN.C.mechtop)
+write_csv(VAAN.C.mechtop, "output/Summary_2Step/summary.VAAN.C.mech.csv")
+
+# % Nitrogen
+VAAN.N1 <- glm(N ~ Year*Site, data = VAAN)
+VAAN.N2 <- glm(N ~ Year, data = VAAN)
+VAAN.N3 <- glm(N ~ Site, data = VAAN)
+VAAN.N4 <- glm(N ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Nmodels <- list(VAAN.N1, VAAN.N2, VAAN.N3, VAAN.N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.N.residplots <- imap(VAAN.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_N_glm.pdf")
+VAAN.N.residplots
+dev.off()
+# diagnostic plots are okay, assumptions are met
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.N <- list("VAAN.N1 = Year*Site" = VAAN.N1, "VAAN.N2 = Year" = VAAN.N2, "VAAN.N3 = Site" = VAAN.N3, "VAAN.N4 = Null" = VAAN.N4)
+VAAN.N <- aictab(cand.set = Models.VAAN.N)
+print(VAAN.N)
+write.csv(VAAN.N, "output/AIC_2Step/VAAN_N.csv")
+# save the summary tables of the models 
+summary.VAAN.N <-map_df(Models.VAAN.N, broom::tidy, .id="model")
+write_csv(summary.VAAN.N, path = "output/Summary_2Step/summary.VAAN.N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.N1, which = "Nagelkerke")
+# Null model is top model, stop here
+
+# % Phosphorus
+VAAN.P1 <- glm(P ~ Year*Site, data = VAAN)
+VAAN.P2 <- glm(P ~ Year, data = VAAN)
+VAAN.P3 <- glm(P ~ Site, data = VAAN)
+VAAN.P4 <- glm(P ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Pmodels <- list(VAAN.P1, VAAN.P2, VAAN.P3, VAAN.P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.P.residplots <- imap(VAAN.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_P_glm.pdf")
+VAAN.P.residplots
+dev.off()
+# diagnostic plots are okay, assumptions are met 
+# create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.P <- list("VAAN.P1 = Year*Site" = VAAN.P1, "VAAN.P2 = Year" = VAAN.P2, "VAAN.P3 = Site" = VAAN.P3, "VAAN.P4 = Null" = VAAN.P4)
+VAAN.P <- aictab(cand.set = Models.VAAN.P)
+print(VAAN.P)
+write.csv(VAAN.P, "output/AIC_2Step/VAAN_P.csv")
+# save the summary tables of the models 
+summary.VAAN.P <-map_df(Models.VAAN.P, broom::tidy, .id="model")
+write_csv(summary.VAAN.P, path = "output/Summary_2Step/summary.VAAN.P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.P1, which = "Nagelkerke")
+# top model is only Site, stop here
+
+# Carbon (g)
+VAAN.Qty_C1 <- glm(Qty_C ~ Year*Site, data = VAAN)
+VAAN.Qty_C2 <- glm(Qty_C ~ Year, data = VAAN)
+VAAN.Qty_C3 <- glm(Qty_C ~ Site, data = VAAN)
+VAAN.Qty_C4 <- glm(Qty_C ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Qty_Cmodels <- list(VAAN.Qty_C1, VAAN.Qty_C2, VAAN.Qty_C3, VAAN.Qty_C4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.Qty_C.residplots <- imap(VAAN.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_Qty_C_glm.pdf")
+VAAN.Qty_C.residplots
+dev.off()
+# assumptions are not met, need to choose different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.Qty_C <- list("VAAN.Qty_C1 = Year*Site" = VAAN.Qty_C1, "VAAN.Qty_C2 = Year" = VAAN.Qty_C2, "VAAN.Qty_C3 = Site" = VAAN.Qty_C3, "VAAN.Qty_C4 = Null" = VAAN.Qty_C4)
+VAAN.Qty_C <- aictab(cand.set = Models.VAAN.Qty_C)
+print(VAAN.Qty_C)
+write.csv(VAAN.Qty_C, "output/AIC_2Step/VAAN_Qty_C.csv")
+# save the summary tables of the models 
+summary.VAAN.Qty_C <-map_df(Models.VAAN.Qty_C, broom::tidy, .id="model")
+write_csv(summary.VAAN.Qty_C, path = "output/Summary_2Step/summary.VAAN.Qty_C.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.Qty_C1, which = "Nagelkerke")
+# top model is just Site, stop here.Could be do to bad fit.
+
+# Nitrogen (g)
+VAAN.Qty_N1 <- glm(Qty_N ~ Year*Site, data = VAAN)
+VAAN.Qty_N2 <- glm(Qty_N ~ Year, data = VAAN)
+VAAN.Qty_N3 <- glm(Qty_N ~ Site, data = VAAN)
+VAAN.Qty_N4 <- glm(Qty_N ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Qty_Nmodels <- list(VAAN.Qty_N1, VAAN.Qty_N2, VAAN.Qty_N3, VAAN.Qty_N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.Qty_N.residplots <- imap(VAAN.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_Qty_N_glm.pdf")
+VAAN.Qty_N.residplots
+dev.off()
+# assumptions not met, choose a different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.Qty_N <- list("VAAN.Qty_N1 = Year*Site" = VAAN.Qty_N1, "VAAN.Qty_N2 = Year" = VAAN.Qty_N2, "VAAN.Qty_N3 = Site" = VAAN.Qty_N3, "VAAN.Qty_N4 = Null" = VAAN.Qty_N4)
+VAAN.Qty_N <- aictab(cand.set = Models.VAAN.Qty_N)
+print(VAAN.Qty_N)
+write.csv(VAAN.Qty_N, "output/AIC_2Step/VAAN_Qty_N.csv")
+# save the summary tables of the models 
+summary.VAAN.Qty_N <-map_df(Models.VAAN.Qty_N, broom::tidy, .id="model")
+write_csv(summary.VAAN.Qty_N, path = "output/Summary_2Step/summary.VAAN.Qty_N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.Qty_N1, which = "Nagelkerke")
+# top model is only Site, stop here. Could be due to bad fit.
+
+# Phosphorus (g)
+VAAN.Qty_P1 <- glm(Qty_P ~ Year*Site, data = VAAN)
+VAAN.Qty_P2 <- glm(Qty_P ~ Year, data = VAAN)
+VAAN.Qty_P3 <- glm(Qty_P ~ Site, data = VAAN)
+VAAN.Qty_P4 <- glm(Qty_P ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.Qty_Pmodels <- list(VAAN.Qty_P1, VAAN.Qty_P2, VAAN.Qty_P3, VAAN.Qty_P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.Qty_P.residplots <- imap(VAAN.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_Qty_P_glm.pdf")
+VAAN.Qty_P.residplots
+dev.off()
+# assumptions not met, choose a different error structure
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.Qty_P <- list("VAAN.Qty_P1 = Year*Site" = VAAN.Qty_P1, "VAAN.Qty_P2 = Year" = VAAN.Qty_P2, "VAAN.Qty_P3 = Site" = VAAN.Qty_P3, "VAAN.Qty_P4 = Null" = VAAN.Qty_P4)
+VAAN.Qty_P <- aictab(cand.set = Models.VAAN.Qty_P)
+print(VAAN.Qty_P)
+write.csv(VAAN.Qty_P, "output/AIC_2Step/VAAN_Qty_P.csv")
+# save the summary tables of the models 
+summary.VAAN.Qty_P <-map_df(Models.VAAN.Qty_P, broom::tidy, .id="model")
+write_csv(summary.VAAN.Qty_P, path = "output/Summary_2Step/summary.VAAN.Qty_P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.Qty_P1, which = "Nagelkerke")
+# top model has only Site, stop here. Probably due to bad fit.
+
+# Carbon:Nitrogen
+VAAN.CNRatio1 <- glm(CNRatio ~ Year*Site, data = VAAN)
+VAAN.CNRatio2 <- glm(CNRatio ~ Year, data = VAAN)
+VAAN.CNRatio3 <- glm(CNRatio ~ Site, data = VAAN)
+VAAN.CNRatio4 <- glm(CNRatio ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.CNRatiomodels <- list(VAAN.CNRatio1, VAAN.CNRatio2, VAAN.CNRatio3, VAAN.CNRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.CNRatio.residplots <- imap(VAAN.CNRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_CNRatio_glm.pdf")
+VAAN.CNRatio.residplots
+dev.off()
+# diagnostic plots look good, assumptions are met
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.CNRatio <- list("VAAN.CNRatio1 = Year*Site" = VAAN.CNRatio1, "VAAN.CNRatio2 = Year" = VAAN.CNRatio2, "VAAN.CNRatio3 = Site" = VAAN.CNRatio3, "VAAN.CNRatio4 = Null" = VAAN.CNRatio4)
+VAAN.CNRatio <- aictab(cand.set = Models.VAAN.CNRatio)
+print(VAAN.CNRatio)
+write.csv(VAAN.CNRatio, "output/AIC_2Step/VAAN_CNRatio.csv")
+# save the summary tables of the models 
+summary.VAAN.CNRatio <-map_df(Models.VAAN.CNRatio, broom::tidy, .id="model")
+write_csv(summary.VAAN.CNRatio, path = "output/Summary_2Step/summary.VAAN.CNRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.CNRatio1, which = "Nagelkerke")
+# top model has only Site, stop here.
+
+# Carbon:Phosphorus
+VAAN.CPRatio1 <- glm(CPRatio ~ Year*Site, data = VAAN)
+VAAN.CPRatio2 <- glm(CPRatio ~ Year, data = VAAN)
+VAAN.CPRatio3 <- glm(CPRatio ~ Site, data = VAAN)
+VAAN.CPRatio4 <- glm(CPRatio ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.CPRatiomodels <- list(VAAN.CPRatio1, VAAN.CPRatio2, VAAN.CPRatio3, VAAN.CPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.CPRatio.residplots <- imap(VAAN.CPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_CPRatio_glm.pdf")
+VAAN.CPRatio.residplots
+dev.off()
+# diagnostic plots look good, assumptions are met 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.CPRatio <- list("VAAN.CPRatio1 = Year*Site" = VAAN.CPRatio1, "VAAN.CPRatio2 = Year" = VAAN.CPRatio2, "VAAN.CPRatio3 = Site" = VAAN.CPRatio3, "VAAN.CPRatio4 = Null" = VAAN.CPRatio4)
+VAAN.CPRatio <- aictab(cand.set = Models.VAAN.CPRatio)
+print(VAAN.CPRatio)
+write.csv(VAAN.CPRatio, "output/AIC_2Step/VAAN_CPRatio.csv")
+# save the summary tables of the models 
+summary.VAAN.CPRatio <-map_df(Models.VAAN.CPRatio, broom::tidy, .id="model")
+write_csv(summary.VAAN.CPRatio, path = "output/Summary_2Step/summary.VAAN.CPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.CPRatio1, which = "Nagelkerke")
+# top model has only Site, stop here.
+
+# Nitrogen:Phosphorus
+VAAN.NPRatio1 <- glm(NPRatio ~ Year*Site, data = VAAN)
+VAAN.NPRatio2 <- glm(NPRatio ~ Year, data = VAAN)
+VAAN.NPRatio3 <- glm(NPRatio ~ Site, data = VAAN)
+VAAN.NPRatio4 <- glm(NPRatio ~ 1, data = VAAN)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+VAAN.NPRatiomodels <- list(VAAN.NPRatio1, VAAN.NPRatio2, VAAN.NPRatio3, VAAN.NPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+VAAN.NPRatio.residplots <- imap(VAAN.NPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_NPRatio_glm.pdf")
+VAAN.NPRatio.residplots
+dev.off()
+# diagnostic plots are okay, assumptions are met. Could use different error structure to check. 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.VAAN.NPRatio <- list("VAAN.NPRatio1 = Year*Site" = VAAN.NPRatio1, "VAAN.NPRatio2 = Year" = VAAN.NPRatio2, "VAAN.NPRatio3 = Site" = VAAN.NPRatio3, "VAAN.NPRatio4 = Null" = VAAN.NPRatio4)
+VAAN.NPRatio <- aictab(cand.set = Models.VAAN.NPRatio)
+print(VAAN.NPRatio)
+write.csv(VAAN.NPRatio, "output/AIC_2Step/VAAN_NPRatio.csv")
+# save the summary tables of the models 
+summary.VAAN.NPRatio <-map_df(Models.VAAN.NPRatio, broom::tidy, .id="model")
+write_csv(summary.VAAN.NPRatio, path = "output/Summary_2Step/summary.VAAN.NPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(VAAN.NPRatio1, which = "Nagelkerke")
+# top model has only Site, stop here.
