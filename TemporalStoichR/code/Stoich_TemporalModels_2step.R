@@ -809,3 +809,285 @@ write_csv(summary.ACRU.NPRatio, path = "output/Summary_2Step/summary.ACRU.NPRati
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ACRU.NPRatio1, which = "Nagelkerke")
 # Null is the top model, stop here.
+
+# BEPA
+# % Carbon
+BEPA.C1 <- glm(C ~ Year*Site, data = BEPA)
+BEPA.C2 <- glm(C ~ Year, data = BEPA)
+BEPA.C3 <- glm(C ~ Site, data = BEPA)
+BEPA.C4 <- glm(C ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Cmodels <- list(BEPA.C1, BEPA.C2, BEPA.C3, BEPA.C4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.C.residplots <- imap(BEPA.Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_C_glm.pdf")
+BEPA.C.residplots
+dev.off()
+# diagnostic plots look good, assumptions are met 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.C <- list("BEPA.C1 = Year*Site" = BEPA.C1, "BEPA.C2 = Year" = BEPA.C2, "BEPA.C3 = Site" = BEPA.C3, "BEPA.C4 = Null" = BEPA.C4)
+BEPA.C <- aictab(cand.set = Models.BEPA.C)
+print(BEPA.C)
+write.csv(BEPA.C, "output/AIC_2Step/BEPA_C.csv")
+# save the summary tables of the models 
+summary.BEPA.C <-map_df(Models.BEPA.C, broom::tidy, .id="model")
+write_csv(summary.BEPA.C, path = "output/Summary_2Step/summary.BEPA.C.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.C1, which = "Nagelkerke")
+# this model has Year in the top model, move on to testing the mechanisms
+# use dredge package and keep interaction terms to max 2 
+# build global model with all mechanisms and interactions 
+BEPA.C.Global <- glm(C ~ EVI * GDD * NDMI * Site, data = BEPA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+BEPA.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = BEPA)
+BEPA.C.mech <- dredge(BEPA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+# check the residuals of the models to ensure that glm was correct choice 
+BEPA.C.mechmodels <- get.models(BEPA.C.mech,subset=NA)
+BEPA.C.mech.residplots <- imap(BEPA.C.mechmodels, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_C_mech_glm.pdf")
+BEPA.C.mech.residplots
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(BEPA.C.mech)
+# save the AIC table
+write_csv(BEPA.C.mech, "output/AIC_2Step/BEPA_C_Mech.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/BEPA.C.pdf")
+par(mar=c(4,5,9,4))
+plot(BEPA.C.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+BEPA.C.mechtop <- (get.models(BEPA.C.mech, 1)[[1]])
+BEPA.C.mechtop <- tidy(BEPA.C.mechtop)
+write_csv(BEPA.C.mechtop, "output/Summary_2Step/summary.BEPA.C.mech.csv")
+
+# % Nitrogen
+BEPA.N1 <- glm(N ~ Year*Site, data = BEPA)
+BEPA.N2 <- glm(N ~ Year, data = BEPA)
+BEPA.N3 <- glm(N ~ Site, data = BEPA)
+BEPA.N4 <- glm(N ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Nmodels <- list(BEPA.N1, BEPA.N2, BEPA.N3, BEPA.N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.N.residplots <- imap(BEPA.Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_N_glm.pdf")
+BEPA.N.residplots
+dev.off()
+# diagnostic plots look good, assumptions are met
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.N <- list("BEPA.N1 = Year*Site" = BEPA.N1, "BEPA.N2 = Year" = BEPA.N2, "BEPA.N3 = Site" = BEPA.N3, "BEPA.N4 = Null" = BEPA.N4)
+BEPA.N <- aictab(cand.set = Models.BEPA.N)
+print(BEPA.N)
+write.csv(BEPA.N, "output/AIC_2Step/BEPA_N.csv")
+# save the summary tables of the models 
+summary.BEPA.N <-map_df(Models.BEPA.N, broom::tidy, .id="model")
+write_csv(summary.BEPA.N, path = "output/Summary_2Step/summary.BEPA.N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.N1, which = "Nagelkerke")
+# top model has only site, second is null, stop here.
+
+# % Phosphorus
+BEPA.P1 <- glm(P ~ Year*Site, data = BEPA)
+BEPA.P2 <- glm(P ~ Year, data = BEPA)
+BEPA.P3 <- glm(P ~ Site, data = BEPA)
+BEPA.P4 <- glm(P ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Pmodels <- list(BEPA.P1, BEPA.P2, BEPA.P3, BEPA.P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.P.residplots <- imap(BEPA.Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_P_glm.pdf")
+BEPA.P.residplots
+dev.off()
+# diagnostic plots look good, assumptions are met 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.P <- list("BEPA.P1 = Year*Site" = BEPA.P1, "BEPA.P2 = Year" = BEPA.P2, "BEPA.P3 = Site" = BEPA.P3, "BEPA.P4 = Null" = BEPA.P4)
+BEPA.P <- aictab(cand.set = Models.BEPA.P)
+print(BEPA.P)
+write.csv(BEPA.P, "output/AIC_2Step/BEPA_P.csv")
+# save the summary tables of the models 
+summary.BEPA.P <-map_df(Models.BEPA.P, broom::tidy, .id="model")
+write_csv(summary.BEPA.P, path = "output/Summary_2Step/summary.BEPA.P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.P1, which = "Nagelkerke")
+# top model is Site only, stop here 
+
+# Carbon (g)
+BEPA.Qty_C1 <- glm(Qty_C ~ Year*Site, data = BEPA)
+BEPA.Qty_C2 <- glm(Qty_C ~ Year, data = BEPA)
+BEPA.Qty_C3 <- glm(Qty_C ~ Site, data = BEPA)
+BEPA.Qty_C4 <- glm(Qty_C ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Qty_Cmodels <- list(BEPA.Qty_C1, BEPA.Qty_C2, BEPA.Qty_C3, BEPA.Qty_C4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.Qty_C.residplots <- imap(BEPA.Qty_Cmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_Qty_C_glm.pdf")
+BEPA.Qty_C.residplots
+dev.off()
+# diagnostic plots do not meet assumptions, choose different error structure
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.Qty_C <- list("BEPA.Qty_C1 = Year*Site" = BEPA.Qty_C1, "BEPA.Qty_C2 = Year" = BEPA.Qty_C2, "BEPA.Qty_C3 = Site" = BEPA.Qty_C3, "BEPA.Qty_C4 = Null" = BEPA.Qty_C4)
+BEPA.Qty_C <- aictab(cand.set = Models.BEPA.Qty_C)
+print(BEPA.Qty_C)
+write.csv(BEPA.Qty_C, "output/AIC_2Step/BEPA_Qty_C.csv")
+# save the summary tables of the models 
+summary.BEPA.Qty_C <-map_df(Models.BEPA.Qty_C, broom::tidy, .id="model")
+write_csv(summary.BEPA.Qty_C, path = "output/Summary_2Step/summary.BEPA.Qty_C.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.Qty_C1, which = "Nagelkerke")
+# top model is null, stop here. Probably due to bad fit.
+
+# Nitrogen (g)
+BEPA.Qty_N1 <- glm(Qty_N ~ Year*Site, data = BEPA)
+BEPA.Qty_N2 <- glm(Qty_N ~ Year, data = BEPA)
+BEPA.Qty_N3 <- glm(Qty_N ~ Site, data = BEPA)
+BEPA.Qty_N4 <- glm(Qty_N ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Qty_Nmodels <- list(BEPA.Qty_N1, BEPA.Qty_N2, BEPA.Qty_N3, BEPA.Qty_N4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.Qty_N.residplots <- imap(BEPA.Qty_Nmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_Qty_N_glm.pdf")
+BEPA.Qty_N.residplots
+dev.off()
+# models do not meet assumptions, choose another error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.Qty_N <- list("BEPA.Qty_N1 = Year*Site" = BEPA.Qty_N1, "BEPA.Qty_N2 = Year" = BEPA.Qty_N2, "BEPA.Qty_N3 = Site" = BEPA.Qty_N3, "BEPA.Qty_N4 = Null" = BEPA.Qty_N4)
+BEPA.Qty_N <- aictab(cand.set = Models.BEPA.Qty_N)
+print(BEPA.Qty_N)
+write.csv(BEPA.Qty_N, "output/AIC_2Step/BEPA_Qty_N.csv")
+# save the summary tables of the models 
+summary.BEPA.Qty_N <-map_df(Models.BEPA.Qty_N, broom::tidy, .id="model")
+write_csv(summary.BEPA.Qty_N, path = "output/Summary_2Step/summary.BEPA.Qty_N.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.Qty_N1, which = "Nagelkerke")
+# Null is top model, stop here. Probably due to bad fit.
+
+# Phosphorus (g)
+BEPA.Qty_P1 <- glm(Qty_P ~ Year*Site, data = BEPA)
+BEPA.Qty_P2 <- glm(Qty_P ~ Year, data = BEPA)
+BEPA.Qty_P3 <- glm(Qty_P ~ Site, data = BEPA)
+BEPA.Qty_P4 <- glm(Qty_P ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.Qty_Pmodels <- list(BEPA.Qty_P1, BEPA.Qty_P2, BEPA.Qty_P3, BEPA.Qty_P4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.Qty_P.residplots <- imap(BEPA.Qty_Pmodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_Qty_P_glm.pdf")
+BEPA.Qty_P.residplots
+dev.off()
+# models do not meet assumptions, use different error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.Qty_P <- list("BEPA.Qty_P1 = Year*Site" = BEPA.Qty_P1, "BEPA.Qty_P2 = Year" = BEPA.Qty_P2, "BEPA.Qty_P3 = Site" = BEPA.Qty_P3, "BEPA.Qty_P4 = Null" = BEPA.Qty_P4)
+BEPA.Qty_P <- aictab(cand.set = Models.BEPA.Qty_P)
+print(BEPA.Qty_P)
+write.csv(BEPA.Qty_P, "output/AIC_2Step/BEPA_Qty_P.csv")
+# save the summary tables of the models 
+summary.BEPA.Qty_P <-map_df(Models.BEPA.Qty_P, broom::tidy, .id="model")
+write_csv(summary.BEPA.Qty_P, path = "output/Summary_2Step/summary.BEPA.Qty_P.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.Qty_P1, which = "Nagelkerke")
+# Null is top model, stop here. Probably due to bad fit.
+
+# Carbon:Nitrogen
+BEPA.CNRatio1 <- glm(CNRatio ~ Year*Site, data = BEPA)
+BEPA.CNRatio2 <- glm(CNRatio ~ Year, data = BEPA)
+BEPA.CNRatio3 <- glm(CNRatio ~ Site, data = BEPA)
+BEPA.CNRatio4 <- glm(CNRatio ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.CNRatiomodels <- list(BEPA.CNRatio1, BEPA.CNRatio2, BEPA.CNRatio3, BEPA.CNRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.CNRatio.residplots <- imap(BEPA.CNRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_CNRatio_glm.pdf")
+BEPA.CNRatio.residplots
+dev.off()
+# diagnostic plots are ok, could try another error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.CNRatio <- list("BEPA.CNRatio1 = Year*Site" = BEPA.CNRatio1, "BEPA.CNRatio2 = Year" = BEPA.CNRatio2, "BEPA.CNRatio3 = Site" = BEPA.CNRatio3, "BEPA.CNRatio4 = Null" = BEPA.CNRatio4)
+BEPA.CNRatio <- aictab(cand.set = Models.BEPA.CNRatio)
+print(BEPA.CNRatio)
+write.csv(BEPA.CNRatio, "output/AIC_2Step/BEPA_CNRatio.csv")
+# save the summary tables of the models 
+summary.BEPA.CNRatio <-map_df(Models.BEPA.CNRatio, broom::tidy, .id="model")
+write_csv(summary.BEPA.CNRatio, path = "output/Summary_2Step/summary.BEPA.CNRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.CNRatio1, which = "Nagelkerke")
+# Null is top model, stop here. Could potentially be due to bad fit - try different error structure just to be sure?
+
+# Carbon:Phosphorus
+BEPA.CPRatio1 <- glm(CPRatio ~ Year*Site, data = BEPA)
+BEPA.CPRatio2 <- glm(CPRatio ~ Year, data = BEPA)
+BEPA.CPRatio3 <- glm(CPRatio ~ Site, data = BEPA)
+BEPA.CPRatio4 <- glm(CPRatio ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.CPRatiomodels <- list(BEPA.CPRatio1, BEPA.CPRatio2, BEPA.CPRatio3, BEPA.CPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.CPRatio.residplots <- imap(BEPA.CPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_CPRatio_glm.pdf")
+BEPA.CPRatio.residplots
+dev.off()
+# diagnostic plots are ok, could try another error structure 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.CPRatio <- list("BEPA.CPRatio1 = Year*Site" = BEPA.CPRatio1, "BEPA.CPRatio2 = Year" = BEPA.CPRatio2, "BEPA.CPRatio3 = Site" = BEPA.CPRatio3, "BEPA.CPRatio4 = Null" = BEPA.CPRatio4)
+BEPA.CPRatio <- aictab(cand.set = Models.BEPA.CPRatio)
+print(BEPA.CPRatio)
+write.csv(BEPA.CPRatio, "output/AIC_2Step/BEPA_CPRatio.csv")
+# save the summary tables of the models 
+summary.BEPA.CPRatio <-map_df(Models.BEPA.CPRatio, broom::tidy, .id="model")
+write_csv(summary.BEPA.CPRatio, path = "output/Summary_2Step/summary.BEPA.CPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.CPRatio1, which = "Nagelkerke")
+# Null is top model, stop here. Could be due to bad fit, try another error structure
+
+# Nitrogen:Phosphorus
+BEPA.NPRatio1 <- glm(NPRatio ~ Year*Site, data = BEPA)
+BEPA.NPRatio2 <- glm(NPRatio ~ Year, data = BEPA)
+BEPA.NPRatio3 <- glm(NPRatio ~ Site, data = BEPA)
+BEPA.NPRatio4 <- glm(NPRatio ~ 1, data = BEPA)
+# check model diagnostics to make sure models are not violating any assumptions 
+# create list of models 
+BEPA.NPRatiomodels <- list(BEPA.NPRatio1, BEPA.NPRatio2, BEPA.NPRatio3, BEPA.NPRatio4)
+# use imap to loop through list of models using function at start of script and 
+# create diagnostic figures 
+BEPA.NPRatio.residplots <- imap(BEPA.NPRatiomodels, resid_plots) 
+# save all diagnostic plots to a pdf 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_NPRatio_glm.pdf")
+BEPA.NPRatio.residplots
+dev.off()
+# diagnostic plots look good, assumptions are met 
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
+Models.BEPA.NPRatio <- list("BEPA.NPRatio1 = Year*Site" = BEPA.NPRatio1, "BEPA.NPRatio2 = Year" = BEPA.NPRatio2, "BEPA.NPRatio3 = Site" = BEPA.NPRatio3, "BEPA.NPRatio4 = Null" = BEPA.NPRatio4)
+BEPA.NPRatio <- aictab(cand.set = Models.BEPA.NPRatio)
+print(BEPA.NPRatio)
+write.csv(BEPA.NPRatio, "output/AIC_2Step/BEPA_NPRatio.csv")
+# save the summary tables of the models 
+summary.BEPA.NPRatio <-map_df(Models.BEPA.NPRatio, broom::tidy, .id="model")
+write_csv(summary.BEPA.NPRatio, path = "output/Summary_2Step/summary.BEPA.NPRatio.csv")
+# calculate pseudo R^2 - just another check of significance determination
+PseudoR2(BEPA.NPRatio1, which = "Nagelkerke")
+# Null was the top model, stop here
