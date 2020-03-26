@@ -180,7 +180,8 @@ plot(ABBA.C.mech)
 dev.off()
 # get the summary of the top model and save it to a .csv
 ABBA.C.mechtop <- (get.models(ABBA.C.mech, 1)[[1]])
-ABBA.C.mechtop <- tidy(ABBA.C.mechtop)
+ABBA.C.mechtop
+GABBA.C.mechtop <- tidy(ABBA.C.mechtop)
 write_csv(ABBA.C.mechtop, "output/Summary_2Step/summary.ABBA.C.mech.csv")
 
 # % Nitrogen
@@ -1373,3 +1374,7 @@ write_csv(summary.VAAN.NPRatio, path = "output/Summary_2Step/summary.VAAN.NPRati
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(VAAN.NPRatio1, which = "Nagelkerke")
 # top model has only Site, stop here.
+
+### Generalized Linear Models ###
+# move from general linear models to generalized linear models for models that 
+# failed to meet assumptions
