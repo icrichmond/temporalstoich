@@ -141,7 +141,7 @@ ABBA.C.residplots <- imap(ABBA.Cmodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_C_glm.pdf")
 ABBA.C.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# assumptions are ok, could try another error structure to check
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.C <- list("ABBA.C1 = Year*Site" = ABBA.C1, "ABBA.C2 = Year" = ABBA.C2, "ABBA.C3 = Site" = ABBA.C3, "ABBA.C4 = Null" = ABBA.C4)
 ABBA.C <- aictab(cand.set = Models.ABBA.C)
@@ -199,7 +199,7 @@ ABBA.N.residplots <- imap(ABBA.Nmodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_N_glm.pdf")
 ABBA.N.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# assumptions are ok, could use another error structure to check
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.N <- list("ABBA.N1 = Year*Site" = ABBA.N1, "ABBA.N2 = Year" = ABBA.N2, "ABBA.N3 = Site" = ABBA.N3, "ABBA.N4 = Null" = ABBA.N4)
 ABBA.N <- aictab(cand.set = Models.ABBA.N)
@@ -257,7 +257,7 @@ ABBA.P.residplots <- imap(ABBA.Pmodels, resid_plots)
 pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_P_glm.pdf")
 ABBA.P.residplots
 dev.off()
-# if models pass assumptions, proceed. If not, use different error structure 
+# assumptions are ok, would use another error structure to check
 # create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.P <- list("ABBA.P1 = Year*Site" = ABBA.P1, "ABBA.P2 = Year" = ABBA.P2, "ABBA.P3 = Site" = ABBA.P3, "ABBA.P4 = Null" = ABBA.P4)
 ABBA.P <- aictab(cand.set = Models.ABBA.P)
