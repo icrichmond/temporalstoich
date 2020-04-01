@@ -1,5 +1,5 @@
 # Author: Isabella Richmond
-# Last edited: March 25, 2020
+# Last edited: April 1, 2020
 
 # This code was for the creation and evaluation of my temporal stoichiometry models. A lot of 
 # code was provided by Travis Heckford (twitter.com/travheckford)
@@ -1376,81 +1376,7 @@ PseudoR2(VAAN.NPRatio1, which = "Nagelkerke")
 # top model has only Site, stop here.
 
 
-### Visualize the models ###
-# going to make boxplots for the 
-# manually setting up colours 
-cols<-c("2016"= rgb(26,153,136, maxColorValue = 255), "2017"= rgb(235,86,0, maxColorValue = 255))
-
-abba.c.box <- ggplot(data=ABBA, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("Balsam Fir")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
-
-acru.c.box<- ggplot(data=ACRU, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("Red Maple")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
-
-bepa.c.box<- ggplot(data=BEPA, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("White Birch")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
-
-vaan.c.box<- ggplot(data=VAAN, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("Lowland Blueberry")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
-png("graphics/StoichModels_2Step/Boxplots/RawCbox.png")
-(abba.c.box | acru.c.box) /
-  (bepa.c.box | vaan.c.box)
-dev.off()
-
-
-
-
-
-### Generalized Linear Models ###
-# move from general linear models to generalized linear models for models that failed to meet assumptions
-# will first address % data - try a beta distribution as it is continuous and bound between 0,1
-
-# now address the quantity data - start by transforming g to mg and see if it helps
+### Standardize Percent Data ###
+# we are going to standardize the percent data and rerun models to make sure that we are not 
+# getting an effect with %C just because the values are higher
+# need the mean and standard deviation of each set of % values
