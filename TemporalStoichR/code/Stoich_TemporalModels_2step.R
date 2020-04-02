@@ -161,7 +161,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 ABBA.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.C.mechmodels <- get.models(ABBA.C.mech,subset=NA)
 ABBA.C.mech.residplots <- imap(ABBA.C.mechmodels, resid_plots) 
@@ -218,8 +218,7 @@ ABBA.N.Global <- glm(N ~ EVI * GDD * NDMI * Site, data = ABBA)
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.N.Global <- glm(N ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.N.mech <- dredge(ABBA.N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.N.mech <- dredge(ABBA.N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.N.mechmodels <- get.models(ABBA.N.mech,subset=NA)
 ABBA.N.mech.residplots <- imap(ABBA.N.mechmodels, resid_plots) 
@@ -276,8 +275,7 @@ ABBA.P.Global <- glm(P ~ EVI * GDD * NDMI * Site, data = ABBA)
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.P.Global <- glm(P ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.P.mech <- dredge(ABBA.P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.P.mech <- dredge(ABBA.P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.P.mechmodels <- get.models(ABBA.P.mech,subset=NA)
 ABBA.P.mech.residplots <- imap(ABBA.P.mechmodels, resid_plots) 
@@ -419,7 +417,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 ABBA.CNRatio.Global <- glm(CNRatio ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.CNRatio.mech <- dredge(ABBA.CNRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.CNRatio.mech <- dredge(ABBA.CNRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.CNRatio.mechmodels <- get.models(ABBA.CNRatio.mech,subset=NA)
 ABBA.CNRatio.mech.residplots <- imap(ABBA.CNRatio.mechmodels, resid_plots) 
@@ -476,7 +474,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 ABBA.CPRatio.Global <- glm(CPRatio ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.CPRatio.mech <- dredge(ABBA.CPRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.CPRatio.mech <- dredge(ABBA.CPRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.CPRatio.mechmodels <- get.models(ABBA.CPRatio.mech,subset=NA)
 ABBA.CPRatio.mech.residplots <- imap(ABBA.CPRatio.mechmodels, resid_plots) 
@@ -564,7 +562,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 ACRU.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = ACRU)
-ACRU.C.mech <- dredge(ACRU.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ACRU.C.mech <- dredge(ACRU.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ACRU.C.mechmodels <- get.models(ACRU.C.mech,subset=NA)
 ACRU.C.mech.residplots <- imap(ACRU.C.mechmodels, resid_plots) 
@@ -847,7 +845,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 BEPA.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = BEPA)
-BEPA.C.mech <- dredge(BEPA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+BEPA.C.mech <- dredge(BEPA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 BEPA.C.mechmodels <- get.models(BEPA.C.mech,subset=NA)
 BEPA.C.mech.residplots <- imap(BEPA.C.mechmodels, resid_plots) 
@@ -1129,7 +1127,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 VAAN.C.Global <- glm(C ~ EVI*GDD*NDMI*Site, data = VAAN)
-VAAN.C.mech <- dredge(VAAN.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+VAAN.C.mech <- dredge(VAAN.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 VAAN.C.mechmodels <- get.models(VAAN.C.mech,subset=NA)
 VAAN.C.mech.residplots <- imap(VAAN.C.mechmodels, resid_plots) 

@@ -194,7 +194,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 ABBA.Qty_C.Global <- glm(Qty_C ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.Qty_C.mech <- dredge(ABBA.Qty_C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.Qty_C.mech <- dredge(ABBA.Qty_C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.Qty_C.mechmodels <- get.models(ABBA.Qty_C.mech,subset=NA)
 ABBA.Qty_C.mech.residplots <- imap(ABBA.Qty_C.mechmodels, resid_plots) 
