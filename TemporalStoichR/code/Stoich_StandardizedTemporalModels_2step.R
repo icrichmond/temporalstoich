@@ -183,13 +183,12 @@ PseudoR2(ABBA.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.C.Global <- glm(C_std ~ EVI * GDD * NDMI * Site, data = ABBA)
+ABBA.C.Global <- glm(C_std ~ EVI * GDD * NDMI, data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.C.Global <- glm(C_std ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
+ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.C.mechmodels <- get.models(ABBA.C.mech,subset=NA)
 ABBA.C.mech.residplots <- imap(ABBA.C.mechmodels, resid_plots) 
@@ -209,7 +208,7 @@ dev.off()
 # get the summary of the top model and save it to a .csv
 ABBA.C.mechtop <- (get.models(ABBA.C.mech, 1)[[1]])
 ABBA.C.mechtop
-GABBA.C.mechtop <- tidy(ABBA.C.mechtop)
+ABBA.C.mechtop <- tidy(ABBA.C.mechtop)
 write_csv(ABBA.C.mechtop, "output/Summary_2Step/summary.ABBA.C.std.mech.csv")
 
 # % Nitrogen
@@ -241,12 +240,12 @@ PseudoR2(ABBA.N1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.N.Global <- glm(N_std ~ EVI * GDD * NDMI * Site, data = ABBA)
+ABBA.N.Global <- glm(N_std ~ EVI * GDD * NDMI, data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.N.mech <- dredge(ABBA.N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
+ABBA.N.mech <- dredge(ABBA.N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.N.mechmodels <- get.models(ABBA.N.mech,subset=NA)
 ABBA.N.mech.residplots <- imap(ABBA.N.mechmodels, resid_plots) 
@@ -298,12 +297,12 @@ PseudoR2(ABBA.P1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.P.Global <- glm(P_std ~ EVI * GDD * NDMI * Site, data = ABBA)
+ABBA.P.Global <- glm(P_std ~ EVI * GDD * NDMI, data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.P.mech <- dredge(ABBA.P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
+ABBA.P.mech <- dredge(ABBA.P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.P.mechmodels <- get.models(ABBA.P.mech,subset=NA)
 ABBA.P.mech.residplots <- imap(ABBA.P.mechmodels, resid_plots) 
@@ -356,13 +355,12 @@ PseudoR2(ACRU.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ACRU.C.Global <- glm(C_std ~ EVI * GDD * NDMI * Site, data = ACRU)
+ACRU.C.Global <- glm(C_std ~ EVI * GDD * NDMI, data = ACRU)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ACRU.C.Global <- glm(C_std ~ EVI*GDD*NDMI*Site, data = ACRU)
-ACRU.C.mech <- dredge(ACRU.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
+ACRU.C.mech <- dredge(ACRU.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
 # check the residuals of the models to ensure that glm was correct choice 
 ACRU.C.mechmodels <- get.models(ACRU.C.mech,subset=NA)
 ACRU.C.mech.residplots <- imap(ACRU.C.mechmodels, resid_plots) 
@@ -471,13 +469,12 @@ PseudoR2(BEPA.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-BEPA.C.Global <- glm(C_std ~ EVI * GDD * NDMI * Site, data = BEPA)
+BEPA.C.Global <- glm(C_std ~ EVI * GDD * NDMI, data = BEPA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-BEPA.C.Global <- glm(C_std ~ EVI*GDD*NDMI*Site, data = BEPA)
-BEPA.C.mech <- dredge(BEPA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
+BEPA.C.mech <- dredge(BEPA.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
 # check the residuals of the models to ensure that glm was correct choice 
 BEPA.C.mechmodels <- get.models(BEPA.C.mech,subset=NA)
 BEPA.C.mech.residplots <- imap(BEPA.C.mechmodels, resid_plots) 
@@ -499,6 +496,7 @@ BEPA.C.mechtop <- (get.models(BEPA.C.mech, 1)[[1]])
 BEPA.C.mechtop
 BEPA.C.mechtop <- tidy(BEPA.C.mechtop)
 write_csv(BEPA.C.mechtop, "output/Summary_2Step/summary.BEPA.C.std.mech.csv")
+
 # % Nitrogen
 BEPA.N1 <- glm(N_std ~ Year*Site, data = BEPA)
 BEPA.N2 <- glm(N_std ~ Year, data = BEPA)
@@ -526,6 +524,7 @@ write_csv(summary.BEPA.N, path = "output/Summary_2Step/summary.BEPA.N.std.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(BEPA.N1, which = "Nagelkerke")
 # Site was top model with Null within 2 delta AICc
+
 # % Phosphorus
 BEPA.P1 <- glm(P_std ~ Year*Site, data = BEPA)
 BEPA.P2 <- glm(P_std ~ Year, data = BEPA)
@@ -584,13 +583,12 @@ PseudoR2(VAAN.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-VAAN.C.Global <- glm(C_std ~ EVI * GDD * NDMI * Site, data = VAAN)
+VAAN.C.Global <- glm(C_std ~ EVI * GDD * NDMI, data = VAAN)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-VAAN.C.Global <- glm(C_std ~ EVI*GDD*NDMI*Site, data = VAAN)
-VAAN.C.mech <- dredge(VAAN.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
+VAAN.C.mech <- dredge(VAAN.C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
 # check the residuals of the models to ensure that glm was correct choice 
 VAAN.C.mechmodels <- get.models(VAAN.C.mech,subset=NA)
 VAAN.C.mech.residplots <- imap(VAAN.C.mechmodels, resid_plots) 
@@ -639,6 +637,7 @@ write_csv(summary.VAAN.N, path = "output/Summary_2Step/summary.VAAN.N.std.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(VAAN.N1, which = "Nagelkerke")
 # Null is top model, stop here.
+
 # % Phosphorus
 VAAN.P1 <- glm(P_std ~ Year*Site, data = VAAN)
 VAAN.P2 <- glm(P_std ~ Year, data = VAAN)
