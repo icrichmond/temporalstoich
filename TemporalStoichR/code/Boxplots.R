@@ -1,3 +1,14 @@
+# Author: Isabella Richmond
+# Last edited: April 2, 2020
+# Source codes: Stoich_TemporalModels_2step.R and Stoich_GzLMTemporalModels_2step.R 
+
+# This code was for the visualization of our data and temporal stoichiometry models.
+# A large portion of boxplot code provided by Juliana Balluffi-Fry and Matteo Rizzuto
+# Run codes in source scripts to load in the data and models 
+# Models evaluate the response of stoichiometry in four boreal plant species with year and site 
+# If year is found to be in the top model when compared using AICc, another model is conducted 
+# where mechanisms are investigated (productivity, site, moisture, weather)
+
 ### Visualize the models ###
 # going to make boxplots for the 
 # manually setting up colours 

@@ -1,5 +1,5 @@
 # Author: Isabella Richmond
-# Last edited: April 1, 2020
+# Last edited: April 2, 2020
 
 # This code was for the creation and evaluation of my temporal stoichiometry models. A lot of 
 # code was provided by Travis Heckford (twitter.com/travheckford)
@@ -155,8 +155,9 @@ pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ABBA_Qty_P_mg.pdf")
 ABBA.Qty_P_mg.residplots
 dev.off()
 # models do not meet assumptions - really bad fit. Will have to try a different error structure.
-
 # transformation to mg did not work to get the models to meet GLM assumptions 
+
+
 # next attempt is to try a gamma error distribution 
 # ABBA 
 # Carbon (g)
@@ -216,7 +217,6 @@ ABBA.Qty_C.mechtop <- (get.models(ABBA.Qty_C.mech, 1)[[1]])
 ABBA.Qty_C.mechtop <- tidy(ABBA.Qty_C.mechtop)
 write_csv(ABBA.Qty_C.mechtop, "output/Summary_2Step/summary.ABBA.Qty_C.mech.csv")
 
-
 # Nitrogen (g)
 ABBA.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma, data = ABBA)
 ABBA.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma,  data = ABBA)
@@ -252,7 +252,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 ABBA.Qty_N.Global <- glm(Qty_N ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.Qty_N.mech <- dredge(ABBA.Qty_N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.Qty_N.mech <- dredge(ABBA.Qty_N.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.Qty_N.mechmodels <- get.models(ABBA.Qty_N.mech,subset=NA)
 ABBA.Qty_N.mech.residplots <- imap(ABBA.Qty_N.mechmodels, resid_plots) 
@@ -309,7 +309,7 @@ options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
 ABBA.Qty_P.Global <- glm(Qty_P ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.Qty_P.mech <- dredge(ABBA.Qty_P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI && GDD && NDMI | EVI && GDD && Site | EVI && NDMI && Site | GDD && NDMI && Site))
+ABBA.Qty_P.mech <- dredge(ABBA.Qty_P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.Qty_P.mechmodels <- get.models(ABBA.Qty_P.mech,subset=NA)
 ABBA.Qty_P.mech.residplots <- imap(ABBA.Qty_P.mechmodels, resid_plots) 

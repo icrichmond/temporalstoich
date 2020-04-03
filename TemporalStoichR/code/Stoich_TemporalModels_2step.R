@@ -1,5 +1,5 @@
 # Author: Isabella Richmond
-# Last edited: April 1, 2020
+# Last edited: April 2, 2020
 
 # This code was for the creation and evaluation of my temporal stoichiometry models. A lot of 
 # code was provided by Travis Heckford (twitter.com/travheckford)
@@ -1372,9 +1372,3 @@ write_csv(summary.VAAN.NPRatio, path = "output/Summary_2Step/summary.VAAN.NPRati
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(VAAN.NPRatio1, which = "Nagelkerke")
 # top model has only Site, stop here.
-
-
-### Standardize Percent Data ###
-# we are going to standardize the percent data and rerun models to make sure that we are not 
-# getting an effect with %C just because the values are higher
-# need the mean and standard deviation of each set of % values
