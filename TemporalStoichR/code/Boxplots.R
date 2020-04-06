@@ -120,23 +120,23 @@ bepa.np.box <- ggboxplot(BEPA, x = "Year", y = "NPRatio", color = "Site", palett
                          add = "jitter", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 #VAAN
 vaan.c.box <- ggboxplot(VAAN, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                        add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Carbon")
+                        add = "jitter",  xlab = "Year", ylab = "% Carbon")
 vaan.n.box <- ggboxplot(VAAN, x = "Year", y = "N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                        add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Nitrogen")
+                        add = "jitter",  xlab = "Year", ylab = "% Nitrogen")
 vaan.p.box <- ggboxplot(VAAN, x = "Year", y = "P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                        add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Phosphorus")
+                        add = "jitter",  xlab = "Year", ylab = "% Phosphorus")
 vaan.qty.c.box <- ggboxplot(VAAN, x = "Year", y = "Qty_C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                            add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon (g)")
+                            add = "jitter", xlab = "Year", ylab = "Carbon (g)")
 vaan.qty.n.box <- ggboxplot(VAAN, x = "Year", y = "Qty_N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                            add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Nitrogen (g)")
+                            add = "jitter", xlab = "Year", ylab = "Nitrogen (g)")
 vaan.qty.p.box <- ggboxplot(VAAN, x = "Year", y = "Qty_P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                            add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Phosphorus (g)")
+                            add = "jitter",  xlab = "Year", ylab = "Phosphorus (g)")
 vaan.cn.box <- ggboxplot(VAAN, x = "Year", y = "CNRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon:Nitrogen")
+                         add = "jitter",  xlab = "Year", ylab = "Carbon:Nitrogen")
 vaan.cp.box <- ggboxplot(VAAN, x = "Year", y = "CPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon:Phosphorus")
+                         add = "jitter", xlab = "Year", ylab = "Carbon:Phosphorus")
 vaan.np.box <- ggboxplot(VAAN, x = "Year", y = "NPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Nitrogen:Phosphorus")
+                         add = "jitter", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 
 # also need boxplots of explanatory variables for the second models (EVI, NDMI, GDD) for 
 # each response variable. Group the data points by site.
@@ -229,4 +229,80 @@ png("graphics/StoichModels_2Step/Boxplots/VAANfull.png", width = 900, height = 7
 (vaan.c.box / vaan.qty.c.box / vaan.cn.box | vaan.n.box / vaan.qty.n.box / vaan.cp.box | vaan.p.box/vaan.qty.p.box/vaan.np.box
 ) + 
   plot_annotation(title = "Lowland Blueberry")
+dev.off()
+
+# % Data
+png("graphics/StoichModels_2Step/Boxplots/PercentC.png", width = 900, height = 700)
+(abba.c.box / bepa.c.box |acru.c.box / vaan.c.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/PercentN.png", width = 900, height = 700)
+(abba.n.box / bepa.n.box |acru.n.box / vaan.n.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/PercentP.png", width = 900, height = 700)
+(abba.p.box / bepa.p.box |acru.p.box / vaan.p.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/PercentFull.png", width = 1000, height = 800)
+(abba.c.box / abba.n.box / abba.p.box | acru.c.box / acru.n.box / acru.p.box | bepa.c.box / bepa.n.box / bepa.p.box | vaan.c.box/ vaan.n.box/vaan.p.box
+) + 
+  plot_annotation(title = "A/B/C = ABBA, D/E/F = ACRU, G/H/I = BEPA, J/K/L = VAAN", tag_levels = "A")
+dev.off()
+
+
+# Qty Data
+png("graphics/StoichModels_2Step/Boxplots/QtyC.png", width = 900, height = 700)
+(abba.qty.c.box / bepa.qty.c.box |acru.qty.c.box / vaan.qty.c.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/QtyN.png", width = 900, height = 700)
+(abba.n.box / bepa.n.box |acru.n.box / vaan.n.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/QtyP.png", width = 900, height = 700)
+(abba.qty.p.box / bepa.qty.p.box |acru.qty.p.box / vaan.qty.p.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/QtyFull.png", width = 1100, height = 800)
+(abba.qty.c.box / abba.qty.n.box / abba.qty.p.box | acru.qty.c.box / acru.qty.n.box / acru.qty.p.box | bepa.qty.c.box / bepa.qty.n.box / bepa.qty.p.box | vaan.qty.c.box/ vaan.qty.n.box/vaan.qty.p.box
+) + 
+  plot_annotation(title = "A/B/C = ABBA, D/E/F = ACRU, G/H/I = BEPA, J/K/L = VAAN", tag_levels = "A")
+dev.off()
+
+# Ratio Data
+png("graphics/StoichModels_2Step/Boxplots/CN.png", width = 900, height = 700)
+(abba.cn.box / bepa.cn.box |acru.cn.box / vaan.cn.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/CP.png", width = 900, height = 700)
+(abba.cp.box / bepa.cp.box |acru.cp.box / vaan.cp.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/NP.png", width = 900, height = 700)
+(abba.np.box / bepa.np.box |acru.np.box / vaan.np.box
+) + 
+  plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/RatioFull.png", width = 1100, height = 800)
+(abba.cn.box / abba.cp.box / abba.np.box | acru.cn.box / acru.cp.box / acru.np.box | bepa.cn.box / bepa.cp.box / bepa.np.box | vaan.cn.box/ vaan.cp.box/vaan.np.box
+) + 
+  plot_annotation(title = "A/B/C = ABBA, D/E/F = ACRU, G/H/I = BEPA, J/K/L = VAAN", tag_levels = "A")
 dev.off()
