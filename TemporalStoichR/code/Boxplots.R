@@ -58,88 +58,91 @@ VAAN <- subset(stoich, Species == "VAAN")
 
 #### Visualize the models ####
 # going to make boxplots for variables across years for each species
+# use color-hex.com to choose colour palettes and Color Oracle app
+# to ensure that they are color-blind friendly 
 # ABBA
-abba.c.box <- ggboxplot(ABBA, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.c.box <- ggboxplot(ABBA, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"),
                         add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "% Carbon")
-abba.n.box <- ggboxplot(ABBA, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.n.box <- ggboxplot(ABBA, x = "Year", y = "N", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "% Nitrogen")
-abba.p.box <- ggboxplot(ABBA, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.p.box <- ggboxplot(ABBA, x = "Year", y = "P", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "% Phosphorus")
-abba.qty.c.box <- ggboxplot(ABBA, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.qty.c.box <- ggboxplot(ABBA, x = "Year", y = "Qty_C", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Carbon (g)")
-abba.qty.n.box <- ggboxplot(ABBA, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.qty.n.box <- ggboxplot(ABBA, x = "Year", y = "Qty_N", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Nitrogen (g)")
-abba.qty.p.box <- ggboxplot(ABBA, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.qty.p.box <- ggboxplot(ABBA, x = "Year", y = "Qty_P", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Phosphorus (g)")
-abba.cn.box <- ggboxplot(ABBA, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.cn.box <- ggboxplot(ABBA, x = "Year", y = "CNRatio", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Carbon:Nitrogen")
-abba.cp.box <- ggboxplot(ABBA, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.cp.box <- ggboxplot(ABBA, x = "Year", y = "CPRatio", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Carbon:Phosphorus")
-abba.np.box <- ggboxplot(ABBA, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+abba.np.box <- ggboxplot(ABBA, x = "Year", y = "NPRatio", color = "Year", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Nitrogen:Phosphorus")
-
 #ACRU
-acru.c.box <- ggboxplot(ACRU, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.c.box <- ggboxplot(ACRU, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Red Maple", xlab = "Year", ylab = "% Carbon")
-acru.n.box <- ggboxplot(ACRU, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.n.box <- ggboxplot(ACRU, x = "Year", y = "N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Red Maple", xlab = "Year", ylab = "% Nitrogen")
-acru.p.box <- ggboxplot(ACRU, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.p.box <- ggboxplot(ACRU, x = "Year", y = "P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Red Maple", xlab = "Year", ylab = "% Phosphorus")
-acru.qty.c.box <- ggboxplot(ACRU, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.qty.c.box <- ggboxplot(ACRU, x = "Year", y = "Qty_C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Carbon (g)")
-acru.qty.n.box <- ggboxplot(ACRU, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.qty.n.box <- ggboxplot(ACRU, x = "Year", y = "Qty_N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Nitrogen (g)")
-acru.qty.p.box <- ggboxplot(ACRU, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.qty.p.box <- ggboxplot(ACRU, x = "Year", y = "Qty_P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Phosphorus (g)")
-acru.cn.box <- ggboxplot(ACRU, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.cn.box <- ggboxplot(ACRU, x = "Year", y = "CNRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Carbon:Nitrogen")
-acru.cp.box <- ggboxplot(ACRU, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.cp.box <- ggboxplot(ACRU, x = "Year", y = "CPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Carbon:Phosphorus")
-acru.np.box <- ggboxplot(ACRU, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+acru.np.box <- ggboxplot(ACRU, x = "Year", y = "NPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 
 #BEPA
-bepa.c.box <- ggboxplot(BEPA, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.c.box <- ggboxplot(BEPA, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Carbon")
-bepa.n.box <- ggboxplot(BEPA, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.n.box <- ggboxplot(BEPA, x = "Year", y = "N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Nitrogen")
-bepa.p.box <- ggboxplot(BEPA, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.p.box <- ggboxplot(BEPA, x = "Year", y = "P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Phosphorus")
-bepa.qty.c.box <- ggboxplot(BEPA, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.qty.c.box <- ggboxplot(BEPA, x = "Year", y = "Qty_C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon (g)")
-bepa.qty.n.box <- ggboxplot(BEPA, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.qty.n.box <- ggboxplot(BEPA, x = "Year", y = "Qty_N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "White Birch", xlab = "Year", ylab = "Nitrogen (g)")
-bepa.qty.p.box <- ggboxplot(BEPA, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.qty.p.box <- ggboxplot(BEPA, x = "Year", y = "Qty_P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "White Birch", xlab = "Year", ylab = "Phosphorus (g)")
-bepa.cn.box <- ggboxplot(BEPA, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.cn.box <- ggboxplot(BEPA, x = "Year", y = "CNRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon:Nitrogen")
-bepa.cp.box <- ggboxplot(BEPA, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.cp.box <- ggboxplot(BEPA, x = "Year", y = "CPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon:Phosphorus")
-bepa.np.box <- ggboxplot(BEPA, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+bepa.np.box <- ggboxplot(BEPA, x = "Year", y = "NPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "White Birch", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 #VAAN
-vaan.c.box <- ggboxplot(VAAN, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.c.box <- ggboxplot(VAAN, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Carbon")
-vaan.n.box <- ggboxplot(VAAN, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.n.box <- ggboxplot(VAAN, x = "Year", y = "N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Nitrogen")
-vaan.p.box <- ggboxplot(VAAN, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.p.box <- ggboxplot(VAAN, x = "Year", y = "P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Phosphorus")
-vaan.qty.c.box <- ggboxplot(VAAN, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.qty.c.box <- ggboxplot(VAAN, x = "Year", y = "Qty_C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon (g)")
-vaan.qty.n.box <- ggboxplot(VAAN, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.qty.n.box <- ggboxplot(VAAN, x = "Year", y = "Qty_N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Nitrogen (g)")
-vaan.qty.p.box <- ggboxplot(VAAN, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.qty.p.box <- ggboxplot(VAAN, x = "Year", y = "Qty_P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                             add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Phosphorus (g)")
-vaan.cn.box <- ggboxplot(VAAN, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.cn.box <- ggboxplot(VAAN, x = "Year", y = "CNRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon:Nitrogen")
-vaan.cp.box <- ggboxplot(VAAN, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.cp.box <- ggboxplot(VAAN, x = "Year", y = "CPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon:Phosphorus")
-vaan.np.box <- ggboxplot(VAAN, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+vaan.np.box <- ggboxplot(VAAN, x = "Year", y = "NPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 
 # also need boxplots of explanatory variables for the second models (EVI, NDMI, GDD) for 
 # each response variable. Group the data points by site.
-
+abba.c.box.site <- ggboxplot(ABBA, x = "Year", y = "C", color = "Site", 
+                        add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "% Carbon")
+abba.c.box.explan
 
 # now save boxplots in required combinations for my slides using patchwork
 png("graphics/StoichModels_2Step/Boxplots/RawCbox.png")
