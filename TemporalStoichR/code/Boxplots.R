@@ -101,23 +101,23 @@ acru.np.box <- ggboxplot(ACRU, x = "Year", y = "NPRatio", color = "Site", palett
 
 #BEPA
 bepa.c.box <- ggboxplot(BEPA, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                        add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Carbon")
+                        add = "jitter", xlab = "Year", ylab = "% Carbon")
 bepa.n.box <- ggboxplot(BEPA, x = "Year", y = "N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                        add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Nitrogen")
+                        add = "jitter",  xlab = "Year", ylab = "% Nitrogen")
 bepa.p.box <- ggboxplot(BEPA, x = "Year", y = "P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                        add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Phosphorus")
+                        add = "jitter",  xlab = "Year", ylab = "% Phosphorus")
 bepa.qty.c.box <- ggboxplot(BEPA, x = "Year", y = "Qty_C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                            add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon (g)")
+                            add = "jitter", xlab = "Year", ylab = "Carbon (g)")
 bepa.qty.n.box <- ggboxplot(BEPA, x = "Year", y = "Qty_N", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                            add = "jitter", title = "White Birch", xlab = "Year", ylab = "Nitrogen (g)")
+                            add = "jitter",  xlab = "Year", ylab = "Nitrogen (g)")
 bepa.qty.p.box <- ggboxplot(BEPA, x = "Year", y = "Qty_P", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                            add = "jitter", title = "White Birch", xlab = "Year", ylab = "Phosphorus (g)")
+                            add = "jitter",  xlab = "Year", ylab = "Phosphorus (g)")
 bepa.cn.box <- ggboxplot(BEPA, x = "Year", y = "CNRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon:Nitrogen")
+                         add = "jitter",  xlab = "Year", ylab = "Carbon:Nitrogen")
 bepa.cp.box <- ggboxplot(BEPA, x = "Year", y = "CPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon:Phosphorus")
+                         add = "jitter",  xlab = "Year", ylab = "Carbon:Phosphorus")
 bepa.np.box <- ggboxplot(BEPA, x = "Year", y = "NPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
-                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "Nitrogen:Phosphorus")
+                         add = "jitter", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 #VAAN
 vaan.c.box <- ggboxplot(VAAN, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Carbon")
@@ -185,4 +185,48 @@ png("graphics/StoichModels_2Step/Boxplots/ACRUfull.png", width = 900, height = 7
 (acru.c.box / acru.qty.c.box / acru.cn.box | acru.n.box / acru.qty.n.box / acru.cp.box | acru.p.box/acru.qty.p.box/acru.np.box
 ) + 
   plot_annotation(title = "Red Maple")
+dev.off()
+
+# BEPA
+png("graphics/StoichModels_2Step/Boxplots/BEPApercentbox.png", width = 900, height = 700)
+(bepa.c.box | bepa.n.box | bepa.p.box) + 
+  plot_annotation(title = "White Birch")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/BEPAqtybox.png", width = 900, height = 700)
+(bepa.qty.c.box | bepa.qty.n.box | bepa.qty.p.box) + 
+  plot_annotation(title = "White Birch")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/BEPAratiobox.png", width = 900, height = 700)
+(bepa.cn.box | bepa.cp.box | bepa.np.box) + 
+  plot_annotation(title = "White Birch")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/BEPAfull.png", width = 900, height = 700)
+(bepa.c.box / bepa.qty.c.box / bepa.cn.box | bepa.n.box / bepa.qty.n.box / bepa.cp.box | bepa.p.box/bepa.qty.p.box/bepa.np.box
+) + 
+  plot_annotation(title = "White Birch")
+dev.off()
+
+# VAAN
+png("graphics/StoichModels_2Step/Boxplots/VAANpercentbox.png", width = 900, height = 700)
+(vaan.c.box | vaan.n.box | vaan.p.box) + 
+  plot_annotation(title = "Lowland Blueberry")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/VAANqtybox.png", width = 900, height = 700)
+(vaan.qty.c.box | vaan.qty.n.box | vaan.qty.p.box) + 
+  plot_annotation(title = "Lowland Blueberry")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/VAANratiobox.png", width = 900, height = 700)
+(vaan.cn.box | vaan.cp.box | vaan.np.box) + 
+  plot_annotation(title = "Lowland Blueberry")
+dev.off()
+
+png("graphics/StoichModels_2Step/Boxplots/VAANfull.png", width = 900, height = 700)
+(vaan.c.box / vaan.qty.c.box / vaan.cn.box | vaan.n.box / vaan.qty.n.box / vaan.cp.box | vaan.p.box/vaan.qty.p.box/vaan.np.box
+) + 
+  plot_annotation(title = "Lowland Blueberry")
 dev.off()
