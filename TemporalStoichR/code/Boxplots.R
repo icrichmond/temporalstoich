@@ -1,78 +1,147 @@
 # Author: Isabella Richmond
 # Last edited: April 2, 2020
-# Source codes: Stoich_TemporalModels_2step.R and Stoich_GzLMTemporalModels_2step.R 
+# Reference codes: Stoich_TemporalModels_2step.R and Stoich_GzLMTemporalModels_2step.R 
 
 # This code was for the visualization of our data and temporal stoichiometry models.
 # A large portion of boxplot code provided by Juliana Balluffi-Fry and Matteo Rizzuto
-# Run codes in source scripts to load in the data and models 
+# Run codes in source scripts to see models
 # Models evaluate the response of stoichiometry in four boreal plant species with year and site 
 # If year is found to be in the top model when compared using AICc, another model is conducted 
 # where mechanisms are investigated (productivity, site, moisture, weather)
 
-### Visualize the models ###
-# going to make boxplots for the 
-# manually setting up colours 
-cols<-c("2016"= rgb(26,153,136, maxColorValue = 255), "2017"= rgb(235,86,0, maxColorValue = 255))
+#### Data Preparation #### 
+# load packages
+install.packages("easypackages")
+library(easypackages)
+install_packages("purrr", "ggcorrplot", "broom", "patchwork")
+libraries("purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr")
+# import datasets
+stoich <- read_csv("input/Stoich_2016_2017.csv")
+gdd <- read_csv("input/GDD_2016_2017.csv")
+evi <- read_csv("input/EVI_2016_2017.csv")
+ndmi <- read_csv("input/NDMI_2016_2017.csv")
+# subset by year so that joining is possible 
+stoich2016 <- subset(stoich, Year==2016)
+stoich2017 <- subset(stoich, Year==2017)
+evi2016 <- subset(evi, Year==2016)
+evi2017 <- subset(evi, Year==2017)
+ndmi2016 <- subset(ndmi, Year==2016)
+ndmi2017 <- subset(ndmi, Year==2017)
+# ndmi and evi datasets have a different number of rows because there are multiple observations
+# at each sample point - due to there being multiple species at each sample point
+# want to add evi and ndmi columns to the stoich dataset to combine data
+# use inner_join by dpylr for EVI and NDMI because it keeps all matching and does not keep 
+# anything that doesn't match
+# output dataframe should have same number of rows as input stoich dataframe 
+stoich2016 <- stoich2016 %>%
+  inner_join(evi2016,by="PlotName") %>%
+  inner_join(ndmi2016, by="PlotName")
+stoich2017 <- stoich2017 %>%
+  inner_join(evi2017, by="PlotName")%>%
+  inner_join(ndmi2017,by="PlotName")
+# bind the 2016 and 2017 dataset back together 
+stoich <- rbind(stoich2016,stoich2017)
+# add GDD columns to stoich dataframe
+stoich <- add_column(stoich, GDD=gdd$GDD, GDDAverage=gdd$AverageGDD)
+# convert Year variable to factor (listed as integer)
+stoich$Year <- as.factor(stoich$Year)
+str(stoich)
+# subset by species
+# ABBA = Abies balsamea, balsam fir 
+# ACRU = Acer rubrum, red maple 
+# BEPA = Betula papyrifera, white birch 
+# VAAN = Vaccinium angustifolium, lowland blueberry
+ABBA <- subset(stoich, Species == "ABBA")
+ACRU <- subset(stoich, Species == "ACRU")
+BEPA <- subset(stoich, Species == "BEPA")
+VAAN <- subset(stoich, Species == "VAAN")
 
-abba.c.box <- ggplot(data=ABBA, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("Balsam Fir")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+#### Visualize the models ####
+# going to make boxplots for variables across years for each species
+# ABBA
+abba.c.box <- ggboxplot(ABBA, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "% Carbon")
+abba.n.box <- ggboxplot(ABBA, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "% Nitrogen")
+abba.p.box <- ggboxplot(ABBA, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "% Phosphorus")
+abba.qty.c.box <- ggboxplot(ABBA, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Carbon (g)")
+abba.qty.n.box <- ggboxplot(ABBA, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Nitrogen (g)")
+abba.qty.p.box <- ggboxplot(ABBA, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Phosphorus (g)")
+abba.cn.box <- ggboxplot(ABBA, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Carbon:Nitrogen")
+abba.cp.box <- ggboxplot(ABBA, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Carbon:Phosphorus")
+abba.np.box <- ggboxplot(ABBA, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Balsam Fir", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 
-acru.c.box<- ggplot(data=ACRU, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("Red Maple")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+#ACRU
+acru.c.box <- ggboxplot(ACRU, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Red Maple", xlab = "Year", ylab = "% Carbon")
+acru.n.box <- ggboxplot(ACRU, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Red Maple", xlab = "Year", ylab = "% Nitrogen")
+acru.p.box <- ggboxplot(ACRU, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Red Maple", xlab = "Year", ylab = "% Phosphorus")
+acru.qty.c.box <- ggboxplot(ACRU, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Carbon (g)")
+acru.qty.n.box <- ggboxplot(ACRU, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Nitrogen (g)")
+acru.qty.p.box <- ggboxplot(ACRU, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Phosphorus (g)")
+acru.cn.box <- ggboxplot(ACRU, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Carbon:Nitrogen")
+acru.cp.box <- ggboxplot(ACRU, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Carbon:Phosphorus")
+acru.np.box <- ggboxplot(ACRU, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Red Maple", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 
-bepa.c.box<- ggplot(data=BEPA, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("White Birch")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+#BEPA
+bepa.c.box <- ggboxplot(BEPA, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Carbon")
+bepa.n.box <- ggboxplot(BEPA, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Nitrogen")
+bepa.p.box <- ggboxplot(BEPA, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "White Birch", xlab = "Year", ylab = "% Phosphorus")
+bepa.qty.c.box <- ggboxplot(BEPA, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon (g)")
+bepa.qty.n.box <- ggboxplot(BEPA, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "White Birch", xlab = "Year", ylab = "Nitrogen (g)")
+bepa.qty.p.box <- ggboxplot(BEPA, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "White Birch", xlab = "Year", ylab = "Phosphorus (g)")
+bepa.cn.box <- ggboxplot(BEPA, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon:Nitrogen")
+bepa.cp.box <- ggboxplot(BEPA, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "Carbon:Phosphorus")
+bepa.np.box <- ggboxplot(BEPA, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "White Birch", xlab = "Year", ylab = "Nitrogen:Phosphorus")
+#VAAN
+vaan.c.box <- ggboxplot(VAAN, x = "Year", y = "C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Carbon")
+vaan.n.box <- ggboxplot(VAAN, x = "Year", y = "N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Nitrogen")
+vaan.p.box <- ggboxplot(VAAN, x = "Year", y = "P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                        add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "% Phosphorus")
+vaan.qty.c.box <- ggboxplot(VAAN, x = "Year", y = "Qty_C", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon (g)")
+vaan.qty.n.box <- ggboxplot(VAAN, x = "Year", y = "Qty_N", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Nitrogen (g)")
+vaan.qty.p.box <- ggboxplot(VAAN, x = "Year", y = "Qty_P", color = "Year", palette = c("#EB5600","#1A9988"), 
+                            add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Phosphorus (g)")
+vaan.cn.box <- ggboxplot(VAAN, x = "Year", y = "CNRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon:Nitrogen")
+vaan.cp.box <- ggboxplot(VAAN, x = "Year", y = "CPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Carbon:Phosphorus")
+vaan.np.box <- ggboxplot(VAAN, x = "Year", y = "NPRatio", color = "Year", palette = c("#EB5600","#1A9988"), 
+                         add = "jitter", title = "Lowland Blueberry", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 
-vaan.c.box<- ggplot(data=VAAN, aes(Year, C, fill=Year))+
-  geom_boxplot(position="dodge", notch=TRUE)+ 
-  geom_jitter(cex=1.5, col="#989898")+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  ggtitle("Lowland Blueberry")+
-  labs(y="% Carbon", x="Year")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=12),
-        plot.title = element_text(size = 14),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+# also need boxplots of explanatory variables for the second models (EVI, NDMI, GDD) for 
+# each response variable. Group the data points by site.
+
+
+# now save boxplots in required combinations for my slides using patchwork
 png("graphics/StoichModels_2Step/Boxplots/RawCbox.png")
 (abba.c.box | acru.c.box) /
   (bepa.c.box | vaan.c.box)
