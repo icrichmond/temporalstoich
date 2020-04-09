@@ -435,6 +435,7 @@ dev.off()
 ABBA.CNRatio.mechtop <- (get.models(ABBA.CNRatio.mech, 1)[[1]])
 ABBA.CNRatio.mechtop <- tidy(ABBA.CNRatio.mechtop)
 write_csv(ABBA.CNRatio.mechtop, "output/Summary_2Step/summary.ABBA.CNRatio.mech.csv")
+PseudoR2(ABBA.CNRatio.mechtop, which = "Nagelkerke")
 
 # Carbon:Phosphorus
 ABBA.CPRatio1 <- glm(CPRatio ~ Year*Site, data = ABBA)
@@ -491,6 +492,7 @@ dev.off()
 ABBA.CPRatio.mechtop <- (get.models(ABBA.CPRatio.mech, 1)[[1]])
 ABBA.CPRatio.mechtop <- tidy(ABBA.CPRatio.mechtop)
 write_csv(ABBA.CPRatio.mechtop, "output/Summary_2Step/summary.ABBA.CPRatio.mech.csv")
+PseudoR2(ABBA.CPRatio.mechtop, which = "Nagelkerke")
 
 # Nitrogen:Phosphorus
 ABBA.NPRatio1 <- glm(NPRatio ~ Year*Site, data = ABBA)

@@ -215,6 +215,7 @@ dev.off()
 ABBA.Qty_C.mechtop <- (get.models(ABBA.Qty_C.mech, 1)[[1]])
 ABBA.Qty_C.mechtop <- tidy(ABBA.Qty_C.mechtop)
 write_csv(ABBA.Qty_C.mechtop, "output/Summary_2Step/summary.ABBA.Qty_C.mech.csv")
+PseudoR2(ABBA.Qty_C.mechtop, which = "Nagelkerke")
 
 # Nitrogen (g)
 ABBA.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma, data = ABBA)
@@ -271,6 +272,7 @@ dev.off()
 ABBA.Qty_N.mechtop <- (get.models(ABBA.Qty_N.mech, 1)[[1]])
 ABBA.Qty_N.mechtop <- tidy(ABBA.Qty_N.mechtop)
 write_csv(ABBA.Qty_N.mechtop, "output/Summary_2Step/summary.ABBA.Qty_N.mech.csv")
+PseudoR2(ABBA.Qty_N.mechtop, which = "Nagelkerke")
 
 # Phosphorus (g)
 ABBA.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma, data = ABBA)
@@ -328,6 +330,7 @@ dev.off()
 ABBA.Qty_P.mechtop <- (get.models(ABBA.Qty_P.mech, 1)[[1]])
 ABBA.Qty_P.mechtop <- tidy(ABBA.Qty_P.mechtop)
 write_csv(ABBA.Qty_P.mechtop, "output/Summary_2Step/summary.ABBA.Qty_P.mech.csv")
+PseudoR2(ABBA.Qty_P.mechtop, which = "Nagelkerke")
 
 #ACRU
 # Carbon (g)

@@ -210,6 +210,7 @@ ABBA.C.mechtop <- (get.models(ABBA.C.mech, 1)[[1]])
 ABBA.C.mechtop
 ABBA.C.mechtop <- tidy(ABBA.C.mechtop)
 write_csv(ABBA.C.mechtop, "output/Summary_2Step/summary.ABBA.C.std.mech.csv")
+PseudoR2(ABBA.C.mechtop, which = "Nagelkerke")
 
 # % Nitrogen
 ABBA.N1 <- glm(N_std ~ Year*Site, data = ABBA)
@@ -267,6 +268,7 @@ ABBA.N.mechtop <- (get.models(ABBA.N.mech, 1)[[1]])
 ABBA.N.mechtop <- tidy(ABBA.N.mechtop)
 ABBA.N.mechtop
 write_csv(ABBA.N.mechtop, "output/Summary_2Step/summary.ABBA.N.std.mech.csv")
+PseudoR2(ABBA.N.mechtop, which = "Nagelkerke")
 
 # % Phosphorus
 ABBA.P1 <- glm(P_std ~ Year*Site, data = ABBA)
@@ -324,6 +326,7 @@ ABBA.P.mechtop <- (get.models(ABBA.P.mech, 1)[[1]])
 ABBA.P.mechtop <- tidy(ABBA.P.mechtop)
 ABBA.P.mechtop
 write_csv(ABBA.P.mechtop, "output/Summary_2Step/summary.ABBA.P.std.mech.csv")
+PseudoR2(ABBA.P.mechtop, which = "Nagelkerke")
 
 # ACRU
 # % Carbon
@@ -382,6 +385,7 @@ ACRU.C.mechtop <- (get.models(ACRU.C.mech, 1)[[1]])
 ACRU.C.mechtop
 ACRU.C.mechtop <- tidy(ACRU.C.mechtop)
 write_csv(ACRU.C.mechtop, "output/Summary_2Step/summary.ACRU.C.std.mech.csv")
+PseudoR2(ACRU.C.mechtop, which = "Nagelkerke")
 
 # % Nitrogen
 ACRU.N1 <- glm(N_std ~ Year*Site, data = ACRU)
@@ -496,6 +500,7 @@ BEPA.C.mechtop <- (get.models(BEPA.C.mech, 1)[[1]])
 BEPA.C.mechtop
 BEPA.C.mechtop <- tidy(BEPA.C.mechtop)
 write_csv(BEPA.C.mechtop, "output/Summary_2Step/summary.BEPA.C.std.mech.csv")
+PseudoR2(BEPA.C.mechtop, which = "Nagelkerke")
 
 # % Nitrogen
 BEPA.N1 <- glm(N_std ~ Year*Site, data = BEPA)
@@ -610,6 +615,8 @@ VAAN.C.mechtop <- (get.models(VAAN.C.mech, 1)[[1]])
 VAAN.C.mechtop
 VAAN.C.mechtop <- tidy(VAAN.C.mechtop)
 write_csv(VAAN.C.mechtop, "output/Summary_2Step/summary.VAAN.C.std.mech.csv")
+PseudoR2(VAAN.C.mechtop, which = "Nagelkerke")
+
 # % Nitrogen
 VAAN.N1 <- glm(N_std ~ Year*Site, data = VAAN)
 VAAN.N2 <- glm(N_std ~ Year, data = VAAN)
