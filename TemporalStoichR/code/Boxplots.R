@@ -138,9 +138,14 @@ vaan.cp.box <- ggboxplot(VAAN, x = "Year", y = "CPRatio", color = "Site", palett
 vaan.np.box <- ggboxplot(VAAN, x = "Year", y = "NPRatio", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
                          add = "jitter", xlab = "Year", ylab = "Nitrogen:Phosphorus")
 
-# also need boxplots of explanatory variables for the second models (EVI, NDMI, GDD) for 
-# each response variable. Group the data points by site.
-
+# also need boxplots of explanatory variables for the second models (EVI, NDMI, GDD) 
+# across years. Group the data points by site.
+evi.box <- ggboxplot(stoich, x = "Year", y = "EVI", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
+                        add = "jitter",  xlab = "Year", ylab = "EVI")
+gdd.box <- ggboxplot(VAAN, x = "Year", y = "GDD", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
+                        add = "jitter",  xlab = "Year", ylab = "GDD")
+ndmi.box <- ggboxplot(VAAN, x = "Year", y = "NDMI", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"), 
+                        add = "jitter",  xlab = "Year", ylab = "NDMI")
 
 # now save boxplots in required combinations for my slides using patchwork
 # ABBA
@@ -306,3 +311,9 @@ png("graphics/StoichModels_2Step/Boxplots/RatioFull.png", width = 1100, height =
 ) + 
   plot_annotation(title = "A/B/C = ABBA, D/E/F = ACRU, G/H/I = BEPA, J/K/L = VAAN", tag_levels = "A")
 dev.off()
+
+# Explanatory variables
+png("graphics/StoichModels_2Step/Boxplots/EVI_GDD_NDMI.png", width = 900, height = 500)
+(evi.box | gdd.box | ndmi.box) 
+dev.off()
+
