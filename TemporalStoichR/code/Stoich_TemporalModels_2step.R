@@ -409,12 +409,12 @@ PseudoR2(ABBA.CNRatio1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.CNRatio.Global <- glm(CNRatio ~ EVI * GDD * NDMI, data = ABBA)
+ABBA.CNRatio.Global <- glm(CNRatio ~ EVI + GDD + NDMI + EVI*GDD + EVI*NDMI + GDD*NDMI, data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.CNRatio.mech <- dredge(ABBA.CNRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
+ABBA.CNRatio.mech <- dredge(ABBA.CNRatio.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.CNRatio.mechmodels <- get.models(ABBA.CNRatio.mech,subset=NA)
 ABBA.CNRatio.mech.residplots <- imap(ABBA.CNRatio.mechmodels, resid_plots) 
@@ -466,12 +466,12 @@ PseudoR2(ABBA.CPRatio1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.CPRatio.Global <- glm(CPRatio ~ EVI * GDD * NDMI, data = ABBA)
+ABBA.CPRatio.Global <- glm(CPRatio ~EVI + GDD + NDMI + EVI*GDD + EVI*NDMI + GDD*NDMI, data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.CPRatio.mech <- dredge(ABBA.CPRatio.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
+ABBA.CPRatio.mech <- dredge(ABBA.CPRatio.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.CPRatio.mechmodels <- get.models(ABBA.CPRatio.mech,subset=NA)
 ABBA.CPRatio.mech.residplots <- imap(ABBA.CPRatio.mechmodels, resid_plots) 

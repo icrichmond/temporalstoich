@@ -15,7 +15,7 @@
 # load packages
 install.packages("easypackages")
 library(easypackages)
-install_packages("sjPlot", "MuMIn", "purrr", "ggcorrplot", "purrr", "broom", "patchwork")
+install_packages("sjPlot","gtsummary",  "MuMIn", "purrr", "ggcorrplot", "purrr", "broom", "patchwork")
 libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
@@ -161,10 +161,10 @@ dev.off()
 # next attempt is to try a gamma error distribution 
 # ABBA 
 # Carbon (g)
-ABBA.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma, data = ABBA)
-ABBA.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma, data = ABBA)
-ABBA.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma, data = ABBA)
-ABBA.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma, data = ABBA)
+ABBA.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma(link=log), data = ABBA)
+ABBA.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma(link=log), data = ABBA)
+ABBA.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma(link=log), data = ABBA)
+ABBA.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma(link=log), data = ABBA)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 ABBA.Qty_Cmodels <- list(ABBA.Qty_C1, ABBA.Qty_C2, ABBA.Qty_C3, ABBA.Qty_C4)
@@ -189,12 +189,12 @@ PseudoR2(ABBA.Qty_C1, which = "Nagelkerke")
 # top model was Year*Site, continue on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.Qty_C.Global <- glm(Qty_C ~ EVI * GDD * NDMI, data = ABBA)
+ABBA.Qty_C.Global <- glm(Qty_C ~ EVI + GDD + NDMI + EVI*GDD + EVI*NDMI + GDD*NDMI, family = Gamma(link=log), data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.Qty_C.mech <- dredge(ABBA.Qty_C.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
+ABBA.Qty_C.mech <- dredge(ABBA.Qty_C.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.Qty_C.mechmodels <- get.models(ABBA.Qty_C.mech,subset=NA)
 ABBA.Qty_C.mech.residplots <- imap(ABBA.Qty_C.mechmodels, resid_plots) 
@@ -213,15 +213,53 @@ plot(ABBA.Qty_C.mech)
 dev.off()
 # get the summary of the top model and save it to a .csv
 ABBA.Qty_C.mechtop <- (get.models(ABBA.Qty_C.mech, 1)[[1]])
-ABBA.Qty_C.mechtop <- tidy(ABBA.Qty_C.mechtop)
+ABBA.Qty_C.mechtop <- tidy(ABBA.Qty_C.mechtop, conf.int=TRUE)
+write_csv(ABBA.Qty_C.mechtop, "output/Summary_2Step/summary.ABBA.Qty_C.mech.csv")
+PseudoR2(ABBA.Qty_C.mechtop, which = "Nagelkerke")
+# investigate for pretending variables as per Leroux 2019
+# use AIC table to identify potential pretending variabels
+# for any suspected pretending variables, look at the confidence intervals of each 
+# model and parameter estimate. If they cross zero and fulfill all other criteria, 
+# they are probably a pretending variable
+for (i in ABBA.Qty_C.mechmodels) { 
+  print(tidy(i, conf.int=TRUE))
+}
+# all 95% CIs cross zero for these models
+# EVI*GDD and GDD*NDMI are pretending variables in these models 
+# rerun with pretending variables removed 
+ABBA.Qty_C.Global <- glm(Qty_C ~ EVI * GDD * NDMI, family = Gamma(link=log), data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.Qty_C.mech.pretend <- dredge(ABBA.Qty_C.Global, evaluate = TRUE, rank = "AICc", subset = !(GDD*EVI*NDMI) | (GDD*NDMI) | (EVI*GDD))
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.Qty_C.mechmodels.pretend <- get.models(ABBA.Qty_C.mech.pretend,subset=NA)
+ABBA.Qty_C.mech.residplots.pretend <- imap(ABBA.Qty_C.mechmodels.pretend, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ABBA_QtyC_mech_gamma.pretend.pdf")
+ABBA.Qty_C.mech.residplots.pretend
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.Qty_C.mech.pretend)
+# save the AIC table
+write_csv(ABBA.Qty_C.mech.pretend, "output/AIC_2Step/ABBA_QtyC_Mech_pretend.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.QtyC.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.Qty_C.mech)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.Qty_C.mechtop <- (get.models(ABBA.Qty_C.mech, 1)[[1]])
+ABBA.Qty_C.mechtop <- tidy(ABBA.Qty_C.mechtop, conf.int=TRUE)
 write_csv(ABBA.Qty_C.mechtop, "output/Summary_2Step/summary.ABBA.Qty_C.mech.csv")
 PseudoR2(ABBA.Qty_C.mechtop, which = "Nagelkerke")
 
 # Nitrogen (g)
-ABBA.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma, data = ABBA)
-ABBA.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma,  data = ABBA)
-ABBA.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma, data = ABBA)
-ABBA.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma, data = ABBA)
+ABBA.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma(link=log)(link=log), data = ABBA)
+ABBA.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma(link=log)(link=log),  data = ABBA)
+ABBA.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma(link=log)(link=log), data = ABBA)
+ABBA.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma(link=log)(link=log), data = ABBA)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 ABBA.Qty_Nmodels <- list(ABBA.Qty_N1, ABBA.Qty_N2, ABBA.Qty_N3, ABBA.Qty_N4)
@@ -246,7 +284,7 @@ PseudoR2(ABBA.Qty_N1, which = "Nagelkerke")
 # top model was Year*Site, continue on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.Qty_N.Global <- glm(Qty_N ~ EVI * GDD * NDMI, data = ABBA)
+ABBA.Qty_N.Global <- glm(Qty_N ~ EVI * GDD * NDMI, family = Gamma(link=log)(link=log), data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
@@ -275,10 +313,10 @@ write_csv(ABBA.Qty_N.mechtop, "output/Summary_2Step/summary.ABBA.Qty_N.mech.csv"
 PseudoR2(ABBA.Qty_N.mechtop, which = "Nagelkerke")
 
 # Phosphorus (g)
-ABBA.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma, data = ABBA)
-ABBA.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma, data = ABBA)
-ABBA.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma, data = ABBA)
-ABBA.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma, data = ABBA)
+ABBA.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma(link=log)(link=log), data = ABBA)
+ABBA.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma(link=log)(link=log), data = ABBA)
+ABBA.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma(link=log)(link=log), data = ABBA)
+ABBA.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma(link=log)(link=log), data = ABBA)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 ABBA.Qty_Pmodels <- list(ABBA.Qty_P1, ABBA.Qty_P2, ABBA.Qty_P3, ABBA.Qty_P4)
@@ -303,13 +341,12 @@ PseudoR2(ABBA.Qty_P1, which = "Nagelkerke")
 # top model was Year*Site, continue on to testing the mechanisms
 # use dredge package and keep interaction terms to max 2 
 # build global model with all mechanisms and interactions 
-ABBA.Qty_P.Global <- glm(Qty_P ~ EVI * GDD * NDMI * Site, data = ABBA)
+ABBA.Qty_P.Global <- glm(Qty_P ~ EVI * GDD * NDMI, family = Gamma(link=log)(link=log), data = ABBA)
 # set options, dredge requires this 
 options(na.action = "na.fail")
 # create AICc table ranking models with dredge. Subset the models to remove three-way 
 # interaction terms 
-ABBA.Qty_P.Global <- glm(Qty_P ~ EVI*GDD*NDMI*Site, data = ABBA)
-ABBA.Qty_P.mech <- dredge(ABBA.Qty_P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI | EVI*GDD*Site | EVI*NDMI*Site | GDD*NDMI*Site | EVI*GDD*NDMI*Site))
+ABBA.Qty_P.mech <- dredge(ABBA.Qty_P.Global, evaluate = TRUE, rank = "AICc", subset = !(EVI*GDD*NDMI))
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.Qty_P.mechmodels <- get.models(ABBA.Qty_P.mech,subset=NA)
 ABBA.Qty_P.mech.residplots <- imap(ABBA.Qty_P.mechmodels, resid_plots) 
@@ -334,10 +371,10 @@ PseudoR2(ABBA.Qty_P.mechtop, which = "Nagelkerke")
 
 #ACRU
 # Carbon (g)
-ACRU.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma, data = ACRU)
-ACRU.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma, data = ACRU)
-ACRU.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma, data = ACRU)
-ACRU.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma, data = ACRU)
+ACRU.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma(link=log), data = ACRU)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 ACRU.Qty_Cmodels <- list(ACRU.Qty_C1, ACRU.Qty_C2, ACRU.Qty_C3, ACRU.Qty_C4)
@@ -362,10 +399,10 @@ PseudoR2(ACRU.Qty_C1, which = "Nagelkerke")
 # top model was Null - stop here.  
 
 # Nitrogen (g)
-ACRU.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma, data = ACRU)
-ACRU.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma,  data = ACRU)
-ACRU.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma, data = ACRU)
-ACRU.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma, data = ACRU)
+ACRU.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma(link=log),  data = ACRU)
+ACRU.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma(link=log), data = ACRU)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 ACRU.Qty_Nmodels <- list(ACRU.Qty_N1, ACRU.Qty_N2, ACRU.Qty_N3, ACRU.Qty_N4)
@@ -390,10 +427,10 @@ PseudoR2(ACRU.Qty_N1, which = "Nagelkerke")
 # top model was Null - stop here. 
 
 # Phosphorus (g)
-ACRU.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma, data = ACRU)
-ACRU.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma, data = ACRU)
-ACRU.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma, data = ACRU)
-ACRU.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma, data = ACRU)
+ACRU.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma(link=log), data = ACRU)
+ACRU.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma(link=log), data = ACRU)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 ACRU.Qty_Pmodels <- list(ACRU.Qty_P1, ACRU.Qty_P2, ACRU.Qty_P3, ACRU.Qty_P4)
@@ -419,10 +456,10 @@ PseudoR2(ACRU.Qty_P1, which = "Nagelkerke")
 
 # BEPA
 # Carbon (g)
-BEPA.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma, data = BEPA)
-BEPA.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma, data = BEPA)
-BEPA.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma, data = BEPA)
-BEPA.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma, data = BEPA)
+BEPA.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma(link=log), data = BEPA)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 BEPA.Qty_Cmodels <- list(BEPA.Qty_C1, BEPA.Qty_C2, BEPA.Qty_C3, BEPA.Qty_C4)
@@ -447,10 +484,10 @@ PseudoR2(BEPA.Qty_C1, which = "Nagelkerke")
 # top model was Null - stop here.  
 
 # Nitrogen (g)
-BEPA.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma, data = BEPA)
-BEPA.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma,  data = BEPA)
-BEPA.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma, data = BEPA)
-BEPA.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma, data = BEPA)
+BEPA.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma(link=log),  data = BEPA)
+BEPA.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma(link=log), data = BEPA)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 BEPA.Qty_Nmodels <- list(BEPA.Qty_N1, BEPA.Qty_N2, BEPA.Qty_N3, BEPA.Qty_N4)
@@ -475,10 +512,10 @@ PseudoR2(BEPA.Qty_N1, which = "Nagelkerke")
 # top model was Null - stop here.  
 
 # Phosphorus (g)
-BEPA.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma, data = BEPA)
-BEPA.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma, data = BEPA)
-BEPA.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma, data = BEPA)
-BEPA.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma, data = BEPA)
+BEPA.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma(link=log), data = BEPA)
+BEPA.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma(link=log), data = BEPA)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 BEPA.Qty_Pmodels <- list(BEPA.Qty_P1, BEPA.Qty_P2, BEPA.Qty_P3, BEPA.Qty_P4)
@@ -504,10 +541,10 @@ PseudoR2(BEPA.Qty_P1, which = "Nagelkerke")
 
 #VAAN
 # Carbon (g)
-VAAN.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma, data = VAAN)
-VAAN.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma, data = VAAN)
-VAAN.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma, data = VAAN)
-VAAN.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma, data = VAAN)
+VAAN.Qty_C1 <- glm(Qty_C ~ Year*Site, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_C2 <- glm(Qty_C ~ Year, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_C3 <- glm(Qty_C ~ Site, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_C4 <- glm(Qty_C ~ 1, family = Gamma(link=log), data = VAAN)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 VAAN.Qty_Cmodels <- list(VAAN.Qty_C1, VAAN.Qty_C2, VAAN.Qty_C3, VAAN.Qty_C4)
@@ -532,10 +569,10 @@ PseudoR2(VAAN.Qty_C1, which = "Nagelkerke")
 # top model was Site - stop here.  
 
 # Nitrogen (g)
-VAAN.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma, data = VAAN)
-VAAN.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma,  data = VAAN)
-VAAN.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma, data = VAAN)
-VAAN.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma, data = VAAN)
+VAAN.Qty_N1 <- glm(Qty_N ~ Year*Site, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_N2 <- glm(Qty_N ~ Year, family = Gamma(link=log),  data = VAAN)
+VAAN.Qty_N3 <- glm(Qty_N ~ Site, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_N4 <- glm(Qty_N ~ 1, family = Gamma(link=log), data = VAAN)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 VAAN.Qty_Nmodels <- list(VAAN.Qty_N1, VAAN.Qty_N2, VAAN.Qty_N3, VAAN.Qty_N4)
@@ -560,10 +597,10 @@ PseudoR2(VAAN.Qty_N1, which = "Nagelkerke")
 # top model was Site - stop here. 
 
 # Phosphorus (g)
-VAAN.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma, data = VAAN)
-VAAN.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma, data = VAAN)
-VAAN.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma, data = VAAN)
-VAAN.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma, data = VAAN)
+VAAN.Qty_P1 <- glm(Qty_P ~ Year*Site, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_P2 <- glm(Qty_P ~ Year, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_P3 <- glm(Qty_P ~ Site, family = Gamma(link=log), data = VAAN)
+VAAN.Qty_P4 <- glm(Qty_P ~ 1, family = Gamma(link=log), data = VAAN)
 # check model diagnostics to make sure models are not violating any assumptions 
 # create list of models 
 VAAN.Qty_Pmodels <- list(VAAN.Qty_P1, VAAN.Qty_P2, VAAN.Qty_P3, VAAN.Qty_P4)
