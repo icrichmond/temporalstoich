@@ -436,6 +436,42 @@ ABBA.CNRatio.mechtop <- (get.models(ABBA.CNRatio.mech, 1)[[1]])
 ABBA.CNRatio.mechtop <- tidy(ABBA.CNRatio.mechtop)
 write_csv(ABBA.CNRatio.mechtop, "output/Summary_2Step/summary.ABBA.CNRatio.mech.csv")
 PseudoR2(ABBA.CNRatio.mechtop, which = "Nagelkerke")
+# investigate for pretending variables as per Leroux 2019
+# use AIC table to identify potential pretending variabels
+# for any suspected pretending variables, look at the confidence intervals of each 
+# model and parameter estimate. If they cross zero and fulfill all other criteria, 
+# they are probably a pretending variable
+for (i in ABBA.CNRatio.mechmodels) { 
+  print(tidy(i, conf.int=TRUE))
+}
+# EVI*GDD and GDD*NDMI seem to be pretending variables in the top models, remove and rerun
+ABBA.CNRatio.Global.pretend <- glm(CNRatio ~ EVI + GDD + NDMI + EVI*NDMI, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.CNRatio.mech.pretend <- dredge(ABBA.CNRatio.Global.pretend, evaluate = TRUE, rank = "AICc")
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.CNRatio.mechmodels.pretend <- get.models(ABBA.CNRatio.mech.pretend,subset=NA)
+ABBA.CNRatio.mech.residplots.pretend <- imap(ABBA.CNRatio.mechmodels.pretend, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ABBA_CNRatio_mech_gamma.pretend.pdf")
+ABBA.CNRatio.mech.residplots.pretend
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.CNRatio.mech.pretend)
+# save the AIC table
+write_csv(ABBA.CNRatio.mech.pretend, "output/AIC_2Step/ABBA_CNRatio_Mech_pretend.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.CNRatio.pretend.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.CNRatio.mech.pretend)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.CNRatio.mechtop.pretend <- (get.models(ABBA.CNRatio.mech.pretend, 1)[[1]])
+ABBA.CNRatio.mechtop.pretend <- tidy(ABBA.CNRatio.mechtop.pretend, conf.int=TRUE)
+write_csv(ABBA.CNRatio.mechtop.pretend, "output/Summary_2Step/summary.ABBA.CNRatio.mech.pretend.csv")
+PseudoR2(ABBA.CNRatio.mechtop.pretend, which = "Nagelkerke")
 
 # Carbon:Phosphorus
 ABBA.CPRatio1 <- glm(CPRatio ~ Year*Site, data = ABBA)
@@ -493,6 +529,42 @@ ABBA.CPRatio.mechtop <- (get.models(ABBA.CPRatio.mech, 1)[[1]])
 ABBA.CPRatio.mechtop <- tidy(ABBA.CPRatio.mechtop)
 write_csv(ABBA.CPRatio.mechtop, "output/Summary_2Step/summary.ABBA.CPRatio.mech.csv")
 PseudoR2(ABBA.CPRatio.mechtop, which = "Nagelkerke")
+# investigate for pretending variables as per Leroux 2019
+# use AIC table to identify potential pretending variabels
+# for any suspected pretending variables, look at the confidence intervals of each 
+# model and parameter estimate. If they cross zero and fulfill all other criteria, 
+# they are probably a pretending variable
+for (i in ABBA.CPRatio.mechmodels) { 
+  print(tidy(i, conf.int=TRUE))
+}
+# EVI*GDD seems to be a pretending variables in the top models, remove and rerun
+ABBA.CPRatio.Global.pretend <- glm(CPRatio ~ EVI + GDD + NDMI + EVI*NDMI + GDD*NDMI, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.CPRatio.mech.pretend <- dredge(ABBA.CPRatio.Global.pretend, evaluate = TRUE, rank = "AICc")
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.CPRatio.mechmodels.pretend <- get.models(ABBA.CPRatio.mech.pretend,subset=NA)
+ABBA.CPRatio.mech.residplots.pretend <- imap(ABBA.CPRatio.mechmodels.pretend, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ABBA_CPRatio_mech_gamma.pretend.pdf")
+ABBA.CPRatio.mech.residplots.pretend
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.CPRatio.mech.pretend)
+# save the AIC table
+write_csv(ABBA.CPRatio.mech.pretend, "output/AIC_2Step/ABBA_CPRatio_Mech_pretend.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.CPRatio.pretend.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.CPRatio.mech.pretend)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.CPRatio.mechtop.pretend <- (get.models(ABBA.CPRatio.mech.pretend, 1)[[1]])
+ABBA.CPRatio.mechtop.pretend <- tidy(ABBA.CPRatio.mechtop.pretend, conf.int=TRUE)
+write_csv(ABBA.CPRatio.mechtop.pretend, "output/Summary_2Step/summary.ABBA.CPRatio.mech.pretend.csv")
+PseudoR2(ABBA.CPRatio.mechtop.pretend, which = "Nagelkerke")
 
 # Nitrogen:Phosphorus
 ABBA.NPRatio1 <- glm(NPRatio ~ Year*Site, data = ABBA)
