@@ -211,6 +211,7 @@ ABBA.C.mechtop
 ABBA.C.mechtop <- tidy(ABBA.C.mechtop)
 write_csv(ABBA.C.mechtop, "output/Summary_2Step/summary.ABBA.C.std.mech.csv")
 PseudoR2(ABBA.C.mechtop, which = "Nagelkerke")
+# no pretending variables 
 
 # % Nitrogen
 ABBA.N1 <- glm(N_std ~ Year*Site, data = ABBA)
@@ -269,6 +270,43 @@ ABBA.N.mechtop <- tidy(ABBA.N.mechtop)
 ABBA.N.mechtop
 write_csv(ABBA.N.mechtop, "output/Summary_2Step/summary.ABBA.N.std.mech.csv")
 PseudoR2(ABBA.N.mechtop, which = "Nagelkerke")
+# investigate for pretending variables as per Leroux 2019
+# use AIC table to identify potential pretending variabels
+# for any suspected pretending variables, look at the confidence intervals of each 
+# model and parameter estimate. If they cross zero and fulfill all other criteria, 
+# they are probably a pretending variable
+for (i in ABBA.N.mechmodels) { 
+  print(tidy(i, conf.int=TRUE))
+}
+# EVI*GDD appears to be a pretending variable in the top models, remove and rerun
+ABBA.N.Global.pretend <- glm(N_std ~ EVI + GDD + NDMI + EVI*NDMI, data = ABBA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+ABBA.N.mech.pretend <- dredge(ABBA.N.Global.pretend, evaluate = TRUE, rank = "AICc")
+# check the residuals of the models to ensure that glm was correct choice 
+ABBA.N.mechmodels.pretend <- get.models(ABBA.N.mech.pretend,subset=NA)
+ABBA.N.mech.residplots.pretend <- imap(ABBA.N.mechmodels.pretend, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ABBA_N_std_mech_gamma.pretend.pdf")
+ABBA.N.mech.residplots.pretend
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(ABBA.N.mech.pretend)
+# save the AIC table
+write_csv(ABBA.N.mech.pretend, "output/AIC_2Step/ABBA_N_std_Mech_pretend.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/ABBA.N.std.pretend.pdf")
+par(mar=c(4,5,9,4))
+plot(ABBA.N.mech.pretend)
+dev.off()
+# get the summary of the top model and save it to a .csv
+ABBA.N.mechtop.pretend <- (get.models(ABBA.N.mech.pretend, 1)[[1]])
+ABBA.N.mechtop.pretend <- tidy(ABBA.N.mechtop.pretend, conf.int=TRUE)
+write_csv(ABBA.N.mechtop.pretend, "output/Summary_2Step/summary.ABBA.N.std.mech.pretend.csv")
+PseudoR2(ABBA.N.mechtop.pretend, which = "Nagelkerke")
+
 
 # % Phosphorus
 ABBA.P1 <- glm(P_std ~ Year*Site, data = ABBA)
@@ -327,6 +365,8 @@ ABBA.P.mechtop <- tidy(ABBA.P.mechtop)
 ABBA.P.mechtop
 write_csv(ABBA.P.mechtop, "output/Summary_2Step/summary.ABBA.P.std.mech.csv")
 PseudoR2(ABBA.P.mechtop, which = "Nagelkerke")
+# no pretending variables
+
 
 # ACRU
 # % Carbon
@@ -386,6 +426,7 @@ ACRU.C.mechtop
 ACRU.C.mechtop <- tidy(ACRU.C.mechtop)
 write_csv(ACRU.C.mechtop, "output/Summary_2Step/summary.ACRU.C.std.mech.csv")
 PseudoR2(ACRU.C.mechtop, which = "Nagelkerke")
+# no pretending variables
 
 # % Nitrogen
 ACRU.N1 <- glm(N_std ~ Year*Site, data = ACRU)
@@ -497,10 +538,45 @@ plot(BEPA.C.mech)
 dev.off()
 # get the summary of the top model and save it to a .csv
 BEPA.C.mechtop <- (get.models(BEPA.C.mech, 1)[[1]])
-BEPA.C.mechtop
 BEPA.C.mechtop <- tidy(BEPA.C.mechtop)
 write_csv(BEPA.C.mechtop, "output/Summary_2Step/summary.BEPA.C.std.mech.csv")
 PseudoR2(BEPA.C.mechtop, which = "Nagelkerke")
+# investigate for pretending variables as per Leroux 2019
+# use AIC table to identify potential pretending variabels
+# for any suspected pretending variables, look at the confidence intervals of each 
+# model and parameter estimate. If they cross zero and fulfill all other criteria, 
+# they are probably a pretending variable
+for (i in BEPA.C.mechmodels) { 
+  print(tidy(i, conf.int=TRUE))
+}
+# EVI appears to be a pretending variable, remove and rerun
+BEPA.C.Global.pretend <- glm(C_std ~ GDD + NDMI + GDD*NDMI, data = BEPA)
+# set options, dredge requires this 
+options(na.action = "na.fail")
+# create AICc table ranking models with dredge. Subset the models to remove three-way 
+# interaction terms 
+BEPA.C.mech.pretend <- dredge(BEPA.C.Global.pretend, evaluate = TRUE, rank = "AICc")
+# check the residuals of the models to ensure that glm was correct choice 
+BEPA.C.mechmodels.pretend <- get.models(BEPA.C.mech.pretend,subset=NA)
+BEPA.C.mech.residplots.pretend <- imap(BEPA.C.mechmodels.pretend, resid_plots) 
+pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/BEPA_C_std_mech_gamma.pretend.pdf")
+BEPA.C.mech.residplots.pretend
+dev.off()
+# if assumptions are met, proceed with AIC table and analysis
+# look at the AIC table
+print(BEPA.C.mech.pretend)
+# save the AIC table
+write_csv(BEPA.C.mech.pretend, "output/AIC_2Step/BEPA_C_std_Mech_pretend.csv")
+# visualize the AIC table 
+pdf("graphics/StoichModels_2Step/AIC/BEPA.C.std.pretend.pdf")
+par(mar=c(4,5,9,4))
+plot(BEPA.C.mech.pretend)
+dev.off()
+# get the summary of the top model and save it to a .csv
+BEPA.C.mechtop.pretend <- (get.models(BEPA.C.mech.pretend, 1)[[1]])
+BEPA.C.mechtop.pretend <- tidy(BEPA.C.mechtop.pretend, conf.int=TRUE)
+write_csv(BEPA.C.mechtop.pretend, "output/Summary_2Step/summary.BEPA.C.std.mech.pretend.csv")
+PseudoR2(BEPA.C.mechtop.pretend, which = "Nagelkerke")
 
 # % Nitrogen
 BEPA.N1 <- glm(N_std ~ Year*Site, data = BEPA)
@@ -616,6 +692,7 @@ VAAN.C.mechtop
 VAAN.C.mechtop <- tidy(VAAN.C.mechtop)
 write_csv(VAAN.C.mechtop, "output/Summary_2Step/summary.VAAN.C.std.mech.csv")
 PseudoR2(VAAN.C.mechtop, which = "Nagelkerke")
+# no pretending variables
 
 # % Nitrogen
 VAAN.N1 <- glm(N_std ~ Year*Site, data = VAAN)
