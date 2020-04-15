@@ -256,10 +256,12 @@ png("graphics/StoichModels_2Step/Boxplots/PercentP.png", width = 900, height = 7
 dev.off()
 
 png("graphics/StoichModels_2Step/Boxplots/PercentFull.png", width = 1000, height = 800)
-(abba.c.box / abba.n.box / abba.p.box | acru.c.box / acru.n.box / acru.p.box | bepa.c.box / bepa.n.box / bepa.p.box | vaan.c.box/ vaan.n.box/vaan.p.box
-) + 
-  plot_annotation(title = "A/B/C = ABBA, D/E/F = ACRU, G/H/I = BEPA, J/K/L = VAAN", tag_levels = "A")
-dev.off()
+((abba.c.box | acru.c.box | bepa.c.box | vaan.c.box) / (abba.n.box | acru.n.box | bepa.n.box | vaan.n.box) / (abba.p.box | acru.p.box | bepa.p.box | vaan.p.box) 
+  + plot_annotation(tag_levels = "A") 
+  + plot_annotation(title =   "Balsam Fir                                               Red Maple                                           White Birch                                         Lowland Blueberry")
+  + plot_annotation(theme = theme(plot.title = element_text(size = 16))) 
+  )
+  dev.off()
 
 
 # Qty Data
@@ -281,11 +283,14 @@ png("graphics/StoichModels_2Step/Boxplots/QtyP.png", width = 900, height = 700)
   plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
 dev.off()
 
-png("graphics/StoichModels_2Step/Boxplots/QtyFull.png", width = 1100, height = 800)
-(abba.qty.c.box / abba.qty.n.box / abba.qty.p.box | acru.qty.c.box / acru.qty.n.box / acru.qty.p.box | bepa.qty.c.box / bepa.qty.n.box / bepa.qty.p.box | vaan.qty.c.box/ vaan.qty.n.box/vaan.qty.p.box
-) + 
-  plot_annotation(title = "A/B/C = ABBA, D/E/F = ACRU, G/H/I = BEPA, J/K/L = VAAN", tag_levels = "A")
+png("graphics/StoichModels_2Step/Boxplots/QtyFull.png", width = 1000, height = 800)
+((abba.qty.c.box | acru.qty.c.box | bepa.qty.c.box | vaan.qty.c.box) / (abba.qty.n.box | acru.qty.n.box | bepa.qty.n.box | vaan.qty.n.box) / (abba.qty.p.box | acru.qty.p.box | bepa.qty.p.box | vaan.qty.p.box) 
+  + plot_annotation(tag_levels = "A") 
+  + plot_annotation(title =   "Balsam Fir                                               Red Maple                                           White Birch                                         Lowland Blueberry")
+  + plot_annotation(theme = theme(plot.title = element_text(size = 16))) 
+)
 dev.off()
+
 
 # Ratio Data
 png("graphics/StoichModels_2Step/Boxplots/CN.png", width = 900, height = 700)
@@ -306,11 +311,14 @@ png("graphics/StoichModels_2Step/Boxplots/NP.png", width = 900, height = 700)
   plot_annotation(title = "A = ABBA, B = BEPA, C = ACRU, D = VAAN", tag_levels = "A")
 dev.off()
 
-png("graphics/StoichModels_2Step/Boxplots/RatioFull.png", width = 1100, height = 800)
-(abba.cn.box / abba.cp.box / abba.np.box | acru.cn.box / acru.cp.box / acru.np.box | bepa.cn.box / bepa.cp.box / bepa.np.box | vaan.cn.box/ vaan.cp.box/vaan.np.box
-) + 
-  plot_annotation(title = "A/B/C = ABBA, D/E/F = ACRU, G/H/I = BEPA, J/K/L = VAAN", tag_levels = "A")
+png("graphics/StoichModels_2Step/Boxplots/RatioFull.png", width = 1000, height = 800)
+((abba.cn.box | acru.cn.box | bepa.cn.box | vaan.cn.box) / (abba.cp.box | acru.cp.box | bepa.cp.box | vaan.cp.box) / (abba.np.box | acru.np.box | bepa.np.box | vaan.np.box) 
+  + plot_annotation(tag_levels = "A") 
+  + plot_annotation(title =   "Balsam Fir                                               Red Maple                                           White Birch                                         Lowland Blueberry")
+  + plot_annotation(theme = theme(plot.title = element_text(size = 16))) 
+)
 dev.off()
+
 
 # Explanatory variables
 png("graphics/StoichModels_2Step/Boxplots/EVI_GDD_NDMI.png", width = 900, height = 500)
