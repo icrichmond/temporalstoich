@@ -332,12 +332,14 @@ meltStoich <- melt(
   measure.vars = c('Species')
 )
 
+png("graphics/StoichModels_2Step/Boxplots/GDD_C_Species.png", width = 1000, height = 800)
 ggplot(meltStoich) +
   geom_point(aes(GDD,C, shape = Year, color = Site), size = 2.5) +
-  geom_smooth(aes(GDD,C,color = Site), method = lm) + 
+  geom_smooth(aes(GDD,C), color = "#373730", method = lm) + 
   scale_color_manual(values=c("#66545e", "#a39193", "#aa6f73", "#eea990"))+
   facet_wrap( ~ value, labeller = labeller(value = 
                                              c("ABBA" = "Balsam Fir",
                                                "ACRU" = "Red Maple",
                                                "BEPA" = "White Birch",
                                                "VAAN" = "Lowland Blueberry"))) 
+dev.off()
