@@ -50,9 +50,12 @@ Scene3NDMI_rescale <- Scene3_NDMI*0.0001
 # create a raster brick with the three scenes
 NDMI_Brick_2016 <- brick(list(Scene1NDMI_rescale, Scene2NDMI_rescale, Scene3NDMI_rescale))
 # plot scenes
-jpeg("graphics/NDMI/NDMIBrick2016.jpg")
-levelplot(NDMI_Brick_2016)
+myTheme <- rasterTheme(region=sequential_hcl(6, h = 300, power=0.8))
+LayerNames <- c("June 24, 2016", "August 15, 2016","September 16, 2016")
+png("graphics/NDMI/NDMI_Original2016.png", width = 13, height = 6, units = "in", res = 600)
+levelplot(NDMI_Brick_2016, par.settings = myTheme, names.attr = LayerNames)
 dev.off()
+
 # perform a linear interpolation between EVI time scenes to populate no data areas
 # first check the distribution of elevation values in the raster
 jpeg("graphics/NDMI/NDMIHist2016.jpg")
@@ -64,10 +67,14 @@ jpeg("graphics/NDMI/NDMIHistApprox2016.jpg")
 hist(NDMI_approx_2016)
 dev.off()
 # plot scenes
-jpeg("graphics/NDMI/NDMIApprox2016.jpg")
-plot(NDMI_approx_2016)
+LayerNamesInterp <- c(" ", " ", " ")
+
+png("Graphics/NDMI/NDMI_Interpolate2016.png", width = 13, height = 6, units = "in", res = 600)
+levelplot(NDMI_approx_2016, par.settings = myTheme, names.attr = LayerNamesInterp)
 dev.off()
+
 writeRaster(NDMI_approx_2016, "output/NDMI/ApproxNA2016", format="GTiff", bylayer=T, suffix="names", overwrite=TRUE)
+
 # average rasters together
 NDMI_mean_2016 <-calc(NDMI_approx_2016, fun = mean)
 jpeg("graphics/NDMI/NDMIMean2016.jpg")
@@ -91,8 +98,10 @@ Scene6NDMI_rescale <- Scene6_NDMI*0.0001
 # create a raster brick with the three scenes
 NDMI_Brick_2017 <- brick(list(Scene4NDMI_rescale, Scene5NDMI_rescale, Scene6NDMI_rescale))
 # plot scenes
-jpeg("graphics/NDMI/NDMIBrick2017.jpg")
-levelplot(NDMI_Brick_2017)
+myTheme <- rasterTheme(region=sequential_hcl(6, h = 300, power=0.8))
+LayerNames <- c("May 30, 2017", "July 17, 2017","September 3, 2017")
+png("graphics/NDMI/NDMI_Original2017.png", width = 13, height = 6, units = "in", res = 600)
+levelplot(NDMI_Brick_2017, par.settings = myTheme, names.attr = LayerNames)
 dev.off()
 # perform a linear interpolation between NDMI time scenes to populate no data areas
 # first check the distribution of elevation values in the raster
@@ -105,9 +114,12 @@ jpeg("graphics/NDMI/NDMIHistApprox2017.jpg")
 hist(NDMI_approx_2017)
 dev.off()
 # plot scenes
-jpeg("graphics/NDMI/NDMIApprox2017.jpg")
-plot(NDMI_approx_2017)
+LayerNamesInterp <- c(" ", " ", " ")
+
+png("Graphics/NDMI/NDMI_Interpolate2017.png", width = 13, height = 6, units = "in", res = 600)
+levelplot(NDMI_approx_2017, par.settings = myTheme, names.attr = LayerNamesInterp)
 dev.off()
+
 writeRaster(NDMI_approx_2017, "output/NDMI/ApproxNA2017", format="GTiff", bylayer=T, suffix="names", overwrite=TRUE)
 # Average rasters together
 NDMI_mean_2017 <-calc(NDMI_approx_2017, fun = mean)
