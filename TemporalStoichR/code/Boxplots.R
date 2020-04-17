@@ -14,7 +14,7 @@
 install.packages("easypackages")
 library(easypackages)
 install_packages("purrr", "ggcorrplot", "broom", "patchwork")
-libraries("purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr")
+libraries("reshape2", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr")
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
 gdd <- read_csv("input/GDD_2016_2017.csv")
@@ -319,9 +319,25 @@ png("graphics/StoichModels_2Step/Boxplots/RatioFull.png", width = 1000, height =
 )
 dev.off()
 
-
-# Explanatory variables
+# explanatory variables
 png("graphics/StoichModels_2Step/Boxplots/EVI_GDD_NDMI.png", width = 900, height = 500)
 (evi.box | gdd.box | ndmi.box) 
 dev.off()
 
+# Make a figure showing the relationship between % C and GDD for the MS 
+# Basic scatter plot
+meltStoich <- melt(
+  stoich,
+  id.vars = c('GDD', 'C', 'Site', 'Year'),
+  measure.vars = c('Species')
+)
+
+ggplot(meltStoich) +
+  geom_point(aes(GDD,C, shape = Year, color = Site), size = 2.5) +
+  geom_smooth(aes(GDD,C,color = Site), method = lm) + 
+  scale_color_manual(values=c("#66545e", "#a39193", "#aa6f73", "#eea990"))+
+  facet_wrap( ~ value, labeller = labeller(value = 
+                                             c("ABBA" = "Balsam Fir",
+                                               "ACRU" = "Red Maple",
+                                               "BEPA" = "White Birch",
+                                               "VAAN" = "Lowland Blueberry"))) 
