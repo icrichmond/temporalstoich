@@ -15,7 +15,7 @@
 # load packages
 install.packages("easypackages")
 library(easypackages)
-install_packages("sjPlot","gtsummary",  "MuMIn", "purrr", "ggcorrplot", "purrr", "broom", "patchwork")
+install_packages("ggpol", "texreg", "kimisc", "psych", "DescTools", "sjPlot","gtsummary",  "MuMIn", "purrr", "ggcorrplot", "purrr", "broom", "patchwork")
 libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
