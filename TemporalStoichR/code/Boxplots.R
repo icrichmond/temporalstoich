@@ -343,3 +343,26 @@ ggplot(meltStoich) +
                                                "BEPA" = "White Birch",
                                                "VAAN" = "Lowland Blueberry"))) 
 dev.off()
+
+# save bar graph of sample distribution at each site
+stoich$Year <- as.factor(stoich$Year)
+stoich$Site <- as.factor()
+
+sitenames <- c("Bloomfield", "Dunphy's Pond", "TNNP North", "Unicorn")
+names(sitenames) <- c("BL", "DP", "TN", "UNI")
+
+cols <- c("#D0C2A9", "#B4BC9C")
+
+png("graphics/StoichModels_2Step/Boxplots/DataDistribution.png", width = 800, height = 1000)
+ggplot(transform(stoich, Site=factor(Site, levels=c("UNI","TN","DP","BL"))), aes(Species, fill = Year))+
+  geom_bar() + 
+  labs(y = "Number of Samples")+
+  geom_text(stat='count', aes(label=..count..), vjust=1.1, size = 3.5)+
+  theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=15), 
+        strip.text = element_text(size=15), axis.title = element_text(size=17),
+        legend.text = element_text(size=15), legend.title = element_text(size=17),
+        legend.position = "top")+
+  scale_fill_manual(values = cols)+
+  scale_x_discrete(labels=c("Balsam Fir","Red Maple","White Birch", "Lowbush Blueberry"))+
+  facet_wrap(~Site, nrow = 4, labeller = labeller(Site = sitenames))
+dev.off()
