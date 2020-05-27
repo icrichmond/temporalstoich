@@ -326,23 +326,43 @@ dev.off()
 
 # Make a figure showing the relationship between % C and GDD for the MS 
 # Basic scatter plot
-meltStoich <- melt(
+meltGDD <- melt(
   stoich,
   id.vars = c('GDD', 'C', 'Site', 'Year'),
   measure.vars = c('Species')
 )
 
 png("graphics/StoichModels_2Step/Boxplots/GDD_C_Species.png", width = 1000, height = 800)
-ggplot(meltStoich) +
+ggplot(meltGDD) +
   geom_point(aes(GDD,C, shape = Year, color = Site), size = 2.5) +
   geom_smooth(aes(GDD,C), color = "#373730", method = lm) + 
   scale_color_manual(values=c("#66545e", "#a39193", "#aa6f73", "#eea990"))+
+  labs(x = "Growing Degree Days", y = "Percent C")+
+  theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=15), 
+        strip.text = element_text(size=15), axis.title = element_text(size=17),
+        legend.text = element_text(size=15), legend.title = element_text(size=17),
+        legend.position = "top")+
   facet_wrap( ~ value, labeller = labeller(value = 
                                              c("ABBA" = "Balsam Fir",
                                                "ACRU" = "Red Maple",
                                                "BEPA" = "White Birch",
                                                "VAAN" = "Lowland Blueberry"))) 
 dev.off()
+
+# Make a figure showing the relationship between % C and year for the MS 
+# Basic boxplot
+png("graphics/StoichModels_2Step/Boxplots/PercentC_Species_MS.png", width = 800, height = 800)
+speciesnames <- c("Balsam Fir", "Red Maple", "White Birch", "Lowbush Blueberry")
+names(speciesnames) <- c("ABBA", "ACRU", "BEPA", "VAAN")
+ggboxplot(stoich, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"),
+                        add = "jitter", xlab = "Year", ylab = "Percent C")+
+  theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=15), 
+        strip.text = element_text(size=15), axis.title = element_text(size=17),
+        legend.text = element_text(size=15), legend.title = element_text(size=17),
+        legend.position = "top")+
+  facet_wrap(~Species, labeller = labeller(Species = speciesnames))
+dev.off()
+
 
 # save bar graph of sample distribution at each site
 stoich$Year <- as.factor(stoich$Year)
