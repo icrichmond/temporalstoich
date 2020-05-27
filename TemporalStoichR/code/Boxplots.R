@@ -336,6 +336,8 @@ png("graphics/StoichModels_2Step/Boxplots/GDD_C_Species.png", width = 1000, heig
 ggplot(meltGDD) +
   geom_point(aes(GDD,C, shape = Year, color = Site), size = 2.5) +
   geom_smooth(aes(GDD,C), color = "#373730", method = lm) + 
+  stat_cor(aes(GDD,C,label = paste(..rr.label..)), label.y = 54.5)+
+  stat_regline_equation(aes(GDD,C), label.y = 55)+
   scale_color_manual(values=c("#66545e", "#a39193", "#aa6f73", "#eea990"))+
   labs(x = "Growing Degree Days", y = "Percent C")+
   theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=15), 
