@@ -332,7 +332,6 @@ meltGDD <- melt(
   measure.vars = c('Species')
 )
 
-png("graphics/StoichModels_2Step/Boxplots/GDD_C_Species.png", width = 1000, height = 800)
 ggplot(meltGDD) +
   geom_point(aes(GDD,C, shape = Year, color = Site), size = 2.5) +
   geom_smooth(aes(GDD,C), color = "#373730", method = lm) + 
@@ -343,17 +342,18 @@ ggplot(meltGDD) +
   theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=15), 
         strip.text = element_text(size=15), axis.title = element_text(size=17),
         legend.text = element_text(size=15), legend.title = element_text(size=17),
-        legend.position = "top")+
+        legend.position = "top", panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), panel.background = element_blank(),
+        strip.background = element_rect(color="black"))+
   facet_wrap( ~ value, labeller = labeller(value = 
                                              c("ABBA" = "Balsam Fir",
                                                "ACRU" = "Red Maple",
                                                "BEPA" = "White Birch",
-                                               "VAAN" = "Lowland Blueberry"))) 
-dev.off()
+                                               "VAAN" = "Lowbush Blueberry")))
+ggsave("graphics/StoichModels_2Step/Boxplots/GDD_C_Species.png", width = 35, height = 35, units=c("cm"),dpi=350)
 
 # Make a figure showing the relationship between % C and year for the MS 
 # Basic boxplot
-png("graphics/StoichModels_2Step/Boxplots/PercentC_Species_MS.png", width = 800, height = 800)
 speciesnames <- c("Balsam Fir", "Red Maple", "White Birch", "Lowbush Blueberry")
 names(speciesnames) <- c("ABBA", "ACRU", "BEPA", "VAAN")
 ggboxplot(stoich, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"),
@@ -363,7 +363,7 @@ ggboxplot(stoich, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#
         legend.text = element_text(size=15), legend.title = element_text(size=17),
         legend.position = "top")+
   facet_wrap(~Species, labeller = labeller(Species = speciesnames))
-dev.off()
+ggsave("graphics/StoichModels_2Step/Boxplots/PercentC_Species_MS.png", width = 35, height = 35, units=c("cm"),dpi=350)
 
 
 # save bar graph of sample distribution at each site
