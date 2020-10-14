@@ -1,7 +1,7 @@
 # Author: Isabella Richmond 
-# Last edited: March 13, 2020
+# Last edited: October 14, 2020
 
-# Code for testing the correlation in weather data collected from Environment & Climate Change 
+# Code for testing the correlation in weather data collected from Environment & Climate Change Historical Datasets
 # Canada's weather stations in Lethbridge, Clarenville, and Charleston (NL, Canada)
 # Weather data is being used to calculate growing degree days for my temporal stoich models 
 # Some gaps in data at the Lethbridge weather station 
@@ -13,8 +13,9 @@
 
 # load packages 
 library(easypackages)
-easypackages::libraries("readr", "dplyr", "plyr", "tibble", "ggplot2", "tidyr")
+easypackages::libraries("readr", "dplyr", "plyr", "tibble", "ggplot2", "tidyr", "purrr")
 
+#### Data Preparation ####
 # load datasets 
 clarenville2016 <- read_csv("input/WeatherCor/Clarenville_2016_R.csv")
 head(clarenville2016)
@@ -31,6 +32,8 @@ clarenville2016 <- add_column(clarenville2016, "Station" = "Clarenville")
 charleston2016 <- add_column(charleston2016, "Station" = "Charleston")
 lethbridge2016 <- add_column(lethbridge2016, "Station" = "Lethbridge")
 
+
+#### Correlations ####
 # correlations between Clarenville and Lethbridge
 # combine town dataframes
 clarenleth <- rbind(clarenville2016, lethbridge2016)
@@ -89,6 +92,10 @@ ggplot(charlesleth, aes(x=Date_Time, y=MinTemp, color=Station)) + geom_point()+
   annotate("text", x =as.Date("2016-12-31"), y = -21,label = chlmax$estimate)
 ggsave("graphics/WeatherCor/charleslethmax.png")
 
+#### Data Replacement ####
 # Clarenville consistently had a higher correlation with Lethbridge weather than Charleston 
 # replace Lethbridge NAs with data from the Clarenville weather station
-# NOTE: replacement was done in Excel - will add in code later
+
+lethbridge2016full <- clarenville2016 %>%
+  map2_df(lethbridge2016, ., coalesce)
+write.csv(lethbridge2016full, "input/GDD/Lethbridge_2016_full_R.csv")
