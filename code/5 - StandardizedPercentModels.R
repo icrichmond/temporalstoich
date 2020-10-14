@@ -17,7 +17,7 @@ easypackages::libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorr
 stoich <- read_csv("input/Stoich_2016_2017.csv")
 gdd <- read_csv("input/GDD_2016_2017_R.csv")
 evi <- read_csv("input/EVI_2016_2017_R.csv")
-ndmi <- read_csv("input/NDMI_2016_2017.csv")
+ndmi <- read_csv("input/NDMI_2016_2017_R.csv")
 # subset by year so that joining is possible 
 stoich2016 <- subset(stoich, Year==2016)
 stoich2017 <- subset(stoich, Year==2017)
