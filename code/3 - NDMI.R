@@ -155,6 +155,5 @@ sampptsraster@data
 colnames(sampptsraster@data)[6] = "NDMI2016"
 colnames(sampptsraster@data)[7] = "NDMI2017"
 
-write.csv(sampptsraster, "output/NDMI/NDMI_20162017.csv")
-
-# Clean up data in Excel - can fix and do this in R later 
+# save CSV to input
+write.csv(sampptsraster, "input/NDMI_2016_2017.csv")
