@@ -1,5 +1,5 @@
 # Author: Isabella Richmond
-# Last edited: April 3, 2020
+# Last edited: October 14, 2020
 
 # This code was for the creation and evaluation of my temporal elemental composition models. 
 # The response variables are % C, N, P of Balsam Fir, Red Maple, White Birch, and Lowbush Blueberry
