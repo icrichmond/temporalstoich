@@ -1,6 +1,5 @@
-# Author: Travis Heckford 
-# Modified by: Isabella Richmond
-# Date of last change: March 13, 2020
+# Author: Travis Heckford & Isabella Richmond
+# Date of last change: October 14, 2020
 
 
 # Processing of Landsat imagery to obtain NDMI for 2016 and 2017

@@ -1,6 +1,5 @@
-# Author: Travis Heckford
-# Adapted by: Isabella Richmond
-# Date of last change: March 13, 2020
+# Author: Travis Heckford & Isabella Richmond
+# Date of last change: October 14, 2020
 
 # Processing of Landsat (EVI) from Landsat imagery for 2017 data 
 # 2016 EVI data was processed in exactly the same way by Travis Heckford
@@ -114,6 +113,20 @@ sampptsraster@data
 # change the column name to EVI2017
 colnames(sampptsraster@data)[6] = "EVI2017"
 # save Sample Points with 2017 EVI as a csv
-write.csv(sampptsraster, "output/EVI/SampPts_EVI_2017.csv")
+write.csv(sampptsraster, "input/EVI/EVI_2017.csv")
 
-# combine with 2016 dataset in Excel - can fix this later
+# combine 2016 and 2017 data
+EVI2016 <- read.csv("input/EVI/EVI_2016.csv")
+EVI2017 <- read.csv("input/EVI/EVI_2017.csv")
+# keep relevant columns 
+EVI2016 <- add_column(EVI2016, Year = 2016)
+EVI2016 <- subset(EVI2016, select = c(PlotName, Year, EVI))
+
+EVI2017 <- EVI2017 %>% 
+  dplyr::rename("EVI" = "EVI2017") %>%
+  add_column(Year = 2017)
+EVI2017 <- subset(EVI2017, select = c(PlotName, Year, EVI))
+# combine years
+EVI <- rbind(EVI2016, EVI2017)
+# write csv 
+write.csv(EVI, "input/EVI_2016_2017_R.csv")
