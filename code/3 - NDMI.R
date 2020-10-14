@@ -155,4 +155,4 @@ colnames(sampptsraster@data)[6] = "NDMI2016"
 colnames(sampptsraster@data)[7] = "NDMI2017"
 
 # save CSV to input
-write.csv(sampptsraster, "input/NDMI_2016_2017.csv")
+write.csv(sampptsraster, "input/NDMI_2016_2017_R.csv")
