@@ -9,7 +9,7 @@
 
 # load packages 
 library(easypackages)
-easypackages::libraries("tidyverse", "pollen", "lubridate")
+easypackages::libraries("tidyverse", "lubridate")
 
 #### Data Preparation ####
 # load datasets 
@@ -81,8 +81,8 @@ s2016 <- subset(s2016, select = c(TimeStamp, SiteName, TrapLocation, PlotName, S
 s2017 <- subset(s2017, select = c(TimeStamp, SiteName, TrapLocation, PlotName, Species))
 
 # convert timestamps to actual dates and times in R 
-s2016$TimeStamp <- as_datetime(s2016$TimeStamp)
-s2017$TimeStamp <- as_datetime(s2017$TimeStamp)
+s2016$TimeStamp <- as_datetime(s2016$TimeStamp, format="%F %H:%M")
+s2017$TimeStamp <- as_datetime(s2017$TimeStamp, format="%F %H:%M")
 
 # repeated observations in the dataset - remove 
 s2016 <- s2016 %>% 
@@ -103,11 +103,11 @@ bl2017 <- filter(s2017, SiteName=="Bloomfield")
 bl2017 <- add_column(bl2017, Date_Time = date(bl2017$TimeStamp))
 bl2017 <- inner_join(bl2017, l2017, by="Date_Time")
 
-tnundp2016 <- filter(s2016, SiteName=="Dumphys Pond" | SiteName=="TNNP North" | SiteName=="Unicorn")
+tnundp2016 <- filter(s2016, SiteName=="Dunphys Pond" | SiteName=="TNNP North" | SiteName=="Unicorn")
 tnundp2016 <- add_column(tnundp2016, Date_Time = date(tnundp2016$TimeStamp))
 tnundp2016 <- inner_join(tnundp2016, tn2016, by="Date_Time")
 
-tnundp2017 <- filter(s2017, SiteName=="Dumphys Pond" | SiteName=="TNNP North" | SiteName=="Unicorn")
+tnundp2017 <- filter(s2017, SiteName=="Dunphys Pond" | SiteName=="TNNP North" | SiteName=="Unicorn")
 tnundp2017 <- add_column(tnundp2017, Date_Time = date(tnundp2017$TimeStamp))
 tnundp2017 <- inner_join(tnundp2017, tn2017, by="Date_Time")
 
