@@ -1,8 +1,8 @@
 # Author: Isabella Richmond
 # Last edited: April 3, 2020
 
-# This code was for the creation and evaluation of my temporal stoichiometry models. A lot of 
-# code was provided by Travis Heckford (twitter.com/travheckford)
+# This code was for the creation and evaluation of my temporal elemental composition models. 
+# The response variables are % C, N, P of Balsam Fir, Red Maple, White Birch, and Lowbush Blueberry
 # Models evaluate the response of stoichiometry in four boreal plant species with year and site 
 # If year is found to be in the top model when compared using AICc, another model is conducted 
 # where mechanisms are investigated (productivity, site, moisture, weather)
@@ -11,19 +11,18 @@
 
 #### Data Preparation ####
 # load packages
-install.packages("easypackages")
-library(easypackages)
-install_packages("sjPlot", "MuMIn", "purrr", "ggcorrplot", "purrr", "broom", "patchwork")
-libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+easypackages::libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
 
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
-gdd <- read_csv("input/GDD_2016_2017.csv")
-evi <- read_csv("input/EVI_2016_2017.csv")
+gdd <- read_csv("input/GDD_2016_2017_R.csv")
+evi <- read_csv("input/EVI_2016_2017_R.csv")
 ndmi <- read_csv("input/NDMI_2016_2017.csv")
 # subset by year so that joining is possible 
 stoich2016 <- subset(stoich, Year==2016)
 stoich2017 <- subset(stoich, Year==2017)
+gdd2016 <- subset(gdd, Year==2016)
+gdd2017 <- subset(gdd, Year==2017)
 evi2016 <- subset(evi, Year==2016)
 evi2017 <- subset(evi, Year==2017)
 ndmi2016 <- subset(ndmi, Year==2016)
@@ -35,19 +34,21 @@ ndmi2017 <- subset(ndmi, Year==2017)
 # anything that doesn't match
 # output dataframe should have same number of rows as input stoich dataframe 
 stoich2016 <- stoich2016 %>%
+  left_join(gdd2016, by=c("PlotName","Species")) %>%
   inner_join(evi2016,by="PlotName") %>%
   inner_join(ndmi2016, by="PlotName")
 stoich2017 <- stoich2017 %>%
+  left_join(gdd2017, by=c("PlotName","Species")) %>%
   inner_join(evi2017, by="PlotName")%>%
   inner_join(ndmi2017,by="PlotName")
 # bind the 2016 and 2017 dataset back together 
 stoich <- rbind(stoich2016,stoich2017)
-# add GDD columns to stoich dataframe
-stoich <- add_column(stoich, GDD=gdd$GDD, GDDAverage=gdd$AverageGDD)
 
 # convert Year variable to factor (listed as integer)
+stoich <- dplyr::rename(stoich, Year = Year.x)
 stoich$Year <- as.factor(stoich$Year)
 str(stoich)
+stoich <- drop_na(stoich, GDD)
 
 # subset the data by species
 # ABBA = Abies balsamea, balsam fir 
@@ -166,18 +167,18 @@ ABBA.Cmodels <- list(ABBA.C1, ABBA.C2, ABBA.C3, ABBA.C4)
 # create diagnostic figures 
 ABBA.C.residplots <- imap(ABBA.Cmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_C_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_C.pdf")
 ABBA.C.residplots
 dev.off()
-# assumptions are ok, could try another error structure to check
+# assumptions are ok
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.C <- list("ABBA.C1 = Year*Site" = ABBA.C1, "ABBA.C2 = Year" = ABBA.C2, "ABBA.C3 = Site" = ABBA.C3, "ABBA.C4 = Null" = ABBA.C4)
 ABBA.C <- aictab(cand.set = Models.ABBA.C)
 print(ABBA.C)
-write.csv(ABBA.C, "output/AIC_2Step/ABBA_C_std.csv")
+write.csv(ABBA.C, "output/AIC/ABBA_C.csv")
 # save the summary tables of the models 
 summary.ABBA.C <-map_df(Models.ABBA.C, broom::tidy, .id="model")
-write_csv(summary.ABBA.C, path = "output/Summary_2Step/summary.ABBA.C.std.csv")
+write_csv(summary.ABBA.C, path = "output/Summary/ABBA_C.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ABBA.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
@@ -192,16 +193,16 @@ ABBA.C.mech <- dredge(ABBA.C.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.C.mechmodels <- get.models(ABBA.C.mech,subset=NA)
 ABBA.C.mech.residplots <- imap(ABBA.C.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_C_std_mech_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_C_mech.pdf")
 ABBA.C.mech.residplots
 dev.off()
-# if assumptions are met, proceed with AIC table and analysis
+# assumptions are OK
 # look at the AIC table
 print(ABBA.C.mech)
 # save the AIC table
-write_csv(ABBA.C.mech, "output/AIC_2Step/ABBA_C_std_Mech.csv")
+write_csv(ABBA.C.mech, "output/AIC/ABBA_C_Mech.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.C.std.pdf")
+pdf("graphics/Models/AIC/ABBA_C.pdf")
 par(mar=c(4,5,9,4))
 plot(ABBA.C.mech)
 dev.off()
@@ -209,7 +210,7 @@ dev.off()
 ABBA.C.mechtop <- (get.models(ABBA.C.mech, 1)[[1]])
 ABBA.C.mechtop
 ABBA.C.mechtop <- tidy(ABBA.C.mechtop)
-write_csv(ABBA.C.mechtop, "output/Summary_2Step/summary.ABBA.C.std.mech.csv")
+write_csv(ABBA.C.mechtop, "output/Summary/ABBA_C_mech.csv")
 PseudoR2(ABBA.C.mechtop, which = "Nagelkerke")
 # investigate for pretending variables as per Leroux 2019
 # use AIC table to identify potential pretending variabels
@@ -229,23 +230,23 @@ ABBA.C.mech.pretend <- dredge(ABBA.C.Global.pretend, evaluate = TRUE, rank = "AI
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.C.mechmodels.pretend <- get.models(ABBA.C.mech.pretend,subset=NA)
 ABBA.C.mech.residplots.pretend <- imap(ABBA.C.mechmodels.pretend, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ABBA_C_std_mech_gamma.pretend.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_C_mech_pretend.pdf")
 ABBA.C.mech.residplots.pretend
 dev.off()
-# if assumptions are met, proceed with AIC table and analysis
+# assumptions are OK
 # look at the AIC table
 print(ABBA.C.mech.pretend)
 # save the AIC table
-write_csv(ABBA.C.mech.pretend, "output/AIC_2Step/ABBA_C_std_Mech_pretend.csv")
+write_csv(ABBA.C.mech.pretend, "output/AIC/ABBA_C_mech_pretend.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.C.std.pretend.pdf")
+pdf("graphics/Models/AIC/ABBA_C_pretend.pdf")
 par(mar=c(4,5,9,4))
 plot(ABBA.C.mech.pretend)
 dev.off()
 # get the summary of the top model and save it to a .csv
 ABBA.C.mechtop.pretend <- (get.models(ABBA.C.mech.pretend, 1)[[1]])
 ABBA.C.mechtop.pretend <- tidy(ABBA.C.mechtop.pretend, conf.int=TRUE)
-write_csv(ABBA.C.mechtop.pretend, "output/Summary_2Step/summary.ABBA.C.std.mech.pretend.csv")
+write_csv(ABBA.C.mechtop.pretend, "output/Summary/ABBA_C_mech_pretend.csv")
 PseudoR2(ABBA.C.mechtop.pretend, which = "Nagelkerke")
 
 
@@ -261,18 +262,18 @@ ABBA.Nmodels <- list(ABBA.N1, ABBA.N2, ABBA.N3, ABBA.N4)
 # create diagnostic figures 
 ABBA.N.residplots <- imap(ABBA.Nmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_N_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_N.pdf")
 ABBA.N.residplots
 dev.off()
-# assumptions are ok, could use another error structure to check
+# assumptions are ok
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.N <- list("ABBA.N1 = Year*Site" = ABBA.N1, "ABBA.N2 = Year" = ABBA.N2, "ABBA.N3 = Site" = ABBA.N3, "ABBA.N4 = Null" = ABBA.N4)
 ABBA.N <- aictab(cand.set = Models.ABBA.N)
 print(ABBA.N)
-write.csv(ABBA.N, "output/AIC_2Step/ABBA_N_std.csv")
+write.csv(ABBA.N, "output/AIC/ABBA_N.csv")
 # save the summary tables of the models 
 summary.ABBA.N <-map_df(Models.ABBA.N, broom::tidy, .id="model")
-write_csv(summary.ABBA.N, path = "output/Summary_2Step/summary.ABBA.N.std.csv")
+write_csv(summary.ABBA.N, path = "output/Summary/ABBA_N.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ABBA.N1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
@@ -287,16 +288,16 @@ ABBA.N.mech <- dredge(ABBA.N.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.N.mechmodels <- get.models(ABBA.N.mech,subset=NA)
 ABBA.N.mech.residplots <- imap(ABBA.N.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_N_std_mech_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_N_mech.pdf")
 ABBA.N.mech.residplots
 dev.off()
 # if assumptions are met, proceed with AIC table and analysis
 # look at the AIC table
 print(ABBA.N.mech)
 # save the AIC table
-write_csv(ABBA.N.mech, "output/AIC_2Step/ABBA_N_std_Mech.csv")
+write_csv(ABBA.N.mech, "output/AIC/ABBA_N_mech.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.N.std.pdf")
+pdf("graphics/Models/AIC/ABBA_N.pdf")
 par(mar=c(4,5,9,4))
 plot(ABBA.N.mech)
 dev.off()
@@ -304,7 +305,7 @@ dev.off()
 ABBA.N.mechtop <- (get.models(ABBA.N.mech, 1)[[1]])
 ABBA.N.mechtop <- tidy(ABBA.N.mechtop)
 ABBA.N.mechtop
-write_csv(ABBA.N.mechtop, "output/Summary_2Step/summary.ABBA.N.std.mech.csv")
+write_csv(ABBA.N.mechtop, "output/Summary/ABBA_N_mech.csv")
 PseudoR2(ABBA.N.mechtop, which = "Nagelkerke")
 # investigate for pretending variables as per Leroux 2019
 # use AIC table to identify potential pretending variabels
@@ -324,23 +325,23 @@ ABBA.N.mech.pretend <- dredge(ABBA.N.Global.pretend, evaluate = TRUE, rank = "AI
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.N.mechmodels.pretend <- get.models(ABBA.N.mech.pretend,subset=NA)
 ABBA.N.mech.residplots.pretend <- imap(ABBA.N.mechmodels.pretend, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ABBA_N_std_mech_gamma.pretend.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_N_mech_pretend.pdf")
 ABBA.N.mech.residplots.pretend
 dev.off()
 # if assumptions are met, proceed with AIC table and analysis
 # look at the AIC table
 print(ABBA.N.mech.pretend)
 # save the AIC table
-write_csv(ABBA.N.mech.pretend, "output/AIC_2Step/ABBA_N_std_Mech_pretend.csv")
+write_csv(ABBA.N.mech.pretend, "output/AIC/ABBA_N_mech_pretend.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.N.std.pretend.pdf")
+pdf("graphics/Models/AIC/ABBA_N_pretend.pdf")
 par(mar=c(4,5,9,4))
 plot(ABBA.N.mech.pretend)
 dev.off()
 # get the summary of the top model and save it to a .csv
 ABBA.N.mechtop.pretend <- (get.models(ABBA.N.mech.pretend, 1)[[1]])
 ABBA.N.mechtop.pretend <- tidy(ABBA.N.mechtop.pretend, conf.int=TRUE)
-write_csv(ABBA.N.mechtop.pretend, "output/Summary_2Step/summary.ABBA.N.std.mech.pretend.csv")
+write_csv(ABBA.N.mechtop.pretend, "output/Summary/ABBA_N_mech_pretend.csv")
 PseudoR2(ABBA.N.mechtop.pretend, which = "Nagelkerke")
 
 
@@ -356,18 +357,18 @@ ABBA.Pmodels <- list(ABBA.P1, ABBA.P2, ABBA.P3, ABBA.P4)
 # create diagnostic figures 
 ABBA.P.residplots <- imap(ABBA.Pmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_P_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_P.pdf")
 ABBA.P.residplots
 dev.off()
-# assumptions are ok, would use another error structure to check
-# create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
+# assumptions are ok
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ABBA.P <- list("ABBA.P1 = Year*Site" = ABBA.P1, "ABBA.P2 = Year" = ABBA.P2, "ABBA.P3 = Site" = ABBA.P3, "ABBA.P4 = Null" = ABBA.P4)
 ABBA.P <- aictab(cand.set = Models.ABBA.P)
 print(ABBA.P)
-write.csv(ABBA.P, "output/AIC_2Step/ABBA_P_std.csv")
+write.csv(ABBA.P, "output/AIC/ABBA_P.csv")
 # save the summary tables of the models 
 summary.ABBA.P <-map_df(Models.ABBA.P, broom::tidy, .id="model")
-write_csv(summary.ABBA.P, path = "output/Summary_2Step/summary.ABBA.P.std.csv")
+write_csv(summary.ABBA.P, path = "output/Summary/ABBA_P.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ABBA.P1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
@@ -382,16 +383,16 @@ ABBA.P.mech <- dredge(ABBA.P.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 ABBA.P.mechmodels <- get.models(ABBA.P.mech,subset=NA)
 ABBA.P.mech.residplots <- imap(ABBA.P.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ABBA_P_std_mech_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ABBA_P_mech.pdf")
 ABBA.P.mech.residplots
 dev.off()
 # if assumptions are met, proceed with AIP table and analysis
 # look at the AIP table
 print(ABBA.P.mech)
 # save the AIC table
-write_csv(ABBA.P.mech, "output/AIC_2Step/ABBA_P_std_Mech.csv")
+write_csv(ABBA.P.mech, "output/AIC/ABBA_P_mech.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ABBA.P.std.pdf")
+pdf("graphics/Models/AIC/ABBA_P.pdf")
 par(mar=c(4,5,9,4))
 plot(ABBA.P.mech)
 dev.off()
@@ -399,7 +400,7 @@ dev.off()
 ABBA.P.mechtop <- (get.models(ABBA.P.mech, 1)[[1]])
 ABBA.P.mechtop <- tidy(ABBA.P.mechtop)
 ABBA.P.mechtop
-write_csv(ABBA.P.mechtop, "output/Summary_2Step/summary.ABBA.P.std.mech.csv")
+write_csv(ABBA.P.mechtop, "output/Summary/ABBA_P_mech.csv")
 PseudoR2(ABBA.P.mechtop, which = "Nagelkerke")
 # no pretending variables
 
@@ -417,7 +418,7 @@ ACRU.Cmodels <- list(ACRU.C1, ACRU.C2, ACRU.C3, ACRU.C4)
 # create diagnostic figures 
 ACRU.C.residplots <- imap(ACRU.Cmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_C_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ACRU_C.pdf")
 ACRU.C.residplots
 dev.off()
 # assumptions are ok, could try another error structure to check
@@ -425,10 +426,10 @@ dev.off()
 Models.ACRU.C <- list("ACRU.C1 = Year*Site" = ACRU.C1, "ACRU.C2 = Year" = ACRU.C2, "ACRU.C3 = Site" = ACRU.C3, "ACRU.C4 = Null" = ACRU.C4)
 ACRU.C <- aictab(cand.set = Models.ACRU.C)
 print(ACRU.C)
-write.csv(ACRU.C, "output/AIC_2Step/ACRU_C_std.csv")
+write.csv(ACRU.C, "output/AIC/ACRU_C.csv")
 # save the summary tables of the models 
 summary.ACRU.C <-map_df(Models.ACRU.C, broom::tidy, .id="model")
-write_csv(summary.ACRU.C, path = "output/Summary_2Step/summary.ACRU.C.std.csv")
+write_csv(summary.ACRU.C, path = "output/Summary/ACRU_C.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ACRU.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
@@ -443,16 +444,16 @@ ACRU.C.mech <- dredge(ACRU.C.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 ACRU.C.mechmodels <- get.models(ACRU.C.mech,subset=NA)
 ACRU.C.mech.residplots <- imap(ACRU.C.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_C_std_mech_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ACRU_C_mech.pdf")
 ACRU.C.mech.residplots
 dev.off()
 # if assumptions are met, proceed with AIC table and analysis
 # look at the AIC table
 print(ACRU.C.mech)
 # save the AIC table
-write_csv(ACRU.C.mech, "output/AIC_2Step/ACRU_C_std_Mech.csv")
+write_csv(ACRU.C.mech, "output/AIC/ACRU_C_mech.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ACRU.C.std.pdf")
+pdf("graphics/Models/AIC/ACRU_C.pdf")
 par(mar=c(4,5,9,4))
 plot(ACRU.C.mech)
 dev.off()
@@ -460,7 +461,7 @@ dev.off()
 ACRU.C.mechtop <- (get.models(ACRU.C.mech, 1)[[1]])
 ACRU.C.mechtop
 ACRU.C.mechtop <- tidy(ACRU.C.mechtop)
-write_csv(ACRU.C.mechtop, "output/Summary_2Step/summary.ACRU.C.std.mech.csv")
+write_csv(ACRU.C.mechtop, "output/Summary/ACRU_C_mech.csv")
 PseudoR2(ACRU.C.mechtop, which = "Nagelkerke")
 # investigate for pretending variables as per Leroux 2019
 # use AIC table to identify potential pretending variabels
@@ -480,23 +481,23 @@ ACRU.C.mech.pretend <- dredge(ACRU.C.Global.pretend, evaluate = TRUE, rank = "AI
 # check the residuals of the models to ensure that glm was correct choice 
 ACRU.C.mechmodels.pretend <- get.models(ACRU.C.mech.pretend,subset=NA)
 ACRU.C.mech.residplots.pretend <- imap(ACRU.C.mechmodels.pretend, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/ACRU_C_std_mech_gamma.pretend.pdf")
+pdf("graphics/Models/ModelDiagnostics/ACRU_C_mech_pretend.pdf")
 ACRU.C.mech.residplots.pretend
 dev.off()
 # if assumptions are met, proceed with AIC table and analysis
 # look at the AIC table
 print(ACRU.C.mech.pretend)
 # save the AIC table
-write_csv(ACRU.C.mech.pretend, "output/AIC_2Step/ACRU_C_std_Mech_pretend.csv")
+write_csv(ACRU.C.mech.pretend, "output/AIC/ACRU_C_mech_pretend.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/ACRU.C.std.pretend.pdf")
+pdf("graphics/Models/AIC/ACRU_C_pretend.pdf")
 par(mar=c(4,5,9,4))
 plot(ACRU.C.mech.pretend)
 dev.off()
 # get the summary of the top model and save it to a .csv
 ACRU.C.mechtop.pretend <- (get.models(ACRU.C.mech.pretend, 1)[[1]])
 ACRU.C.mechtop.pretend <- tidy(ACRU.C.mechtop.pretend, conf.int=TRUE)
-write_csv(ACRU.C.mechtop.pretend, "output/Summary_2Step/summary.ACRU.C.std.mech.pretend.csv")
+write_csv(ACRU.C.mechtop.pretend, "output/Summary/ACRU_C_mech_pretend.csv")
 PseudoR2(ACRU.C.mechtop.pretend, which = "Nagelkerke")
 
 # % Nitrogen
@@ -511,7 +512,7 @@ ACRU.Nmodels <- list(ACRU.N1, ACRU.N2, ACRU.N3, ACRU.N4)
 # create diagnostic figures 
 ACRU.N.residplots <- imap(ACRU.Nmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_N_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ACRU_N.pdf")
 ACRU.N.residplots
 dev.off()
 # assumptions are ok, could use another error structure to check
@@ -519,10 +520,10 @@ dev.off()
 Models.ACRU.N <- list("ACRU.N1 = Year*Site" = ACRU.N1, "ACRU.N2 = Year" = ACRU.N2, "ACRU.N3 = Site" = ACRU.N3, "ACRU.N4 = Null" = ACRU.N4)
 ACRU.N <- aictab(cand.set = Models.ACRU.N)
 print(ACRU.N)
-write.csv(ACRU.N, "output/AIC_2Step/ACRU_N_std.csv")
+write.csv(ACRU.N, "output/AIC/ACRU_N.csv")
 # save the summary tables of the models 
 summary.ACRU.N <-map_df(Models.ACRU.N, broom::tidy, .id="model")
-write_csv(summary.ACRU.N, path = "output/Summary_2Step/summary.ACRU.N.std.csv")
+write_csv(summary.ACRU.N, path = "output/Summary/ACRU_N.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ACRU.N1, which = "Nagelkerke")
 # this model has Year as top model but Null is within 2 delta AICc, stop here. 
@@ -539,18 +540,18 @@ ACRU.Pmodels <- list(ACRU.P1, ACRU.P2, ACRU.P3, ACRU.P4)
 # create diagnostic figures 
 ACRU.P.residplots <- imap(ACRU.Pmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/ACRU_P_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/ACRU_P.pdf")
 ACRU.P.residplots
 dev.off()
-# assumptions are ok, would use another error structure to check
-# create an AIPc table to show the "best model" to use as a prediction of spatial stoichiometry
+# assumptions are ok
+# create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.ACRU.P <- list("ACRU.P1 = Year*Site" = ACRU.P1, "ACRU.P2 = Year" = ACRU.P2, "ACRU.P3 = Site" = ACRU.P3, "ACRU.P4 = Null" = ACRU.P4)
 ACRU.P <- aictab(cand.set = Models.ACRU.P)
 print(ACRU.P)
-write.csv(ACRU.P, "output/AIC_2Step/ACRU_P_std.csv")
+write.csv(ACRU.P, "output/AIC/ACRU_P.csv")
 # save the summary tables of the models 
 summary.ACRU.P <-map_df(Models.ACRU.P, broom::tidy, .id="model")
-write_csv(summary.ACRU.P, path = "output/Summary_2Step/summary.ACRU.P.std.csv")
+write_csv(summary.ACRU.P, path = "output/Summary/ACRU_P.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(ACRU.P1, which = "Nagelkerke")
 # Null is top model, stop here
@@ -568,18 +569,18 @@ BEPA.Cmodels <- list(BEPA.C1, BEPA.C2, BEPA.C3, BEPA.C4)
 # create diagnostic figures 
 BEPA.C.residplots <- imap(BEPA.Cmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_C_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/BEPA_C.pdf")
 BEPA.C.residplots
 dev.off()
-# assumptions are ok, could try another error structure to check
+# assumptions are ok
 # create an AICc table to show the "best model" to use as a prediction of spatial stoichiometry
 Models.BEPA.C <- list("BEPA.C1 = Year*Site" = BEPA.C1, "BEPA.C2 = Year" = BEPA.C2, "BEPA.C3 = Site" = BEPA.C3, "BEPA.C4 = Null" = BEPA.C4)
 BEPA.C <- aictab(cand.set = Models.BEPA.C)
 print(BEPA.C)
-write.csv(BEPA.C, "output/AIC_2Step/BEPA_C_std.csv")
+write.csv(BEPA.C, "output/AIC/BEPA_C.csv")
 # save the summary tables of the models 
 summary.BEPA.C <-map_df(Models.BEPA.C, broom::tidy, .id="model")
-write_csv(summary.BEPA.C, path = "output/Summary_2Step/summary.BEPA.C.std.csv")
+write_csv(summary.BEPA.C, path = "output/Summary/BEPA_C.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(BEPA.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
@@ -594,23 +595,23 @@ BEPA.C.mech <- dredge(BEPA.C.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 BEPA.C.mechmodels <- get.models(BEPA.C.mech,subset=NA)
 BEPA.C.mech.residplots <- imap(BEPA.C.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_C_std_mech_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/BEPA_C_mech.pdf")
 BEPA.C.mech.residplots
 dev.off()
 # if assumptions are met, proceed with AIC table and analysis
 # look at the AIC table
 print(BEPA.C.mech)
 # save the AIC table
-write_csv(BEPA.C.mech, "output/AIC_2Step/BEPA_C_std_Mech.csv")
+write_csv(BEPA.C.mech, "output/AIC/BEPA_C_mech.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/BEPA.C.std.pdf")
+pdf("graphics/Models/AIC/BEPA_C.pdf")
 par(mar=c(4,5,9,4))
 plot(BEPA.C.mech)
 dev.off()
 # get the summary of the top model and save it to a .csv
 BEPA.C.mechtop <- (get.models(BEPA.C.mech, 1)[[1]])
 BEPA.C.mechtop <- tidy(BEPA.C.mechtop)
-write_csv(BEPA.C.mechtop, "output/Summary_2Step/summary.BEPA.C.std.mech.csv")
+write_csv(BEPA.C.mechtop, "output/Summary/BEPA_C_mech.csv")
 PseudoR2(BEPA.C.mechtop, which = "Nagelkerke")
 # investigate for pretending variables as per Leroux 2019
 # use AIC table to identify potential pretending variabels
@@ -630,7 +631,7 @@ BEPA.C.mech.pretend <- dredge(BEPA.C.Global.pretend, evaluate = TRUE, rank = "AI
 # check the residuals of the models to ensure that glm was correct choice 
 BEPA.C.mechmodels.pretend <- get.models(BEPA.C.mech.pretend,subset=NA)
 BEPA.C.mech.residplots.pretend <- imap(BEPA.C.mechmodels.pretend, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics_GzLM/BEPA_C_std_mech_gamma.pretend.pdf")
+pdf("graphics/Models/ModelDiagnostics/BEPA_C_mech_pretend.pdf")
 BEPA.C.mech.residplots.pretend
 dev.off()
 # if assumptions are met, proceed with AIC table and analysis
@@ -639,14 +640,14 @@ print(BEPA.C.mech.pretend)
 # save the AIC table
 write_csv(BEPA.C.mech.pretend, "output/AIC_2Step/BEPA_C_std_Mech_pretend.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/BEPA.C.std.pretend.pdf")
+pdf("graphics/Models/AIC/BEPA_C_pretend.pdf")
 par(mar=c(4,5,9,4))
 plot(BEPA.C.mech.pretend)
 dev.off()
 # get the summary of the top model and save it to a .csv
 BEPA.C.mechtop.pretend <- (get.models(BEPA.C.mech.pretend, 1)[[1]])
 BEPA.C.mechtop.pretend <- tidy(BEPA.C.mechtop.pretend, conf.int=TRUE)
-write_csv(BEPA.C.mechtop.pretend, "output/Summary_2Step/summary.BEPA.C.std.mech.pretend.csv")
+write_csv(BEPA.C.mechtop.pretend, "output/Summary/BEPA_C_mech_pretend.csv")
 PseudoR2(BEPA.C.mechtop.pretend, which = "Nagelkerke")
 
 # % Nitrogen
@@ -661,7 +662,7 @@ BEPA.Nmodels <- list(BEPA.N1, BEPA.N2, BEPA.N3, BEPA.N4)
 # create diagnostic figures 
 BEPA.N.residplots <- imap(BEPA.Nmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_N_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/BEPA_N.pdf")
 BEPA.N.residplots
 dev.off()
 # assumptions are ok, could use another error structure to check
@@ -669,10 +670,10 @@ dev.off()
 Models.BEPA.N <- list("BEPA.N1 = Year*Site" = BEPA.N1, "BEPA.N2 = Year" = BEPA.N2, "BEPA.N3 = Site" = BEPA.N3, "BEPA.N4 = Null" = BEPA.N4)
 BEPA.N <- aictab(cand.set = Models.BEPA.N)
 print(BEPA.N)
-write.csv(BEPA.N, "output/AIC_2Step/BEPA_N_std.csv")
+write.csv(BEPA.N, "output/AIC/BEPA_N.csv")
 # save the summary tables of the models 
 summary.BEPA.N <-map_df(Models.BEPA.N, broom::tidy, .id="model")
-write_csv(summary.BEPA.N, path = "output/Summary_2Step/summary.BEPA.N.std.csv")
+write_csv(summary.BEPA.N, path = "output/Summary/BEPA_N.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(BEPA.N1, which = "Nagelkerke")
 # Site was top model with Null within 2 delta AICc
@@ -689,7 +690,7 @@ BEPA.Pmodels <- list(BEPA.P1, BEPA.P2, BEPA.P3, BEPA.P4)
 # create diagnostic figures 
 BEPA.P.residplots <- imap(BEPA.Pmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/BEPA_P_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/BEPA_P.pdf")
 BEPA.P.residplots
 dev.off()
 # assumptions are ok, would use another error structure to check
@@ -697,10 +698,10 @@ dev.off()
 Models.BEPA.P <- list("BEPA.P1 = Year*Site" = BEPA.P1, "BEPA.P2 = Year" = BEPA.P2, "BEPA.P3 = Site" = BEPA.P3, "BEPA.P4 = Null" = BEPA.P4)
 BEPA.P <- aictab(cand.set = Models.BEPA.P)
 print(BEPA.P)
-write.csv(BEPA.P, "output/AIC_2Step/BEPA_P_std.csv")
+write.csv(BEPA.P, "output/AIC/BEPA_P.csv")
 # save the summary tables of the models 
 summary.BEPA.P <-map_df(Models.BEPA.P, broom::tidy, .id="model")
-write_csv(summary.BEPA.P, path = "output/Summary_2Step/summary.BEPA.P.std.csv")
+write_csv(summary.BEPA.P, path = "output/Summary/BEPA_P.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(BEPA.P1, which = "Nagelkerke")
 # Site is the top model, stop here.
@@ -718,7 +719,7 @@ VAAN.Cmodels <- list(VAAN.C1, VAAN.C2, VAAN.C3, VAAN.C4)
 # create diagnostic figures 
 VAAN.C.residplots <- imap(VAAN.Cmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_C_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/VAAN_C.pdf")
 VAAN.C.residplots
 dev.off()
 # assumptions are ok, could try another error structure to check
@@ -726,10 +727,10 @@ dev.off()
 Models.VAAN.C <- list("VAAN.C1 = Year*Site" = VAAN.C1, "VAAN.C2 = Year" = VAAN.C2, "VAAN.C3 = Site" = VAAN.C3, "VAAN.C4 = Null" = VAAN.C4)
 VAAN.C <- aictab(cand.set = Models.VAAN.C)
 print(VAAN.C)
-write.csv(VAAN.C, "output/AIC_2Step/VAAN_C_std.csv")
+write.csv(VAAN.C, "output/AIC/VAAN_C.csv")
 # save the summary tables of the models 
 summary.VAAN.C <-map_df(Models.VAAN.C, broom::tidy, .id="model")
-write_csv(summary.VAAN.C, path = "output/Summary_2Step/summary.VAAN.C.std.csv")
+write_csv(summary.VAAN.C, path = "output/Summary/VAAN_C.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(VAAN.C1, which = "Nagelkerke")
 # this model has Year in the top model, move on to testing the mechanisms
@@ -744,16 +745,16 @@ VAAN.C.mech <- dredge(VAAN.C.Global, evaluate = TRUE, rank = "AICc")
 # check the residuals of the models to ensure that glm was correct choice 
 VAAN.C.mechmodels <- get.models(VAAN.C.mech,subset=NA)
 VAAN.C.mech.residplots <- imap(VAAN.C.mechmodels, resid_plots) 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_C_std_mech_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/VAAN_C_mech.pdf")
 VAAN.C.mech.residplots
 dev.off()
 # if assumptions are met, proceed with AIC table and analysis
 # look at the AIC table
 print(VAAN.C.mech)
 # save the AIC table
-write_csv(VAAN.C.mech, "output/AIC_2Step/VAAN_C_std_Mech.csv")
+write_csv(VAAN.C.mech, "output/AIC/VAAN_C_mech.csv")
 # visualize the AIC table 
-pdf("graphics/StoichModels_2Step/AIC/VAAN.C.std.pdf")
+pdf("graphics/Models/AIC/VAAN_C.pdf")
 par(mar=c(4,5,9,4))
 plot(VAAN.C.mech)
 dev.off()
@@ -761,7 +762,7 @@ dev.off()
 VAAN.C.mechtop <- (get.models(VAAN.C.mech, 1)[[1]])
 VAAN.C.mechtop
 VAAN.C.mechtop <- tidy(VAAN.C.mechtop)
-write_csv(VAAN.C.mechtop, "output/Summary_2Step/summary.VAAN.C.std.mech.csv")
+write_csv(VAAN.C.mechtop, "output/Summary/VAAN_C_mech_pretend.csv")
 PseudoR2(VAAN.C.mechtop, which = "Nagelkerke")
 # no pretending variables
 
@@ -777,7 +778,7 @@ VAAN.Nmodels <- list(VAAN.N1, VAAN.N2, VAAN.N3, VAAN.N4)
 # create diagnostic figures 
 VAAN.N.residplots <- imap(VAAN.Nmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_N_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/VAAN_N.pdf")
 VAAN.N.residplots
 dev.off()
 # assumptions are ok, could use another error structure to check
@@ -785,10 +786,10 @@ dev.off()
 Models.VAAN.N <- list("VAAN.N1 = Year*Site" = VAAN.N1, "VAAN.N2 = Year" = VAAN.N2, "VAAN.N3 = Site" = VAAN.N3, "VAAN.N4 = Null" = VAAN.N4)
 VAAN.N <- aictab(cand.set = Models.VAAN.N)
 print(VAAN.N)
-write.csv(VAAN.N, "output/AIC_2Step/VAAN_N_std.csv")
+write.csv(VAAN.N, "output/AIC/VAAN_N.csv")
 # save the summary tables of the models 
 summary.VAAN.N <-map_df(Models.VAAN.N, broom::tidy, .id="model")
-write_csv(summary.VAAN.N, path = "output/Summary_2Step/summary.VAAN.N.std.csv")
+write_csv(summary.VAAN.N, path = "output/Summary/VAAN_N.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(VAAN.N1, which = "Nagelkerke")
 # Null is top model, stop here.
@@ -805,7 +806,7 @@ VAAN.Pmodels <- list(VAAN.P1, VAAN.P2, VAAN.P3, VAAN.P4)
 # create diagnostic figures 
 VAAN.P.residplots <- imap(VAAN.Pmodels, resid_plots) 
 # save all diagnostic plots to a pdf 
-pdf("graphics/StoichModels_2Step/ModelDiagnostics/VAAN_P_std_glm.pdf")
+pdf("graphics/Models/ModelDiagnostics/VAAN_P.pdf")
 VAAN.P.residplots
 dev.off()
 # assumptions are ok, would use another error structure to check
@@ -813,13 +814,12 @@ dev.off()
 Models.VAAN.P <- list("VAAN.P1 = Year*Site" = VAAN.P1, "VAAN.P2 = Year" = VAAN.P2, "VAAN.P3 = Site" = VAAN.P3, "VAAN.P4 = Null" = VAAN.P4)
 VAAN.P <- aictab(cand.set = Models.VAAN.P)
 print(VAAN.P)
-write.csv(VAAN.P, "output/AIC_2Step/VAAN_P_std.csv")
+write.csv(VAAN.P, "output/AIC/VAAN_P.csv")
 # save the summary tables of the models 
 summary.VAAN.P <-map_df(Models.VAAN.P, broom::tidy, .id="model")
-write_csv(summary.VAAN.P, path = "output/Summary_2Step/summary.VAAN.P.std.csv")
+write_csv(summary.VAAN.P, path = "output/Summary/VAAN_P.csv")
 # calculate pseudo R^2 - just another check of significance determination
 PseudoR2(VAAN.P1, which = "Nagelkerke")
 # Site is top model, stop here 
 
-# After running standardized models, results are the same as with the non-standardized data. 
 # %C has Year in top model for all species, ABBA has Year in %C, N and P 
