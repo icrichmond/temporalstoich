@@ -4,7 +4,10 @@
 
 #### Manuscript is currently under review at the Journal of Plant Ecology. All data and code for the manuscript are available here and published on figshare.
 
-This repository contains code, data, and results for Richmond et al. Temporal variation and its drivers in the elemental traits of four boreal plant species.
+This repository contains code, data, and results for Richmond et al. Temporal variation and its drivers in the elemental traits of four boreal plant species. 
+
+Zenodo Repository: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4090893.svg)](https://doi.org/10.5281/zenodo.4090893)
+
 
 **code**  
 This folder contains all the R scripts necessary to reproduce our analyses.  
