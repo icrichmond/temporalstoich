@@ -1,16 +1,20 @@
+# Author: Isabella Richmond
+# Last edited: October 15, 2020
+
+# This code was for the partitioning of variance between site, year, and species for each element and ratio 
+# that we tested.
 
 #### Data Preparation ####
-# load packages
-easypackages::packages("vegan", "tidyverse", "patchwork")
-
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
-gdd <- read_csv("input/GDD_2016_2017.csv")
-evi <- read_csv("input/EVI_2016_2017.csv")
-ndmi <- read_csv("input/NDMI_2016_2017.csv")
+gdd <- read_csv("input/GDD_2016_2017_R.csv")
+evi <- read_csv("input/EVI_2016_2017_R.csv")
+ndmi <- read_csv("input/NDMI_2016_2017_R.csv")
 # subset by year so that joining is possible 
 stoich2016 <- subset(stoich, Year==2016)
 stoich2017 <- subset(stoich, Year==2017)
+gdd2016 <- subset(gdd, Year==2016)
+gdd2017 <- subset(gdd, Year==2017)
 evi2016 <- subset(evi, Year==2016)
 evi2017 <- subset(evi, Year==2017)
 ndmi2016 <- subset(ndmi, Year==2016)
@@ -22,19 +26,21 @@ ndmi2017 <- subset(ndmi, Year==2017)
 # anything that doesn't match
 # output dataframe should have same number of rows as input stoich dataframe 
 stoich2016 <- stoich2016 %>%
+  left_join(gdd2016, by=c("PlotName","Species")) %>%
   inner_join(evi2016,by="PlotName") %>%
   inner_join(ndmi2016, by="PlotName")
 stoich2017 <- stoich2017 %>%
+  left_join(gdd2017, by=c("PlotName","Species")) %>%
   inner_join(evi2017, by="PlotName")%>%
   inner_join(ndmi2017,by="PlotName")
 # bind the 2016 and 2017 dataset back together 
 stoich <- rbind(stoich2016,stoich2017)
-# add GDD columns to stoich dataframe
-stoich <- add_column(stoich, GDD=gdd$GDD, GDDAverage=gdd$AverageGDD)
 
 # convert Year variable to factor (listed as integer)
+stoich <- dplyr::rename(stoich, Year = Year.x)
 stoich$Year <- as.factor(stoich$Year)
 str(stoich)
+stoich <- drop_na(stoich, GDD)
 
 # subset the data by species
 # ABBA = Abies balsamea, balsam fir 
