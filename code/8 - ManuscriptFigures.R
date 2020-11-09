@@ -334,16 +334,17 @@ meltGDD <- melt(
   measure.vars = c('Species')
 )
 
+#old colours #66545e", "#a39193", "#aa6f73", "#eea990
 ggplot(meltGDD) +
-  geom_point(aes(GDD,C, shape = Year, color = Site), size = 2.5) +
+  geom_point(aes(GDD,C, shape = Year, color = Site), size = 4.5) +
   geom_smooth(aes(GDD,C), color = "#373730", method = lm) + 
-  stat_cor(aes(GDD,C,label = paste(..rr.label..)), label.y = 54.5)+
-  stat_regline_equation(aes(GDD,C), label.y = 55)+
-  scale_color_manual(values=c("#66545e", "#a39193", "#aa6f73", "#eea990"))+
+  stat_cor(aes(GDD,C,label = paste(..rr.label..)), label.y = 54.5, size = 6)+
+  stat_regline_equation(aes(GDD,C), label.y = 55, size = 6)+
+  scale_color_grey()+
   labs(x = "Growing Degree Days", y = "Percent C")+
-  theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=15), 
-        strip.text = element_text(size=15), axis.title = element_text(size=17),
-        legend.text = element_text(size=15), legend.title = element_text(size=17),
+  theme(axis.text.x = element_text(size=18), axis.text.y = element_text(size=18), 
+        strip.text = element_text(size=18), axis.title = element_text(size=18),
+        legend.text = element_text(size=18), legend.title = element_text(size=18),
         legend.position = "top", panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(), panel.background = element_blank(),
         strip.background = element_rect(color="black"))+
@@ -352,20 +353,21 @@ ggplot(meltGDD) +
                                                "ACRU" = "Red Maple",
                                                "BEPA" = "White Birch",
                                                "VAAN" = "Lowbush Blueberry")))
-ggsave("graphics/Models/Boxplots/GDD_C_Species.png")
+ggsave("graphics/Models/Boxplots/GDD_C_Species.png", width = 45, height = 40, units=c("cm"),dpi=600)
 
 # Make a figure showing the relationship between % C and year for the MS 
 # Basic boxplot
+# old colours "#66545e", "#a39193", "#aa6f73", "#eea990"
 speciesnames <- c("Balsam Fir", "Red Maple", "White Birch", "Lowbush Blueberry")
 names(speciesnames) <- c("ABBA", "ACRU", "BEPA", "VAAN")
-ggboxplot(stoich, x = "Year", y = "C", color = "Site", palette = c("#66545e", "#a39193", "#aa6f73", "#eea990"),
+ggboxplot(stoich, x = "Year", y = "C", color = "Site", palette = c("grey"),
           add = "jitter", xlab = "Year", ylab = "Percent C")+
-  theme(axis.text.x = element_text(size=15), axis.text.y = element_text(size=15), 
-        strip.text = element_text(size=15), axis.title = element_text(size=17),
-        legend.text = element_text(size=15), legend.title = element_text(size=17),
+  theme(axis.text.x = element_text(size=18), axis.text.y = element_text(size=18), 
+        strip.text = element_text(size=18), axis.title = element_text(size=18),
+        legend.text = element_text(size=18), legend.title = element_text(size=18),
         legend.position = "top")+
   facet_wrap(~Species, labeller = labeller(Species = speciesnames))
-ggsave("graphics/Models/Boxplots/PercentC_Species_MS.png", width = 35, height = 35, units=c("cm"),dpi=350)
+ggsave("graphics/Models/Boxplots/PercentC_Species_MS.png", width = 40, height = 40, units=c("cm"),dpi=600)
 
 
 # save bar graph of sample distribution at each site

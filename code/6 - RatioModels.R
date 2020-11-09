@@ -9,7 +9,10 @@
 
 #### Data Preparation ####
 # load packages
-easypackages::libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+easypackages::libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", 
+                        "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", 
+                        "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", 
+                        "kimisc", "psych", "DescTools", "tidyr")
 
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
