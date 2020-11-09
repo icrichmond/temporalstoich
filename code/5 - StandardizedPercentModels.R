@@ -11,7 +11,10 @@
 
 #### Data Preparation ####
 # load packages
-easypackages::libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", "psych", "DescTools")
+easypackages::libraries("MASS", "sjPlot", "purrr", "patchwork", "broom", 
+                        "ggcorrplot", "ggplot2","dplyr", "tibble", "readr", "plyr", 
+                        "ggpol", "ggpubr", "MuMIn", "AICcmodavg", "texreg", "kimisc", 
+                        "psych", "DescTools", "tidyr")
 
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
@@ -404,7 +407,6 @@ write_csv(ABBA.P.mechtop, "output/Summary/ABBA_P_mech.csv")
 PseudoR2(ABBA.P.mechtop, which = "Nagelkerke")
 # no pretending variables
 
-
 # ACRU
 # % Carbon
 ACRU.C1 <- glm(C_std ~ Year*Site, data = ACRU)
@@ -638,7 +640,7 @@ dev.off()
 # look at the AIC table
 print(BEPA.C.mech.pretend)
 # save the AIC table
-write_csv(BEPA.C.mech.pretend, "output/AIC_2Step/BEPA_C_std_Mech_pretend.csv")
+write_csv(BEPA.C.mech.pretend, "output/AIC/BEPA_C_mech_pretend.csv")
 # visualize the AIC table 
 pdf("graphics/Models/AIC/BEPA_C_pretend.pdf")
 par(mar=c(4,5,9,4))
