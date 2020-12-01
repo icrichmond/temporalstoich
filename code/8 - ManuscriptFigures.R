@@ -361,14 +361,18 @@ ggsave("graphics/Models/Boxplots/GDD_C_Species.png", width = 45, height = 40, un
 speciesnames <- c("Balsam Fir", "Red Maple", "White Birch", "Lowbush Blueberry")
 names(speciesnames) <- c("ABBA", "ACRU", "BEPA", "VAAN")
 ggboxplot(stoich, x = "Year", y = "C", color = "Site", palette = c("grey"),
-          add = "jitter", xlab = "Year", ylab = "Percent C")+
-  theme(axis.text.x = element_text(size=18), axis.text.y = element_text(size=18), 
-        strip.text = element_text(size=18), axis.title = element_text(size=18),
-        legend.text = element_text(size=18), legend.title = element_text(size=18),
+          add = "jitter", xlab = "Year", ylab = "Percent C",
+          add.params = list(size=6), size=2)+
+  theme(axis.text.x = element_text(size=40, margin=unit(c(2,2,2,2),"cm")), 
+        axis.text.y = element_text(size=40, margin=unit(c(2,2,2,2),"cm")), 
+        strip.text = element_text(size=40), 
+        axis.title = element_text(size=40),
+        legend.text = element_text(size=40), 
+        legend.title = element_text(size=40),
+        axis.ticks.length = unit(-0.5, "cm"),
         legend.position = "top")+
   facet_wrap(~Species, labeller = labeller(Species = speciesnames))
-ggsave("graphics/Models/Boxplots/PercentC_Species_MS.png", width = 40, height = 40, units=c("cm"),dpi=600)
-
+ggsave("graphics/Models/Boxplots/PercentC_Species_MS.tiff", width = 60, height = 60, units=c("cm"),dpi=600)
 
 # save bar graph of sample distribution at each site
 stoich$Year <- as.factor(stoich$Year)
