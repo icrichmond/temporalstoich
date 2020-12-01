@@ -338,22 +338,26 @@ meltGDD <- melt(
 ggplot(meltGDD) +
   geom_point(aes(GDD,C, shape = Year, color = Site), size = 4.5) +
   geom_smooth(aes(GDD,C), color = "#373730", method = lm) + 
-  stat_cor(aes(GDD,C,label = paste(..rr.label..)), label.y = 54.5, size = 6)+
-  stat_regline_equation(aes(GDD,C), label.y = 55, size = 6)+
+  stat_cor(aes(GDD,C,label = paste(..rr.label..)), label.y = 54, size = 10)+
+  stat_regline_equation(aes(GDD,C), label.y = 55, size = 10)+
   scale_color_grey()+
   labs(x = "Growing Degree Days", y = "Percent C")+
-  theme(axis.text.x = element_text(size=18), axis.text.y = element_text(size=18), 
-        strip.text = element_text(size=18), axis.title = element_text(size=18),
-        legend.text = element_text(size=18), legend.title = element_text(size=18),
+  theme(axis.text.x = element_text(size=40, colour = 'black', margin=unit(c(2,2,2,2),"cm")), 
+        axis.text.y = element_text(size=40, colour = 'black', margin=unit(c(2,2,2,2),"cm")), 
+        strip.text = element_text(size=40), axis.title = element_text(size=40),
+        legend.text = element_text(size=40), legend.title = element_text(size=40),
         legend.position = "top", panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(), panel.background = element_blank(),
-        strip.background = element_rect(color="black"))+
+        strip.background = element_rect(color="black"),
+        axis.ticks.length = unit(-0.5, "cm"),
+        axis.ticks = element_line(colour='black'),
+        axis.line = element_line(colour="black"))+
   facet_wrap( ~ value, labeller = labeller(value = 
                                              c("ABBA" = "Balsam Fir",
                                                "ACRU" = "Red Maple",
                                                "BEPA" = "White Birch",
                                                "VAAN" = "Lowbush Blueberry")))
-ggsave("graphics/Models/Boxplots/GDD_C_Species.png", width = 45, height = 40, units=c("cm"),dpi=600)
+ggsave("graphics/Models/Boxplots/GDD_C_Species.tiff", width = 45, height = 40, units=c("cm"),dpi=600)
 
 # Make a figure showing the relationship between % C and year for the MS 
 # Basic boxplot
