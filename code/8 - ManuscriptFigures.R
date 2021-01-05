@@ -10,7 +10,7 @@
 
 #### Data Preparation #### 
 # load packages 
-easypackages::libraries("tidyverse", "data.table")
+easypackages::libraries("tidyverse", "data.table", "ggpubr")
 # import datasets
 stoich <- read_csv("input/Stoich_2016_2017.csv")
 gdd <- read_csv("input/GDD_2016_2017_R.csv")
@@ -357,7 +357,7 @@ ggplot(meltGDD) +
                                                "ACRU" = "Red Maple",
                                                "BEPA" = "White Birch",
                                                "VAAN" = "Lowbush Blueberry")))
-ggsave("graphics/Models/Boxplots/GDD_C_Species.tiff", width = 45, height = 40, units=c("cm"),dpi=600)
+ggsave("graphics/Models/Boxplots/GDD_C_Species.jpg", width = 45, height = 40, units=c("cm"),dpi=300)
 
 # Make a figure showing the relationship between % C and year for the MS 
 # Basic boxplot
@@ -376,7 +376,7 @@ ggboxplot(stoich, x = "Year", y = "C", color = "Site", palette = c("grey"),
         axis.ticks.length = unit(-0.5, "cm"),
         legend.position = "top")+
   facet_wrap(~Species, labeller = labeller(Species = speciesnames))
-ggsave("graphics/Models/Boxplots/PercentC_Species_MS.tiff", width = 60, height = 60, units=c("cm"),dpi=600)
+ggsave("graphics/Models/Boxplots/PercentC_Species_MS.jpg", width = 40, height = 40, units=c("cm"),dpi=300)
 
 # save bar graph of sample distribution at each site
 stoich$Year <- as.factor(stoich$Year)
