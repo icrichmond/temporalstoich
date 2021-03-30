@@ -11,8 +11,8 @@
 # Install/load the following packages
 install.packages("easypackages")
 library(easypackages)
-packages("colorspace", "rts", "raster", "RCurl", "sp", "rgdal", "rgeos", "RStoolbox", "shapefiles", "getSpatialData", "rasterVis", "spatialEco", "spatial.tools")
-libraries("colorspace", "rts", "raster", "RCurl", "sp", "rgdal", "rgeos", "RStoolbox", "shapefiles", "getSpatialData", "rasterVis", "spatialEco", "spatial.tools")
+packages("colorspace", "rts", "raster", "RCurl", "sp", "rgdal", "rgeos", "RStoolbox", "shapefiles")
+libraries("colorspace", "rts", "raster", "RCurl", "sp", "rgdal", "rgeos", "RStoolbox", "shapefiles")
 
 # This analysis is bounded within our Area Of Interest (AOI).
 # The AOI is the ecodistrict (468)
@@ -55,10 +55,9 @@ Scene4EVI_rescale <- Scene4_EVI*0.0001
 # create a raster brick with the four scenes
 EVI_Brick <- brick(list(Scene1EVI_rescale, Scene2EVI_rescale, Scene3EVI_rescale, Scene4EVI_rescale))
 # plot scenes
-myTheme <- rasterTheme(region=sequential_hcl(6, power=0.8))
 LayerNames <- c("May 14, 2017", "May 30, 2017","July 17, 2017", "September 13, 2017")
 png("graphics/EVI/EVI_Original.png", width = 13, height = 6, units = "in", res = 600)
-levelplot(EVI_Brick, par.settings = myTheme, names.attr = LayerNames)
+plot(EVI_Brick)
 dev.off()
 
 # perform a linear interpolation between EVI time scenes to populate no data areas
@@ -76,7 +75,7 @@ dev.off()
 LayerNamesInterp <- c(" ", " ", " ", " ")
 
 png("Graphics/EVI/EVI_Interpolate.png", width = 13, height = 6, units = "in", res = 600)
-levelplot(EVI_approx, par.settings = myTheme, names.attr = LayerNamesInterp)
+plot(EVI_approx)
 dev.off()
 
 writeRaster(EVI_approx, "output/EVI/EVIApprox", format="GTiff", bylayer=T, suffix="names", overwrite=TRUE)
