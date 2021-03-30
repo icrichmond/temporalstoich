@@ -6,7 +6,7 @@
 
 This repository contains code, data, and results for Richmond et al. Temporal variation and its drivers in the elemental traits of four boreal plant species. 
 
-Zenodo Repository: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4090893.svg)](https://doi.org/10.5281/zenodo.4090893)
+Zenodo Repository: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4090893.svg)](https://doi.org/10.5281/zenodo.4090893)   
 Paper: https://academic.oup.com/jpe/article-abstract/14/3/398/6044219?redirectedFrom=fulltext
 
 **code**  
